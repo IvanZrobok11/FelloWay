@@ -9,6 +9,7 @@ Derived from `TECH_PLAN.md` backend bullets. Paths and payloads are indicative; 
 | GET | `/users/me` | Current user profile |
 | PUT | `/users/me` | Update name, bio, interests, city |
 | POST | `/users/me/avatar` | Upload avatar (multipart) |
+| PUT | `/users/me/push-preferences` | Sync notification toggles (body: `globalEnabled`, `eventMessages`, `tripMessages`, `directMessages`) |
 | GET | `/users/{id}/reviews` | Reviews list on profile |
 | POST | `/users/{id}/block` | Block user |
 
@@ -33,12 +34,11 @@ Derived from `TECH_PLAN.md` backend bullets. Paths and payloads are indicative; 
 | GET | `/trips/{id}/join-requests` | Owner: pending requests (`items`) |
 | POST | `/trips/{id}/approve/{userId}` | Owner approves (client may only trigger if authorized) |
 
-## Reviews & push prefs
+## Reviews
 
 | Method | Path | Use on client |
 |--------|------|----------------|
-| POST | `/events/{id}/attendees/{userId}/review` | Post-event feedback |
-| *(TBD)* | push preferences | Align with backend `push_preferences` design |
+| POST | `/events/{id}/attendees/{userId}/review` | Post-event feedback (`rating`, optional `comment`) |
 
 ## Reports
 

@@ -751,6 +751,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Low rating — review carefully before approving.'**
   String get tripLowRatingWarning;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @notificationGlobalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All notifications'**
+  String get notificationGlobalTitle;
+
+  /// No description provided for @notificationGlobalSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Master switch for push alerts'**
+  String get notificationGlobalSubtitle;
+
+  /// No description provided for @notificationEventsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Event updates'**
+  String get notificationEventsTitle;
+
+  /// No description provided for @notificationEventsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders and event chat activity'**
+  String get notificationEventsSubtitle;
+
+  /// No description provided for @notificationTripsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip chats'**
+  String get notificationTripsTitle;
+
+  /// No description provided for @notificationTripsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Join requests and trip messages'**
+  String get notificationTripsSubtitle;
+
+  /// No description provided for @notificationDmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct messages'**
+  String get notificationDmTitle;
+
+  /// No description provided for @notificationDmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DMs from other attendees'**
+  String get notificationDmSubtitle;
+
+  /// No description provided for @eventFeedbackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Event feedback'**
+  String get eventFeedbackTitle;
+
+  /// No description provided for @eventFeedbackSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How was this event for you?'**
+  String get eventFeedbackSubtitle;
+
+  /// No description provided for @eventFeedbackCommentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional comment'**
+  String get eventFeedbackCommentLabel;
+
+  /// No description provided for @eventFeedbackSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit feedback'**
+  String get eventFeedbackSubmit;
+
+  /// No description provided for @eventFeedbackThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your feedback.'**
+  String get eventFeedbackThanks;
+
+  /// No description provided for @eventFeedbackStarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{rating} out of 5 stars'**
+  String eventFeedbackStarLabel(Object rating);
+
+  /// No description provided for @eventLeaveFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave feedback'**
+  String get eventLeaveFeedback;
+
+  /// No description provided for @reviewsListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reviews'**
+  String get reviewsListTitle;
+
+  /// No description provided for @reviewsAnonymousEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Event'**
+  String get reviewsAnonymousEvent;
+
+  /// No description provided for @reviewSemanticLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Review: {eventTitle}, {rating} stars. {comment}'**
+  String reviewSemanticLabel(Object eventTitle, Object rating, Object comment);
+
+  /// No description provided for @profileEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get profileEditTitle;
+
+  /// No description provided for @profileEditBioLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get profileEditBioLabel;
+
+  /// No description provided for @profileEditInterestsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests (comma-separated)'**
+  String get profileEditInterestsHint;
+
+  /// No description provided for @profileEditChangePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get profileEditChangePhoto;
+
+  /// No description provided for @profileEditAvatarDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar updated.'**
+  String get profileEditAvatarDone;
+
+  /// No description provided for @profileEditSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get profileEditSave;
+
+  /// No description provided for @profileEditSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile saved.'**
+  String get profileEditSaved;
+
+  /// No description provided for @profileMenuEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get profileMenuEdit;
+
+  /// No description provided for @profileMenuNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification settings'**
+  String get profileMenuNotifications;
+
+  /// No description provided for @profileMenuReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews about you'**
+  String get profileMenuReviews;
+
+  /// No description provided for @onboardingWelcomeSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to FelloWay. Networking before IT conferences and trip coordination.'**
+  String get onboardingWelcomeSemanticsLabel;
 }
 
 class _AppLocalizationsDelegate

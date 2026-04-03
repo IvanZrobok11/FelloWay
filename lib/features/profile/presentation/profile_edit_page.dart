@@ -1,0 +1,276 @@
+import 'package:flutter/material.dart';
+import 'package:felloway_client/l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../app/app_scope.dart';
+import '../../../shared/errors/result.dart';
+import '../domain/user_profile.dart';
+
+class ProfileEditPage extends StatefulWidget {
+  const ProfileEditPage({super.key});
+
+  @override
+  State<ProfileEditPage> createState() => _ProfileEditPageState();
+}
+
+class _ProfileEditPageState extends State<ProfileEditPage> {
+  final _name = TextEditingController();
+  final _bio = TextEditingController();
+  final _city = TextEditingController();
+  final _hobbies = TextEditingController();
+  final _interests = TextEditingController();
+  final _linkedin = TextEditingController();
+  final _facebook = TextEditingController();
+
+  UserProfile? _original;
+  String? _avatarUrl;
+  bool _loading = true;
+  bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+  }
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _bio.dispose();
+    _city.dispose();
+    _hobbies.dispose();
+    _interests.dispose();
+    _linkedin.dispose();
+    _facebook.dispose();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    final users = AppScope.usersOf(context);
+    final config = AppScope.configOf(context);
+    final res = await users.getMe();
+    if (!mounted) return;
+    switch (res) {
+      case Success(:final value):
+        _applyProfile(value);
+        setState(() => _loading = false);
+      case Failure():
+        if (config.isDemoBackend) {
+          _applyProfile(
+            UserProfile(
+              id: 'demo',
+              displayName: 'Demo User',
+              interests: const ['IT'],
+              hobbies: 'Coffee',
+              homeCityLabel: 'Kyiv',
+              ratingAverage: 4.2,
+            ),
+          );
+          setState(() => _loading = false);
+        } else {
+          setState(() => _loading = false);
+        }
+    }
+  }
+
+  void _applyProfile(UserProfile p) {
+    _original = p;
+    _avatarUrl = p.avatarUrl;
+    _name.text = p.displayName;
+    _bio.text = p.bio ?? '';
+    _city.text = p.homeCityLabel;
+    _hobbies.text = p.hobbies;
+    _interests.text = p.interests.join(', ');
+    _linkedin.text = p.linkedinUrl ?? '';
+    _facebook.text = p.facebookUrl ?? '';
+  }
+
+  Future<void> _pickAvatar() async {
+    final l10n = AppLocalizations.of(context)!;
+    final picker = ImagePicker();
+    final x = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 2048,
+      maxHeight: 2048,
+      imageQuality: 85,
+    );
+    if (x == null || !mounted) return;
+    final users = AppScope.usersOf(context);
+    setState(() => _saving = true);
+    final up = await users.uploadAvatar(x.path);
+    if (!mounted) return;
+    setState(() => _saving = false);
+    switch (up) {
+      case Success(:final value):
+        if (value != null) {
+          setState(() => _avatarUrl = value);
+        }
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.profileEditAvatarDone)));
+      case Failure(:final error):
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error.message)));
+    }
+  }
+
+  Future<void> _save() async {
+    final orig = _original;
+    final l10n = AppLocalizations.of(context)!;
+    if (orig == null) return;
+    final interestList = _interests.text
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+    final draft = UserProfile(
+      id: orig.id,
+      displayName: _name.text.trim(),
+      bio: _bio.text.trim().isEmpty ? null : _bio.text.trim(),
+      avatarUrl: _avatarUrl,
+      linkedinUrl: _linkedin.text.trim().isEmpty ? null : _linkedin.text.trim(),
+      facebookUrl: _facebook.text.trim().isEmpty ? null : _facebook.text.trim(),
+      interests: interestList,
+      hobbies: _hobbies.text.trim(),
+      homeCityLabel: _city.text.trim(),
+      ratingAverage: orig.ratingAverage,
+    );
+    setState(() => _saving = true);
+    final users = AppScope.usersOf(context);
+    final res = await users.updateMe(draft);
+    if (!mounted) return;
+    setState(() => _saving = false);
+    switch (res) {
+      case Success():
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.profileEditSaved)));
+        Navigator.of(context).pop();
+      case Failure(:final error):
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error.message)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    if (_loading) {
+      return Scaffold(
+        appBar: AppBar(title: Text(l10n.profileEditTitle)),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (_original == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text(l10n.profileEditTitle)),
+        body: Center(child: Text(l10n.commonErrorTitle)),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.profileEditTitle)),
+      body: ListView(
+        padding: const EdgeInsets.all(24),
+        children: [
+          Center(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 48,
+                  backgroundImage: _avatarUrl != null
+                      ? NetworkImage(_avatarUrl!)
+                      : null,
+                  child: _avatarUrl == null
+                      ? Text(
+                          _name.text.isNotEmpty
+                              ? _name.text[0].toUpperCase()
+                              : '?',
+                        )
+                      : null,
+                ),
+                TextButton.icon(
+                  onPressed: _saving ? null : _pickAvatar,
+                  icon: const Icon(Icons.photo_camera_outlined),
+                  label: Text(l10n.profileEditChangePhoto),
+                ),
+              ],
+            ),
+          ),
+          TextField(
+            controller: _name,
+            decoration: InputDecoration(
+              labelText: l10n.onboardingNameLabel,
+              border: const OutlineInputBorder(),
+            ),
+            textCapitalization: TextCapitalization.words,
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _bio,
+            decoration: InputDecoration(
+              labelText: l10n.profileEditBioLabel,
+              border: const OutlineInputBorder(),
+            ),
+            maxLines: 3,
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _city,
+            decoration: InputDecoration(
+              labelText: l10n.onboardingCityLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _interests,
+            decoration: InputDecoration(
+              labelText: l10n.profileEditInterestsHint,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _hobbies,
+            decoration: InputDecoration(
+              labelText: l10n.onboardingHobbiesLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _linkedin,
+            decoration: InputDecoration(
+              labelText: l10n.profileLinkedIn,
+              border: const OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.url,
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _facebook,
+            decoration: InputDecoration(
+              labelText: l10n.profileFacebook,
+              border: const OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.url,
+          ),
+          const SizedBox(height: 24),
+          FilledButton(
+            onPressed: _saving ? null : _save,
+            child: _saving
+                ? const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text(l10n.profileEditSave),
+          ),
+        ],
+      ),
+    );
+  }
+}

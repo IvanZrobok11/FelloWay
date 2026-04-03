@@ -161,6 +161,21 @@ class _ProfilePageState extends State<ProfilePage> {
             title: Text(p.displayName),
             subtitle: Text(p.homeCityLabel),
           ),
+          ListTile(
+            leading: const Icon(Icons.edit_outlined),
+            title: Text(l10n.profileMenuEdit),
+            onTap: () => context.push('/profile/edit'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.notifications_outlined),
+            title: Text(l10n.profileMenuNotifications),
+            onTap: () => context.push('/profile/notifications'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.rate_review_outlined),
+            title: Text(l10n.profileMenuReviews),
+            onTap: () => context.push('/profile/reviews'),
+          ),
           if (p.ratingAverage != null)
             ListTile(
               title: Text(

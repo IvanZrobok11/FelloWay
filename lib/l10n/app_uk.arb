@@ -138,5 +138,47 @@
   "tripApprove": "Схвалити",
   "tripApproved": "Учасника схвалено.",
   "tripRequesterCity": "Звідки: {city}",
-  "tripLowRatingWarning": "Низький рейтинг — уважно перевірте перед схваленням."
+  "tripLowRatingWarning": "Низький рейтинг — уважно перевірте перед схваленням.",
+  "notificationSettingsTitle": "Сповіщення",
+  "notificationGlobalTitle": "Усі сповіщення",
+  "notificationGlobalSubtitle": "Головний перемикач push",
+  "notificationEventsTitle": "Оновлення подій",
+  "notificationEventsSubtitle": "Нагадування та активність у чатах подій",
+  "notificationTripsTitle": "Чати поїздок",
+  "notificationTripsSubtitle": "Запити на вступ і повідомлення",
+  "notificationDmTitle": "Особисті повідомлення",
+  "notificationDmSubtitle": "Повідомлення від інших учасників",
+  "eventFeedbackTitle": "Відгук про подію",
+  "eventFeedbackSubtitle": "Як вам була ця подія?",
+  "eventFeedbackCommentLabel": "Коментар (необов'язково)",
+  "eventFeedbackSubmit": "Надіслати відгук",
+  "eventFeedbackThanks": "Дякуємо за відгук.",
+  "eventFeedbackStarLabel": "{rating} з 5 зірок",
+  "@eventFeedbackStarLabel": {
+    "placeholders": {
+      "rating": {}
+    }
+  },
+  "eventLeaveFeedback": "Залишити відгук",
+  "reviewsListTitle": "Відгуки про вас",
+  "reviewsAnonymousEvent": "Подія",
+  "reviewSemanticLabel": "Відгук: {eventTitle}, {rating} зірок. {comment}",
+  "@reviewSemanticLabel": {
+    "placeholders": {
+      "eventTitle": {},
+      "rating": {},
+      "comment": {}
+    }
+  },
+  "profileEditTitle": "Редагувати профіль",
+  "profileEditBioLabel": "Про себе",
+  "profileEditInterestsHint": "Інтереси (через кому)",
+  "profileEditChangePhoto": "Змінити фото",
+  "profileEditAvatarDone": "Аватар оновлено.",
+  "profileEditSave": "Зберегти",
+  "profileEditSaved": "Профіль збережено.",
+  "profileMenuEdit": "Редагувати профіль",
+  "profileMenuNotifications": "Налаштування сповіщень",
+  "profileMenuReviews": "Відгуки про вас",
+  "onboardingWelcomeSemanticsLabel": "Ласкаво просимо до FelloWay. Нетворкінг перед IT-конференціями та координація поїздок."
 }

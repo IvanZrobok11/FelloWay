@@ -371,4 +371,100 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get tripLowRatingWarning =>
       'Низький рейтинг — уважно перевірте перед схваленням.';
+
+  @override
+  String get notificationSettingsTitle => 'Сповіщення';
+
+  @override
+  String get notificationGlobalTitle => 'Усі сповіщення';
+
+  @override
+  String get notificationGlobalSubtitle => 'Головний перемикач push';
+
+  @override
+  String get notificationEventsTitle => 'Оновлення подій';
+
+  @override
+  String get notificationEventsSubtitle =>
+      'Нагадування та активність у чатах подій';
+
+  @override
+  String get notificationTripsTitle => 'Чати поїздок';
+
+  @override
+  String get notificationTripsSubtitle => 'Запити на вступ і повідомлення';
+
+  @override
+  String get notificationDmTitle => 'Особисті повідомлення';
+
+  @override
+  String get notificationDmSubtitle => 'Повідомлення від інших учасників';
+
+  @override
+  String get eventFeedbackTitle => 'Відгук про подію';
+
+  @override
+  String get eventFeedbackSubtitle => 'Як вам була ця подія?';
+
+  @override
+  String get eventFeedbackCommentLabel => 'Коментар (необов\'язково)';
+
+  @override
+  String get eventFeedbackSubmit => 'Надіслати відгук';
+
+  @override
+  String get eventFeedbackThanks => 'Дякуємо за відгук.';
+
+  @override
+  String eventFeedbackStarLabel(Object rating) {
+    return '$rating з 5 зірок';
+  }
+
+  @override
+  String get eventLeaveFeedback => 'Залишити відгук';
+
+  @override
+  String get reviewsListTitle => 'Відгуки про вас';
+
+  @override
+  String get reviewsAnonymousEvent => 'Подія';
+
+  @override
+  String reviewSemanticLabel(Object eventTitle, Object rating, Object comment) {
+    return 'Відгук: $eventTitle, $rating зірок. $comment';
+  }
+
+  @override
+  String get profileEditTitle => 'Редагувати профіль';
+
+  @override
+  String get profileEditBioLabel => 'Про себе';
+
+  @override
+  String get profileEditInterestsHint => 'Інтереси (через кому)';
+
+  @override
+  String get profileEditChangePhoto => 'Змінити фото';
+
+  @override
+  String get profileEditAvatarDone => 'Аватар оновлено.';
+
+  @override
+  String get profileEditSave => 'Зберегти';
+
+  @override
+  String get profileEditSaved => 'Профіль збережено.';
+
+  @override
+  String get profileMenuEdit => 'Редагувати профіль';
+
+  @override
+  String get profileMenuNotifications => 'Налаштування сповіщень';
+
+  @override
+  String get profileMenuReviews => 'Відгуки про вас';
+
+  @override
+  String get onboardingWelcomeSemanticsLabel =>
+      'Ласкаво просимо до FelloWay. Нетворкінг перед IT-конференціями та координація поїздок.';
 }

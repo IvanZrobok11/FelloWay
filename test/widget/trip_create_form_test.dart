@@ -35,8 +35,8 @@ void main() {
       apiClient: apiClient,
       authSession: AuthSession(tokenStorage: tokenStorage),
       onboardingPreferences: OnboardingPreferences(prefs),
-      eventsRepository: EventsRepository(apiClient),
-      usersRepository: UsersRepository(apiClient),
+      eventsRepository: EventsRepository(apiClient, config),
+      usersRepository: UsersRepository(apiClient, config),
       streamChatService: StreamChatService(
         config: config,
         apiClient: apiClient,

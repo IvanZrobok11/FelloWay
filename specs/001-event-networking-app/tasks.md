@@ -149,15 +149,15 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 **Purpose**: Push, notification preferences, post-event feedback, reviews UI, hardening
 
-- [ ] T058 [P] [-] Foreground/background push handling + deep link to chat/event in `lib/app/notifications/push_handler.dart`
-- [ ] T059 [-] Profile: per-chat / global notification toggles UI + API sync in `lib/features/profile/presentation/notification_settings_page.dart`
-- [ ] T060 [-] Post-event feedback screen (stars + optional text) + `POST` review in `lib/features/profile/presentation/event_feedback_page.dart`
-- [ ] T061 [-] User profile: reviews list from `GET /users/{id}/reviews` in `lib/features/profile/presentation/reviews_list.dart`
-- [ ] T062 [-] Profile edit: avatar upload flow + `POST /users/me/avatar` in `lib/features/profile/presentation/profile_edit_page.dart`
-- [ ] T063 [-] Golden tests for event card and onboarding chrome in `test/golden/event_card_golden_test.dart`
-- [ ] T064 [P] [-] Cross-story UX + accessibility audit (tabs, focus order, screen reader labels)
-- [ ] T065 [P] [-] Update [quickstart.md](./quickstart.md) with flavors, defines, and device checklists
-- [ ] T066 [-] Run full `dart format .`, `flutter analyze`, `flutter test`, and `integration_test/` on CI target
+- [x] T058 [P] [-] Foreground/background push handling + deep link to chat/event in `lib/app/notifications/push_handler.dart`
+- [x] T059 [-] Profile: per-chat / global notification toggles UI + API sync in `lib/features/profile/presentation/notification_settings_page.dart`
+- [x] T060 [-] Post-event feedback screen (stars + optional text) + `POST` review in `lib/features/profile/presentation/event_feedback_page.dart`
+- [x] T061 [-] User profile: reviews list from `GET /users/{id}/reviews` in `lib/features/profile/presentation/reviews_list.dart`
+- [x] T062 [-] Profile edit: avatar upload flow + `POST /users/me/avatar` in `lib/features/profile/presentation/profile_edit_page.dart`
+- [x] T063 [-] Golden tests for event card and onboarding chrome in `test/golden/event_card_golden_test.dart`
+- [x] T064 [P] [-] Cross-story UX + accessibility audit (tabs, focus order, screen reader labels)
+- [x] T065 [P] [-] Update [quickstart.md](./quickstart.md) with flavors, defines, and device checklists
+- [x] T066 [-] Run full `dart format .`, `flutter analyze`, `flutter test`, and `integration_test/` on CI target
 
 ---
 

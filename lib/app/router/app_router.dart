@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../auth/auth_session.dart';
+import '../notifications/push_handler.dart';
 import '../../features/onboarding/data/onboarding_preferences.dart';
 import '../shell/main_shell.dart';
 import '../../features/auth/presentation/oauth_sign_in_page.dart';
@@ -14,15 +15,21 @@ import '../../features/onboarding/presentation/city_page.dart';
 import '../../features/onboarding/presentation/interests_page.dart';
 import '../../features/onboarding/presentation/name_page.dart';
 import '../../features/onboarding/presentation/welcome_page.dart';
+import '../../features/profile/presentation/event_feedback_page.dart';
+import '../../features/profile/presentation/notification_settings_page.dart';
+import '../../features/profile/presentation/profile_edit_page.dart';
 import '../../features/profile/presentation/profile_page.dart';
+import '../../features/profile/presentation/reviews_list.dart';
 import '../../features/trips/presentation/create_trip_page.dart';
 import '../../features/trips/presentation/trip_owner_requests_page.dart';
 
 GoRouter createAppRouter({
   required AuthSession authSession,
   required OnboardingPreferences onboardingPreferences,
+  GlobalKey<NavigatorState>? navigatorKey,
 }) {
   return GoRouter(
+    navigatorKey: navigatorKey ?? PushHandler.rootNavigatorKey,
     initialLocation: '/events',
     refreshListenable: authSession,
     redirect: (context, state) {
@@ -94,6 +101,23 @@ GoRouter createAppRouter({
             eventId: eid.isEmpty ? '' : Uri.decodeComponent(eid),
           );
         },
+      ),
+      GoRoute(
+        path: '/profile/edit',
+        builder: (context, state) => const ProfileEditPage(),
+      ),
+      GoRoute(
+        path: '/profile/notifications',
+        builder: (context, state) => const NotificationSettingsPage(),
+      ),
+      GoRoute(
+        path: '/profile/reviews',
+        builder: (context, state) => const ProfileReviewsPage(),
+      ),
+      GoRoute(
+        path: '/event/:eventId/feedback',
+        builder: (context, state) =>
+            EventFeedbackPage(eventId: state.pathParameters['eventId']!),
       ),
       GoRoute(
         path: '/chats/channel',

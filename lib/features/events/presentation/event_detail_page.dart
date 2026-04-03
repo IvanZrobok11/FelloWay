@@ -205,6 +205,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
     final e = _event!;
     final attending = e.attendStatus == AttendStatus.attending;
     final streamReady = AppScope.streamChatOf(context).isReady;
+    final eventEnded = DateTime.now().isAfter(e.endsAt);
 
     return Scaffold(
       appBar: AppBar(title: Text(e.title)),
@@ -278,6 +279,14 @@ class _EventDetailPageState extends State<EventDetailPage> {
                 onPressed: () => openEventChannel(context, eventId: e.id),
                 icon: const Icon(Icons.forum_outlined),
                 label: Text(l10n.chatOpenEventChat),
+              ),
+            ],
+            if (attending && eventEnded) ...[
+              const SizedBox(height: 12),
+              TextButton.icon(
+                onPressed: () => context.push('/event/${e.id}/feedback'),
+                icon: const Icon(Icons.star_outline),
+                label: Text(l10n.eventLeaveFeedback),
               ),
             ],
           ] else

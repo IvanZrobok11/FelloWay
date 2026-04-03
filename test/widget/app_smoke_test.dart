@@ -56,8 +56,8 @@ void main() {
       streamApiKey: '',
     );
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
-    final eventsRepository = EventsRepository(apiClient);
-    final usersRepository = UsersRepository(apiClient);
+    final eventsRepository = EventsRepository(apiClient, config);
+    final usersRepository = UsersRepository(apiClient, config);
     final tripsRepository = TripsRepository(apiClient, config);
     final streamChatService = StreamChatService(
       config: config,

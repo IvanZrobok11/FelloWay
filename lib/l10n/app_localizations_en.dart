@@ -371,4 +371,99 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tripLowRatingWarning =>
       'Low rating — review carefully before approving.';
+
+  @override
+  String get notificationSettingsTitle => 'Notifications';
+
+  @override
+  String get notificationGlobalTitle => 'All notifications';
+
+  @override
+  String get notificationGlobalSubtitle => 'Master switch for push alerts';
+
+  @override
+  String get notificationEventsTitle => 'Event updates';
+
+  @override
+  String get notificationEventsSubtitle => 'Reminders and event chat activity';
+
+  @override
+  String get notificationTripsTitle => 'Trip chats';
+
+  @override
+  String get notificationTripsSubtitle => 'Join requests and trip messages';
+
+  @override
+  String get notificationDmTitle => 'Direct messages';
+
+  @override
+  String get notificationDmSubtitle => 'DMs from other attendees';
+
+  @override
+  String get eventFeedbackTitle => 'Event feedback';
+
+  @override
+  String get eventFeedbackSubtitle => 'How was this event for you?';
+
+  @override
+  String get eventFeedbackCommentLabel => 'Optional comment';
+
+  @override
+  String get eventFeedbackSubmit => 'Submit feedback';
+
+  @override
+  String get eventFeedbackThanks => 'Thanks for your feedback.';
+
+  @override
+  String eventFeedbackStarLabel(Object rating) {
+    return '$rating out of 5 stars';
+  }
+
+  @override
+  String get eventLeaveFeedback => 'Leave feedback';
+
+  @override
+  String get reviewsListTitle => 'Your reviews';
+
+  @override
+  String get reviewsAnonymousEvent => 'Event';
+
+  @override
+  String reviewSemanticLabel(Object eventTitle, Object rating, Object comment) {
+    return 'Review: $eventTitle, $rating stars. $comment';
+  }
+
+  @override
+  String get profileEditTitle => 'Edit profile';
+
+  @override
+  String get profileEditBioLabel => 'Bio';
+
+  @override
+  String get profileEditInterestsHint => 'Interests (comma-separated)';
+
+  @override
+  String get profileEditChangePhoto => 'Change photo';
+
+  @override
+  String get profileEditAvatarDone => 'Avatar updated.';
+
+  @override
+  String get profileEditSave => 'Save';
+
+  @override
+  String get profileEditSaved => 'Profile saved.';
+
+  @override
+  String get profileMenuEdit => 'Edit profile';
+
+  @override
+  String get profileMenuNotifications => 'Notification settings';
+
+  @override
+  String get profileMenuReviews => 'Reviews about you';
+
+  @override
+  String get onboardingWelcomeSemanticsLabel =>
+      'Welcome to FelloWay. Networking before IT conferences and trip coordination.';
 }

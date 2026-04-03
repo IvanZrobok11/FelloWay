@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../../app/config/app_config.dart';
 import '../../../shared/errors/app_failure.dart';
 import '../../../shared/errors/result.dart';
 import '../../../shared/network/api_client.dart';
@@ -13,9 +14,10 @@ class EventsPage {
 }
 
 class EventsRepository {
-  EventsRepository(this._api);
+  EventsRepository(this._api, this._config);
 
   final ApiClient _api;
+  final AppConfig _config;
 
   Future<Result<EventsPage>> listEvents({
     String? query,
@@ -70,6 +72,29 @@ class EventsRepository {
   Future<Result<bool>> leave(String id) async {
     try {
       await _api.dio.delete<void>('/events/$id/attend');
+      return const Success(true);
+    } on DioException catch (e) {
+      return Failure(_api.mapDioError(e));
+    }
+  }
+
+  Future<Result<bool>> submitAttendeeReview({
+    required String eventId,
+    required String attendeeUserId,
+    required int stars,
+    String? comment,
+  }) async {
+    if (_config.isDemoBackend) {
+      return const Success(true);
+    }
+    try {
+      await _api.dio.post<void>(
+        '/events/$eventId/attendees/$attendeeUserId/review',
+        data: {
+          'rating': stars,
+          if (comment != null && comment.isNotEmpty) 'comment': comment,
+        },
+      );
       return const Success(true);
     } on DioException catch (e) {
       return Failure(_api.mapDioError(e));

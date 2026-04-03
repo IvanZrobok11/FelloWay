@@ -175,5 +175,47 @@
       "city": {}
     }
   },
-  "tripLowRatingWarning": "Low rating — review carefully before approving."
+  "tripLowRatingWarning": "Low rating — review carefully before approving.",
+  "notificationSettingsTitle": "Notifications",
+  "notificationGlobalTitle": "All notifications",
+  "notificationGlobalSubtitle": "Master switch for push alerts",
+  "notificationEventsTitle": "Event updates",
+  "notificationEventsSubtitle": "Reminders and event chat activity",
+  "notificationTripsTitle": "Trip chats",
+  "notificationTripsSubtitle": "Join requests and trip messages",
+  "notificationDmTitle": "Direct messages",
+  "notificationDmSubtitle": "DMs from other attendees",
+  "eventFeedbackTitle": "Event feedback",
+  "eventFeedbackSubtitle": "How was this event for you?",
+  "eventFeedbackCommentLabel": "Optional comment",
+  "eventFeedbackSubmit": "Submit feedback",
+  "eventFeedbackThanks": "Thanks for your feedback.",
+  "eventFeedbackStarLabel": "{rating} out of 5 stars",
+  "@eventFeedbackStarLabel": {
+    "placeholders": {
+      "rating": {}
+    }
+  },
+  "eventLeaveFeedback": "Leave feedback",
+  "reviewsListTitle": "Your reviews",
+  "reviewsAnonymousEvent": "Event",
+  "reviewSemanticLabel": "Review: {eventTitle}, {rating} stars. {comment}",
+  "@reviewSemanticLabel": {
+    "placeholders": {
+      "eventTitle": {},
+      "rating": {},
+      "comment": {}
+    }
+  },
+  "profileEditTitle": "Edit profile",
+  "profileEditBioLabel": "Bio",
+  "profileEditInterestsHint": "Interests (comma-separated)",
+  "profileEditChangePhoto": "Change photo",
+  "profileEditAvatarDone": "Avatar updated.",
+  "profileEditSave": "Save",
+  "profileEditSaved": "Profile saved.",
+  "profileMenuEdit": "Edit profile",
+  "profileMenuNotifications": "Notification settings",
+  "profileMenuReviews": "Reviews about you",
+  "onboardingWelcomeSemanticsLabel": "Welcome to FelloWay. Networking before IT conferences and trip coordination."
 }

@@ -24,23 +24,47 @@ class MainShell extends StatelessWidget {
         onDestinationSelected: _onTap,
         destinations: [
           NavigationDestination(
-            icon: const Icon(Icons.event_outlined),
-            selectedIcon: const Icon(Icons.event),
+            icon: Tooltip(
+              message: l10n.tabEvents,
+              child: const Icon(Icons.event_outlined),
+            ),
+            selectedIcon: Tooltip(
+              message: l10n.tabEvents,
+              child: const Icon(Icons.event),
+            ),
             label: l10n.tabEvents,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.map_outlined),
-            selectedIcon: const Icon(Icons.map),
+            icon: Tooltip(
+              message: l10n.tabMap,
+              child: const Icon(Icons.map_outlined),
+            ),
+            selectedIcon: Tooltip(
+              message: l10n.tabMap,
+              child: const Icon(Icons.map),
+            ),
             label: l10n.tabMap,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.chat_bubble_outline),
-            selectedIcon: const Icon(Icons.chat_bubble),
+            icon: Tooltip(
+              message: l10n.tabChats,
+              child: const Icon(Icons.chat_bubble_outline),
+            ),
+            selectedIcon: Tooltip(
+              message: l10n.tabChats,
+              child: const Icon(Icons.chat_bubble),
+            ),
             label: l10n.tabChats,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.person_outline),
-            selectedIcon: const Icon(Icons.person),
+            icon: Tooltip(
+              message: l10n.tabProfile,
+              child: const Icon(Icons.person_outline),
+            ),
+            selectedIcon: Tooltip(
+              message: l10n.tabProfile,
+              child: const Icon(Icons.person),
+            ),
             label: l10n.tabProfile,
           ),
         ],

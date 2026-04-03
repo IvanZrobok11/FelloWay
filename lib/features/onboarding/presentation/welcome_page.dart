@@ -14,24 +14,28 @@ class WelcomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.onboardingWelcomeTitle)),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              l10n.onboardingWelcomeBody,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const Spacer(),
-            FilledButton(
-              onPressed: () => context.go(
-                '/onboarding/name',
-                extra: draft ?? OnboardingDraft(),
+      body: Semantics(
+        container: true,
+        label: l10n.onboardingWelcomeSemanticsLabel,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                l10n.onboardingWelcomeBody,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
-              child: Text(l10n.onboardingContinue),
-            ),
-          ],
+              const Spacer(),
+              FilledButton(
+                onPressed: () => context.go(
+                  '/onboarding/name',
+                  extra: draft ?? OnboardingDraft(),
+                ),
+                child: Text(l10n.onboardingContinue),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -13,6 +14,7 @@ import '../shared/network/api_client.dart';
 import 'app_scope.dart';
 import 'auth/auth_session.dart';
 import 'config/app_config.dart';
+import 'notifications/push_handler.dart';
 import 'router/app_router.dart';
 import 'theme/app_theme.dart';
 
@@ -45,18 +47,31 @@ class FellowayApp extends StatefulWidget {
 }
 
 class _FellowayAppState extends State<FellowayApp> {
+  GoRouter? _router;
+
   @override
   void initState() {
     super.initState();
     widget.authSession.addListener(_onAuthChanged);
     widget.streamChatService.addListener(_onStreamChanged);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _syncChat());
+    _router = createAppRouter(
+      authSession: widget.authSession,
+      onboardingPreferences: widget.onboardingPreferences,
+      navigatorKey: PushHandler.rootNavigatorKey,
+    );
+    PushHandler.attach(_router!);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await PushHandler.registerMessagingBridge();
+      await _syncChat();
+    });
   }
 
   @override
   void dispose() {
     widget.authSession.removeListener(_onAuthChanged);
     widget.streamChatService.removeListener(_onStreamChanged);
+    PushHandler.detach();
+    _router?.dispose();
     super.dispose();
   }
 
@@ -81,10 +96,7 @@ class _FellowayAppState extends State<FellowayApp> {
 
   @override
   Widget build(BuildContext context) {
-    final router = createAppRouter(
-      authSession: widget.authSession,
-      onboardingPreferences: widget.onboardingPreferences,
-    );
+    final router = _router!;
     Widget child = AppScope(
       config: widget.config,
       apiClient: widget.apiClient,
