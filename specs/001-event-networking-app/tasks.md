@@ -96,19 +96,19 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 ### Tests for User Story 2 (REQUIRED) ⚠️
 
-- [ ] T033 [P] [US2] Unit tests for chat access rules (joined vs left) in `test/unit/chat_access_policy_test.dart`
-- [ ] T034 [P] [US2] Widget test for chats tab empty/loading states in `test/widget/chats_tab_test.dart`
-- [ ] T035 [US2] Integration test: open channel from event context in `integration_test/us2_chat_navigation_test.dart` (Stream test env or mock)
+- [x] T033 [P] [US2] Unit tests for chat access rules (joined vs left) in `test/unit/chat_access_policy_test.dart`
+- [x] T034 [P] [US2] Widget test for chats tab empty/loading states in `test/widget/chats_tab_test.dart`
+- [x] T035 [US2] Integration test: open channel from event context in `integration_test/us2_chat_navigation_test.dart` (Stream test env or mock)
 
 ### Implementation for User Story 2
 
-- [ ] T036 [US2] Stream client bootstrap (token from backend) in `lib/features/chats/data/stream_chat_service.dart`
-- [ ] T037 [US2] Chats list (event, trip, DM) in `lib/features/chats/presentation/chats_list_page.dart`
-- [ ] T038 [US2] Channel route wrapper for event-wide chat in `lib/features/chats/presentation/channel_page.dart`
-- [ ] T039 [US2] Start DM from attendee profile / event participants in `lib/features/chats/presentation/dm_launcher.dart`
-- [ ] T040 [US2] Enforce unjoin: disconnect/remove event + trip channels; DM read-only composer lock in `lib/features/chats/application/chat_access_controller.dart` (or equivalent state layer)
-- [ ] T041 [US2] Report message/user entry points (UI + `POST` report when contract finalized) in `lib/features/chats/presentation/report_sheet.dart`
-- [ ] T042 [US2] Block user action from profile/chat (`POST /users/{id}/block`) in `lib/features/profile/presentation/block_user_action.dart`
+- [x] T036 [US2] Stream client bootstrap (token from backend) in `lib/features/chats/data/stream_chat_service.dart`
+- [x] T037 [US2] Chats list (event, trip, DM) in `lib/features/chats/presentation/chats_list_page.dart`
+- [x] T038 [US2] Channel route wrapper for event-wide chat in `lib/features/chats/presentation/channel_page.dart`
+- [x] T039 [US2] Start DM from attendee profile / event participants in `lib/features/chats/presentation/dm_launcher.dart`
+- [x] T040 [US2] Enforce unjoin: disconnect/remove event + trip channels; DM read-only composer lock in `lib/features/chats/application/chat_access_controller.dart` (or equivalent state layer)
+- [x] T041 [US2] Report message/user entry points (UI + `POST` report when contract finalized) in `lib/features/chats/presentation/report_sheet.dart`
+- [x] T042 [US2] Block user action from profile/chat (`POST /users/{id}/block`) in `lib/features/profile/presentation/block_user_action.dart`
 - [ ] T043 [US2] Verify UX consistency with shared widgets and l10n for chat errors
 - [ ] T044 [US2] Verify chat list scroll performance under typical channel count
 

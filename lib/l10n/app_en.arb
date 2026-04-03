@@ -91,6 +91,32 @@
   "profileInterests": "Interests",
   "profileHobbies": "Hobbies",
   "chatsGuestMessage": "Sign in to see your chats.",
+  "chatsStreamKeyHint": "Set STREAM_API_KEY to enable GetStream chat.",
+  "chatsConnecting": "Connecting to chat…",
+  "chatsDemoHint": "Demo API: chat uses GetStream only with a real backend token.",
+  "chatsLoadError": "Could not load chats: {message}",
+  "@chatsLoadError": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "chatOpenEventChat": "Event chat",
+  "chatMessageUser": "Message",
+  "chatChannelTitle": "Chat",
+  "chatDmReadOnlyHint": "You left this event — messages are read-only.",
+  "chatReportTitle": "Report",
+  "chatReportDetailsLabel": "What happened?",
+  "chatReportSubmitted": "Thanks — we will review this report.",
+  "chatReportSubmit": "Submit report",
+  "chatBlockUserTitle": "Block user?",
+  "chatBlockUserBody": "Block {name}? You will no longer interact in chat.",
+  "@chatBlockUserBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatBlockUserConfirm": "Block",
+  "chatBlockUserSuccess": "User blocked.",
   "eventsPlaceholderTitle": "Events",
   "mapPlaceholderTitle": "Map",
   "chatsPlaceholderTitle": "Chats",

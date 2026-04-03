@@ -7,6 +7,7 @@ import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
 import 'package:felloway_client/features/events/data/events_repository.dart';
 import 'package:felloway_client/features/onboarding/data/onboarding_preferences.dart';
 import 'package:felloway_client/features/profile/data/users_repository.dart';
+import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:felloway_client/shared/network/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,6 @@ void main() {
   );
 
   setUpAll(() async {
-    SharedPreferences.setMockInitialValues({});
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(secureStorageChannel, (call) async {
           switch (call.method) {
@@ -44,7 +44,10 @@ void main() {
         .setMockMethodCallHandler(secureStorageChannel, null);
   });
 
-  testWidgets('app loads shell with bottom navigation', (tester) async {
+  testWidgets('ChatsListPage shows guest message when not signed in', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({'onboarding_complete_v1': true});
     final prefs = await SharedPreferences.getInstance();
     final onboarding = OnboardingPreferences(prefs);
     final tokenStorage = TokenStorage();
@@ -77,6 +80,61 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(NavigationBar), findsOneWidget);
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(NavigationBar)),
+    )!;
+    await tester.tap(find.text(l10n.tabChats));
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.chatsGuestMessage), findsOneWidget);
   });
+
+  testWidgets(
+    'ChatsListPage shows stream key hint when signed in without key',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({'onboarding_complete_v1': true});
+      final prefs = await SharedPreferences.getInstance();
+      final onboarding = OnboardingPreferences(prefs);
+      final tokenStorage = TokenStorage();
+      final authSession = AuthSession(tokenStorage: tokenStorage);
+      await authSession.setAuthenticated(
+        accessToken: 'test-access',
+        refreshToken: 'test-refresh',
+      );
+      const config = AppConfig(
+        apiBaseUrl: 'https://test.local',
+        streamApiKey: '',
+      );
+      final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
+      final eventsRepository = EventsRepository(apiClient);
+      final usersRepository = UsersRepository(apiClient);
+      final streamChatService = StreamChatService(
+        config: config,
+        apiClient: apiClient,
+      );
+      final chatAccessController = ChatAccessController();
+
+      await tester.pumpWidget(
+        FellowayApp(
+          config: config,
+          authSession: authSession,
+          apiClient: apiClient,
+          onboardingPreferences: onboarding,
+          eventsRepository: eventsRepository,
+          usersRepository: usersRepository,
+          streamChatService: streamChatService,
+          chatAccessController: chatAccessController,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(NavigationBar)),
+      )!;
+      await tester.tap(find.text(l10n.tabChats));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.chatsStreamKeyHint), findsOneWidget);
+    },
+  );
 }

@@ -440,6 +440,102 @@ abstract class AppLocalizations {
   /// **'Sign in to see your chats.'**
   String get chatsGuestMessage;
 
+  /// No description provided for @chatsStreamKeyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Set STREAM_API_KEY to enable GetStream chat.'**
+  String get chatsStreamKeyHint;
+
+  /// No description provided for @chatsConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to chat…'**
+  String get chatsConnecting;
+
+  /// No description provided for @chatsDemoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo API: chat uses GetStream only with a real backend token.'**
+  String get chatsDemoHint;
+
+  /// No description provided for @chatsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load chats: {message}'**
+  String chatsLoadError(Object message);
+
+  /// No description provided for @chatOpenEventChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Event chat'**
+  String get chatOpenEventChat;
+
+  /// No description provided for @chatMessageUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get chatMessageUser;
+
+  /// No description provided for @chatChannelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chatChannelTitle;
+
+  /// No description provided for @chatDmReadOnlyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You left this event — messages are read-only.'**
+  String get chatDmReadOnlyHint;
+
+  /// No description provided for @chatReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get chatReportTitle;
+
+  /// No description provided for @chatReportDetailsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened?'**
+  String get chatReportDetailsLabel;
+
+  /// No description provided for @chatReportSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks — we will review this report.'**
+  String get chatReportSubmitted;
+
+  /// No description provided for @chatReportSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit report'**
+  String get chatReportSubmit;
+
+  /// No description provided for @chatBlockUserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Block user?'**
+  String get chatBlockUserTitle;
+
+  /// No description provided for @chatBlockUserBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}? You will no longer interact in chat.'**
+  String chatBlockUserBody(Object name);
+
+  /// No description provided for @chatBlockUserConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get chatBlockUserConfirm;
+
+  /// No description provided for @chatBlockUserSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'User blocked.'**
+  String get chatBlockUserSuccess;
+
   /// No description provided for @eventsPlaceholderTitle.
   ///
   /// In en, this message translates to:

@@ -31,4 +31,13 @@ class UsersRepository {
       return Failure(_api.mapDioError(e));
     }
   }
+
+  Future<Result<bool>> blockUser(String userId) async {
+    try {
+      await _api.dio.post<void>('/users/$userId/block');
+      return const Success(true);
+    } on DioException catch (e) {
+      return Failure(_api.mapDioError(e));
+    }
+  }
 }

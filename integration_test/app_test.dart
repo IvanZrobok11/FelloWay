@@ -2,6 +2,8 @@ import 'package:felloway_client/app/app.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
+import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
+import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
 import 'package:felloway_client/features/events/data/events_repository.dart';
 import 'package:felloway_client/features/onboarding/data/onboarding_preferences.dart';
 import 'package:felloway_client/features/profile/data/users_repository.dart';
@@ -30,6 +32,11 @@ void main() {
     );
     final eventsRepository = EventsRepository(apiClient);
     final usersRepository = UsersRepository(apiClient);
+    final streamChatService = StreamChatService(
+      config: config,
+      apiClient: apiClient,
+    );
+    final chatAccessController = ChatAccessController();
 
     await tester.pumpWidget(
       FellowayApp(
@@ -39,6 +46,8 @@ void main() {
         onboardingPreferences: onboarding,
         eventsRepository: eventsRepository,
         usersRepository: usersRepository,
+        streamChatService: streamChatService,
+        chatAccessController: chatAccessController,
       ),
     );
     await tester.pumpAndSettle();

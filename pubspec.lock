@@ -765,7 +765,7 @@ packages:
     source: hosted
     version: "6.1.0"
   logging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: logging
       sha256: c8245ada5f1717ed44271ed1c26b8ce85ca3228fd2ffdb75468ab01979309d61
@@ -1234,7 +1234,7 @@ packages:
     source: hosted
     version: "2.1.4"
   stream_chat:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: stream_chat
       sha256: "7f1f6cb0bb7f1910c993b1c1f663c6825127882554d5f592c865c7829f06dc6a"

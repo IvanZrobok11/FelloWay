@@ -195,6 +195,61 @@ class AppLocalizationsUk extends AppLocalizations {
   String get chatsGuestMessage => 'Увійдіть, щоб побачити чати.';
 
   @override
+  String get chatsStreamKeyHint =>
+      'Щоб увімкнути GetStream, задайте STREAM_API_KEY.';
+
+  @override
+  String get chatsConnecting => 'Підключення до чату…';
+
+  @override
+  String get chatsDemoHint =>
+      'Демо API: чат працює лише з реальним токеном бекенду.';
+
+  @override
+  String chatsLoadError(Object message) {
+    return 'Не вдалося завантажити чати: $message';
+  }
+
+  @override
+  String get chatOpenEventChat => 'Чат події';
+
+  @override
+  String get chatMessageUser => 'Написати';
+
+  @override
+  String get chatChannelTitle => 'Чат';
+
+  @override
+  String get chatDmReadOnlyHint =>
+      'Ви скасували участь — лише перегляд повідомлень.';
+
+  @override
+  String get chatReportTitle => 'Скарга';
+
+  @override
+  String get chatReportDetailsLabel => 'Що сталося?';
+
+  @override
+  String get chatReportSubmitted => 'Дякуємо — ми розглянемо скаргу.';
+
+  @override
+  String get chatReportSubmit => 'Надіслати скаргу';
+
+  @override
+  String get chatBlockUserTitle => 'Заблокувати користувача?';
+
+  @override
+  String chatBlockUserBody(Object name) {
+    return 'Заблокувати $name? Ви більше не взаємодітимете в чаті.';
+  }
+
+  @override
+  String get chatBlockUserConfirm => 'Заблокувати';
+
+  @override
+  String get chatBlockUserSuccess => 'Користувача заблоковано.';
+
+  @override
   String get eventsPlaceholderTitle => 'Події';
 
   @override

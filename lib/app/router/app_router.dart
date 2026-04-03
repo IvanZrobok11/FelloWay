@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../auth/auth_session.dart';
 import '../../features/onboarding/data/onboarding_preferences.dart';
 import '../shell/main_shell.dart';
 import '../../features/auth/presentation/oauth_sign_in_page.dart';
+import '../../features/chats/presentation/channel_page.dart';
 import '../../features/chats/presentation/chats_list_page.dart';
 import '../../features/events/presentation/event_detail_page.dart';
 import '../../features/events/presentation/events_list_page.dart';
@@ -70,6 +72,20 @@ GoRouter createAppRouter({
         path: '/event/:eventId',
         builder: (context, state) =>
             EventDetailPage(eventId: state.pathParameters['eventId']!),
+      ),
+      GoRoute(
+        path: '/chats/channel',
+        builder: (context, state) {
+          final type = state.uri.queryParameters['type'] ?? 'messaging';
+          final id = state.uri.queryParameters['id'] ?? '';
+          if (id.isEmpty) {
+            return const Scaffold(body: Center(child: Text('Invalid channel')));
+          }
+          return ChannelPage(
+            channelType: type,
+            channelId: Uri.decodeComponent(id),
+          );
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

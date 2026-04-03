@@ -195,6 +195,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatsGuestMessage => 'Sign in to see your chats.';
 
   @override
+  String get chatsStreamKeyHint =>
+      'Set STREAM_API_KEY to enable GetStream chat.';
+
+  @override
+  String get chatsConnecting => 'Connecting to chat…';
+
+  @override
+  String get chatsDemoHint =>
+      'Demo API: chat uses GetStream only with a real backend token.';
+
+  @override
+  String chatsLoadError(Object message) {
+    return 'Could not load chats: $message';
+  }
+
+  @override
+  String get chatOpenEventChat => 'Event chat';
+
+  @override
+  String get chatMessageUser => 'Message';
+
+  @override
+  String get chatChannelTitle => 'Chat';
+
+  @override
+  String get chatDmReadOnlyHint =>
+      'You left this event — messages are read-only.';
+
+  @override
+  String get chatReportTitle => 'Report';
+
+  @override
+  String get chatReportDetailsLabel => 'What happened?';
+
+  @override
+  String get chatReportSubmitted => 'Thanks — we will review this report.';
+
+  @override
+  String get chatReportSubmit => 'Submit report';
+
+  @override
+  String get chatBlockUserTitle => 'Block user?';
+
+  @override
+  String chatBlockUserBody(Object name) {
+    return 'Block $name? You will no longer interact in chat.';
+  }
+
+  @override
+  String get chatBlockUserConfirm => 'Block';
+
+  @override
+  String get chatBlockUserSuccess => 'User blocked.';
+
+  @override
   String get eventsPlaceholderTitle => 'Events';
 
   @override

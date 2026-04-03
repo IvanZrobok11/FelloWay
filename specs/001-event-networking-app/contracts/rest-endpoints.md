@@ -44,3 +44,7 @@ Reporting flows in PRD; exact paths TBD with backend (`reports` admin-facing; mo
 ## GetStream
 
 User creation/sync and channel provisioning are **server-side** with Stream; mobile uses Stream SDK token (from backend) to connect.
+
+| Method | Path | Use on client |
+|--------|------|----------------|
+| GET | `/chat/stream-token` | JWT / token string for `StreamChatClient.connectUser` (response: `{ "token": "..." }` or `{ "streamToken": "..." }`) |

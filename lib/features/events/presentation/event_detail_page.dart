@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart' show StreamChat;
 
 import '../../../app/app_scope.dart';
 import '../../../shared/errors/result.dart';
+import '../../chats/presentation/dm_launcher.dart';
 import '../data/demo_events.dart';
 import '../domain/event.dart';
 
@@ -40,14 +42,27 @@ class _EventDetailPageState extends State<EventDetailPage> {
     if (!mounted) return;
     switch (res) {
       case Success(:final value):
+        if (mounted) {
+          AppScope.chatAccessOf(context).setEventAttendance(
+            value.id,
+            value.attendStatus == AttendStatus.attending,
+          );
+        }
         setState(() {
           _event = value;
           _loading = false;
         });
       case Failure(:final error):
         if (config.isDemoBackend) {
+          final demo = demoEventDetail(widget.eventId);
+          if (mounted) {
+            AppScope.chatAccessOf(context).setEventAttendance(
+              demo.id,
+              demo.attendStatus == AttendStatus.attending,
+            );
+          }
           setState(() {
-            _event = demoEventDetail(widget.eventId);
+            _event = demo;
             _loading = false;
             _error = null;
           });
@@ -92,9 +107,19 @@ class _EventDetailPageState extends State<EventDetailPage> {
     final config = AppScope.configOf(context);
     switch (r) {
       case Success():
+        if (mounted) {
+          AppScope.chatAccessOf(
+            context,
+          ).setEventAttendance(widget.eventId, true);
+        }
         await _load();
       case Failure(:final error):
         if (config.isDemoBackend && _event != null) {
+          if (mounted) {
+            AppScope.chatAccessOf(
+              context,
+            ).setEventAttendance(widget.eventId, true);
+          }
           setState(() => _event = _withAttend(_event!, AttendStatus.attending));
         } else if (mounted) {
           ScaffoldMessenger.of(
@@ -111,9 +136,21 @@ class _EventDetailPageState extends State<EventDetailPage> {
     if (!mounted) return;
     switch (r) {
       case Success():
+        if (mounted) {
+          AppScope.chatAccessOf(
+            context,
+          ).setEventAttendance(widget.eventId, false);
+          await AppScope.streamChatOf(context).onLeftEvent(widget.eventId);
+        }
         await _load();
       case Failure(:final error):
         if (config.isDemoBackend && _event != null) {
+          if (mounted) {
+            AppScope.chatAccessOf(
+              context,
+            ).setEventAttendance(widget.eventId, false);
+            await AppScope.streamChatOf(context).onLeftEvent(widget.eventId);
+          }
           setState(
             () => _event = _withAttend(_event!, AttendStatus.notAttending),
           );
@@ -166,6 +203,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
 
     final e = _event!;
     final attending = e.attendStatus == AttendStatus.attending;
+    final streamReady = AppScope.streamChatOf(context).isReady;
 
     return Scaffold(
       appBar: AppBar(title: Text(e.title)),
@@ -203,10 +241,14 @@ class _EventDetailPageState extends State<EventDetailPage> {
           if (!auth)
             ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-              child: _AttendeeList(attendees: e.attendees),
+              child: _AttendeeList(attendees: e.attendees, eventId: e.id),
             )
           else
-            _AttendeeList(attendees: e.attendees),
+            _AttendeeList(
+              attendees: e.attendees,
+              eventId: e.id,
+              allowDm: attending && streamReady,
+            ),
           if (!auth)
             Padding(
               padding: const EdgeInsets.only(top: 12),
@@ -216,14 +258,22 @@ class _EventDetailPageState extends State<EventDetailPage> {
               ),
             ),
           const SizedBox(height: 24),
-          if (auth)
+          if (auth) ...[
             attending
                 ? OutlinedButton(
                     onPressed: _leave,
                     child: Text(l10n.eventLeave),
                   )
-                : FilledButton(onPressed: _join, child: Text(l10n.eventJoin))
-          else
+                : FilledButton(onPressed: _join, child: Text(l10n.eventJoin)),
+            if (attending && streamReady) ...[
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
+                onPressed: () => openEventChannel(context, eventId: e.id),
+                icon: const Icon(Icons.forum_outlined),
+                label: Text(l10n.chatOpenEventChat),
+              ),
+            ],
+          ] else
             FilledButton(onPressed: _join, child: Text(l10n.eventJoinSignIn)),
         ],
       ),
@@ -236,25 +286,45 @@ class _EventDetailPageState extends State<EventDetailPage> {
 }
 
 class _AttendeeList extends StatelessWidget {
-  const _AttendeeList({required this.attendees});
+  const _AttendeeList({
+    required this.attendees,
+    required this.eventId,
+    this.allowDm = false,
+  });
 
   final List<EventAttendeePreview> attendees;
+  final String eventId;
+  final bool allowDm;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (attendees.isEmpty) {
-      return Text(AppLocalizations.of(context)!.emptyStateTitle);
+      return Text(l10n.emptyStateTitle);
     }
     return Column(
-      children: attendees
-          .map(
-            (a) => ListTile(
-              dense: true,
-              title: Text(a.displayName),
-              subtitle: Text(a.city),
-            ),
-          )
-          .toList(),
+      children: attendees.map((a) {
+        return ListTile(
+          dense: true,
+          title: Text(a.displayName),
+          subtitle: Text(a.city),
+          trailing: allowDm && a.id.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.chat_bubble_outline),
+                  tooltip: l10n.chatMessageUser,
+                  onPressed: () {
+                    final client = StreamChat.of(context).client;
+                    openOrCreateEventDm(
+                      context,
+                      client: client,
+                      otherUserId: a.id,
+                      eventId: eventId,
+                    );
+                  },
+                )
+              : null,
+        );
+      }).toList(),
     );
   }
 }
