@@ -3,8 +3,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
-import '../../../shared/errors/result.dart';
-import '../../profile/domain/user_profile.dart';
 import '../domain/onboarding_draft.dart';
 import '../domain/onboarding_completion.dart';
 
@@ -40,7 +38,6 @@ class _CityPageState extends State<CityPage> {
   }
 
   Future<void> _finish(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
     final draft = _draft!;
     final city = _city?.trim() ?? '';
     if (city.isEmpty) return;
@@ -56,29 +53,11 @@ class _CityPageState extends State<CityPage> {
     }
 
     setState(() => _saving = true);
-    final users = AppScope.usersOf(context);
-    final onboarding = AppScope.onboardingOf(context);
-    final profile = UserProfile(
-      id: 'local',
-      displayName: draft.displayName,
-      interests: draft.interests,
-      hobbies: draft.hobbies,
-      homeCityLabel: draft.homeCityLabel,
-    );
-    final result = await users.updateMe(profile);
+    final store = AppScope.onboardingDraftStoreOf(context);
+    await store.savePending(draft);
     if (!context.mounted) return;
     setState(() => _saving = false);
-
-    switch (result) {
-      case Success():
-        await onboarding.setComplete(true);
-        if (!context.mounted) return;
-        context.go('/events');
-      case Failure(:final error):
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.onboardingSaveFailed(error.message))),
-        );
-    }
+    context.push('/sign-in');
   }
 
   @override
@@ -127,7 +106,7 @@ class _CityPageState extends State<CityPage> {
                         height: 24,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Text(l10n.onboardingGoToEvents),
+                    : Text(l10n.onboardingSignInToFinish),
               ),
             ],
           ),

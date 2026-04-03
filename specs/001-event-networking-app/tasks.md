@@ -73,9 +73,9 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 - [x] T020 [US1] `EventsRepository` + DTO mapping in `lib/features/events/data/events_repository.dart` (`GET /events`, `GET /events/{id}`, attend/delete attend)
 - [x] T021 [US1] OAuth sign-in flow (LinkedIn/Facebook) in `lib/features/auth/presentation/oauth_sign_in_page.dart` using `flutter_appauth`
 - [x] T022 [US1] Onboarding S1 welcome (hero, get started → S2, log in → `/sign-in`) in `lib/features/onboarding/presentation/welcome_page.dart`; OAuth providers remain on `oauth_sign_in_page.dart` (T021)
-- [x] T023 [US1] Onboarding S2 display name in `lib/features/onboarding/presentation/name_page.dart` + `PUT /users/me` wiring
+- [x] T023 [US1] Onboarding S2 display name in `lib/features/onboarding/presentation/name_page.dart` (local draft; no API until post-OAuth sync)
 - [x] T024 [US1] Onboarding S3 interests/hobbies chips in `lib/features/onboarding/presentation/interests_page.dart`
-- [x] T025 [US1] Onboarding S4 cascade city selection in `lib/features/onboarding/presentation/city_page.dart` + persist via `PUT /users/me`
+- [x] T025 [US1] Onboarding S4 cascade city in `lib/features/onboarding/presentation/city_page.dart` + save draft → `/sign-in`; post-OAuth `GET`/`PUT /users/me` in `oauth_sign_in_page.dart`
 - [x] T026 [US1] Events list with infinite scroll + search (name/tag/city) in `lib/features/events/presentation/events_list_page.dart`
 - [x] T027 [US1] Event detail: required fields, optional fields, participant list, join/unjoin in `lib/features/events/presentation/event_detail_page.dart`
 - [x] T028 [US1] Guest blur / sign-in CTA on detail per PRD in `lib/features/events/presentation/event_detail_page.dart`

@@ -53,7 +53,7 @@
 
 - OAuth 2.0 flow для LinkedIn і Facebook (отримання токену, підтягування базового профілю)
 - Refresh token логіка (видача, оновлення, інвалідація)
-- Endpoint'и профілю: `GET /users/me`, `PUT /users/me` (ім'я, біо, інтереси, місто)
+- Endpoint'и профілю: `GET /users/me`, `PUT /users/me` (ім'я, біо, інтереси, місто). На клієнті **онбординг S2–S4 не викликає** `PUT`; після OAuth — `GET`, потім умовний `PUT` з локальної чернетки, якщо профіль на сервері ще неповний.
 - Завантаження аватару в Azure Blob Storage (`POST /users/me/avatar`)
 - Синхронізація користувача з GetStream при реєстрації (створення GetStream user з нашим user ID)
 - Міграція БД: таблиці `users`, `interests`, `user_interests`, `cities`

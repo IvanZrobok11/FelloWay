@@ -8,6 +8,7 @@ import 'features/auth/data/token_storage.dart';
 import 'features/chats/application/chat_access_controller.dart';
 import 'features/chats/data/stream_chat_service.dart';
 import 'features/events/data/events_repository.dart';
+import 'features/onboarding/data/onboarding_draft_store.dart';
 import 'features/onboarding/data/onboarding_preferences.dart';
 import 'features/profile/data/users_repository.dart';
 import 'features/trips/data/trips_repository.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
   await authSession.restore();
   final prefs = await SharedPreferences.getInstance();
   final onboardingPreferences = OnboardingPreferences(prefs);
+  final onboardingDraftStore = OnboardingDraftStore(prefs);
   final apiClient = ApiClient(
     config: config,
     tokenStorage: tokenStorage,
@@ -40,6 +42,7 @@ Future<void> main() async {
       authSession: authSession,
       apiClient: apiClient,
       onboardingPreferences: onboardingPreferences,
+      onboardingDraftStore: onboardingDraftStore,
       eventsRepository: eventsRepository,
       usersRepository: usersRepository,
       tripsRepository: tripsRepository,

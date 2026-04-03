@@ -38,6 +38,7 @@
   "onboardingCityTitle": "Місто проживання",
   "onboardingCityLabel": "Місто",
   "onboardingGoToEvents": "До подій",
+  "onboardingSignInToFinish": "Увійти, щоб завершити",
   "onboardingSaveFailed": "Не вдалося зберегти профіль: {message}",
   "@onboardingSaveFailed": {
     "placeholders": {

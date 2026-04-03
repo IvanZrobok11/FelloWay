@@ -112,6 +112,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingGoToEvents => 'Go to events';
 
   @override
+  String get onboardingSignInToFinish => 'Sign in to finish';
+
+  @override
   String onboardingSaveFailed(Object message) {
     return 'Could not save profile: $message';
   }

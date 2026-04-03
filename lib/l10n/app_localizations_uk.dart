@@ -112,6 +112,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get onboardingGoToEvents => 'До подій';
 
   @override
+  String get onboardingSignInToFinish => 'Увійти, щоб завершити';
+
+  @override
   String onboardingSaveFailed(Object message) {
     return 'Не вдалося зберегти профіль: $message';
   }

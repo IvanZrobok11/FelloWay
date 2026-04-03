@@ -5,6 +5,7 @@ import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
 import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
 import 'package:felloway_client/features/events/data/events_repository.dart';
+import 'package:felloway_client/features/onboarding/data/onboarding_draft_store.dart';
 import 'package:felloway_client/features/onboarding/data/onboarding_preferences.dart';
 import 'package:felloway_client/features/profile/data/users_repository.dart';
 import 'package:felloway_client/features/trips/data/trips_repository.dart';
@@ -35,6 +36,7 @@ void main() {
       apiClient: apiClient,
       authSession: AuthSession(tokenStorage: tokenStorage),
       onboardingPreferences: OnboardingPreferences(prefs),
+      onboardingDraftStore: OnboardingDraftStore(prefs),
       eventsRepository: EventsRepository(apiClient, config),
       usersRepository: UsersRepository(apiClient, config),
       streamChatService: StreamChatService(

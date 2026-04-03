@@ -9,6 +9,7 @@
 | Concept | Client role | Typical fields (illustrative) |
 |---------|-------------|-------------------------------|
 | `Session` | Auth state | access token handle, refresh token presence, expiry hint, user id |
+| `OnboardingDraft` | Pre-auth registration | display name, interests, hobbies, home city label — persisted locally until OAuth succeeds, then merged or discarded per `GET /users/me` |
 | `UserProfile` | Me + others (visibility rules) | id, display name, home city, interests, hobbies, bio, avatar url, social links, aggregate rating |
 | `Event` | List + detail | id, title, start/end, city, venue, cover images, optional capacity/price/official url, attendee preview flags |
 | `EventAttendee` | List items | id, display name, city (policy: no avatars on cards per PRD for signed-in preview) |

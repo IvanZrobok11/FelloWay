@@ -79,7 +79,7 @@ Commit generated `test/golden/goldens/*.png` when goldens change; expect possibl
 ## Device Checks (Manual)
 
 - **Welcome (S1)**: **Get started** continues to name/interests/city; **Log in** pushes `/sign-in` (OAuth). Screen reader label summarizes both paths (`onboardingWelcomeSemanticsLabel`).
-- Onboarding **S2–S4**: TalkBack / VoiceOver reads section labels (Semantics); event list search field is exposed as a text field
+- Onboarding **S2–S4**: collect **display name, interests/hobbies, home city** into a **local draft** only; after S4 the primary action goes to **`/sign-in`**. **No `PUT /users/me`** during S2–S4. After successful OAuth, the app runs **`GET /users/me`** and applies **`PUT /users/me`** from the draft only when the server profile is still incomplete (empty display name or home city). TalkBack / VoiceOver: section labels on onboarding; event list search field is exposed as a text field
 - Event list / cards: cover images use decoded cache bounds (smaller memory); pull-to-refresh + infinite scroll uses one list request per page
 - Chats: Stream channel list uses SDK lazy loading; chat connection errors use shared `ErrorDisplay` + localized retry
 - Trips on event detail: one `GET …/trips` per refresh; profile loaded once for join policy (see `EventTripsSection` doc comment)

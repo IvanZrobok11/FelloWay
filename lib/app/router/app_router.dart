@@ -38,7 +38,7 @@ GoRouter createAppRouter({
       final onSignIn = path == '/sign-in';
 
       if (!authSession.isAuthenticated) {
-        if (onOnboarding) return '/events';
+        // Allow local onboarding (S1–S4) and sign-in before OAuth.
         return null;
       }
 

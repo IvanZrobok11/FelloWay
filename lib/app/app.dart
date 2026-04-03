@@ -7,6 +7,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../features/chats/application/chat_access_controller.dart';
 import '../features/chats/data/stream_chat_service.dart';
 import '../features/events/data/events_repository.dart';
+import '../features/onboarding/data/onboarding_draft_store.dart';
 import '../features/onboarding/data/onboarding_preferences.dart';
 import '../features/profile/data/users_repository.dart';
 import '../features/trips/data/trips_repository.dart';
@@ -25,6 +26,7 @@ class FellowayApp extends StatefulWidget {
     required this.authSession,
     required this.apiClient,
     required this.onboardingPreferences,
+    required this.onboardingDraftStore,
     required this.eventsRepository,
     required this.usersRepository,
     required this.streamChatService,
@@ -36,6 +38,7 @@ class FellowayApp extends StatefulWidget {
   final AuthSession authSession;
   final ApiClient apiClient;
   final OnboardingPreferences onboardingPreferences;
+  final OnboardingDraftStore onboardingDraftStore;
   final EventsRepository eventsRepository;
   final UsersRepository usersRepository;
   final StreamChatService streamChatService;
@@ -102,6 +105,7 @@ class _FellowayAppState extends State<FellowayApp> {
       apiClient: widget.apiClient,
       authSession: widget.authSession,
       onboardingPreferences: widget.onboardingPreferences,
+      onboardingDraftStore: widget.onboardingDraftStore,
       eventsRepository: widget.eventsRepository,
       usersRepository: widget.usersRepository,
       streamChatService: widget.streamChatService,

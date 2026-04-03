@@ -296,6 +296,12 @@ abstract class AppLocalizations {
   /// **'Go to events'**
   String get onboardingGoToEvents;
 
+  /// No description provided for @onboardingSignInToFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to finish'**
+  String get onboardingSignInToFinish;
+
   /// No description provided for @onboardingSaveFailed.
   ///
   /// In en, this message translates to:

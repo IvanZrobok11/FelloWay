@@ -49,6 +49,9 @@ class UsersRepository {
   }
 
   Future<Result<bool>> updateMe(UserProfile draft) async {
+    if (_config.isDemoBackend) {
+      return const Success(true);
+    }
     try {
       await _api.dio.put<void>('/users/me', data: draft.toUpdateBody());
       return const Success(true);

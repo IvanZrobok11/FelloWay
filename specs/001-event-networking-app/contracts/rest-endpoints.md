@@ -7,7 +7,7 @@ Derived from `TECH_PLAN.md` backend bullets. Paths and payloads are indicative; 
 | Method | Path | Use on client |
 |--------|------|----------------|
 | GET | `/users/me` | Current user profile |
-| PUT | `/users/me` | Update name, bio, interests, city |
+| PUT | `/users/me` | Update name, bio, interests, city. **Registration path:** not called during onboarding S2–S4; after OAuth, client may call `GET` first and **only** `PUT` when profile is incomplete (e.g. new user or missing name/city). Profile edit and settings flows use `PUT` anytime when signed in. |
 | POST | `/users/me/avatar` | Upload avatar (multipart) |
 | PUT | `/users/me/push-preferences` | Sync notification toggles (body: `globalEnabled`, `eventMessages`, `tripMessages`, `directMessages`) |
 | GET | `/users/{id}/reviews` | Reviews list on profile |

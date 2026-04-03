@@ -21,9 +21,10 @@ open event details, join an event, and see joined status in one session.
 **Acceptance Scenarios**:
 
 1. **Given** a first-time user opens the app, **When** they choose **Get started**
-   on the welcome screen and complete mandatory onboarding fields (and sign in
-   when the flow requires it), **Then** they are taken to the event list with a
-   personalized ordering.
+   on the welcome screen, complete mandatory onboarding fields **locally** (S2–S4),
+   then sign in successfully on `/sign-in`, **Then** the client syncs profile to
+   the backend when needed (`GET /users/me` then conditional `PUT /users/me`) and
+   they reach the event list with personalized ordering.
 2. **Given** a user is on the welcome screen, **When** they choose **Log in**,
    **Then** they are taken to the OAuth sign-in screen and, after successful
    authentication, routed according to session and onboarding completion state.
@@ -174,7 +175,10 @@ chats for one event.
 - **User**: Person using the platform with profile attributes, preferences,
   social identity linkage, and participation status.
 - **OnboardingProfile**: Mandatory initial profile inputs including display name,
-  interests/hobbies, and home city.
+  interests/hobbies, and home city. Before authentication, these live in a
+  **local onboarding draft**; the first server write uses `PUT /users/me` only
+  after OAuth succeeds and only when the server profile is not already complete
+  (display name and home city both present).
 - **Event**: Work conference listing with schedule, location, media, optional
   capacity/pricing/link metadata, and lifecycle state.
 - **EventParticipation**: Relationship between a user and an event, including
@@ -216,6 +220,9 @@ chats for one event.
 - The Flutter client shows **OAuth provider choice on a dedicated sign-in
   screen**; the **welcome** screen separates **profile onboarding (get started)**
   from **log in** rather than embedding LinkedIn/Facebook on S1.
+- **S2–S4 do not call the profile API** until the user has a session; after OAuth,
+  the app may **skip** `PUT /users/me` if `GET /users/me` already returns a
+  complete profile (returning user on the same device).
 - Users have a valid social account supported by the platform for sign-in.
 - Event and location reference data are available from existing business sources.
 - Push delivery infrastructure is available for notification triggers.

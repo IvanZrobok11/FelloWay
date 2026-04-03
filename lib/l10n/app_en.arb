@@ -41,6 +41,7 @@
   "onboardingCityTitle": "Home city",
   "onboardingCityLabel": "City",
   "onboardingGoToEvents": "Go to events",
+  "onboardingSignInToFinish": "Sign in to finish",
   "onboardingSaveFailed": "Could not save profile: {message}",
   "@onboardingSaveFailed": {
     "placeholders": {

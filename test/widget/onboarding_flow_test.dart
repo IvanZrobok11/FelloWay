@@ -7,7 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  testWidgets('WelcomePage shows hero, get started, and log in', (tester) async {
+  testWidgets('WelcomePage shows hero, get started, and log in', (
+    tester,
+  ) async {
     final router = GoRouter(
       initialLocation: '/welcome',
       routes: [

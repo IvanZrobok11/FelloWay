@@ -61,8 +61,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _signOut() async {
     final onboarding = AppScope.onboardingOf(context);
+    final draftStore = AppScope.onboardingDraftStoreOf(context);
     final session = AppScope.authSessionOf(context);
     await onboarding.clear();
+    await draftStore.clearPending();
     await session.signOut();
     if (!mounted) return;
     context.go('/events');
