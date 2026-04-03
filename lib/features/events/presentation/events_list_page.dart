@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
 import '../../../shared/errors/result.dart';
+import '../../../shared/widgets/error_display.dart';
 import '../data/demo_events.dart';
 import '../domain/event.dart';
 import 'event_card.dart';
@@ -124,14 +125,18 @@ class _EventsListPageState extends State<EventsListPage> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                hintText: l10n.eventsSearchHint,
-                border: const OutlineInputBorder(),
+            child: Semantics(
+              label: l10n.eventsSearchHint,
+              textField: true,
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  hintText: l10n.eventsSearchHint,
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: _onSearchChanged,
               ),
-              onChanged: _onSearchChanged,
             ),
           ),
           Expanded(
@@ -152,13 +157,7 @@ class _EventsListPageState extends State<EventsListPage> {
     if (_error != null) {
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Text(_error!, textAlign: TextAlign.center),
-          ),
-          TextButton(onPressed: _loadInitial, child: Text(l10n.commonRetry)),
-        ],
+        children: [ErrorDisplay(message: _error!, onRetry: _loadInitial)],
       );
     }
     if (_items.isEmpty) {

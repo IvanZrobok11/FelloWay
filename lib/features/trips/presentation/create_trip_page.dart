@@ -103,79 +103,84 @@ class _CreateTripPageState extends State<CreateTripPage> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.tripCreateTitle)),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
-        children: [
-          TextField(
-            key: const Key('trip_route_field'),
-            controller: _routeCtrl,
-            decoration: InputDecoration(
-              labelText: l10n.tripRouteLabel,
-              border: const OutlineInputBorder(),
+      body: Semantics(
+        container: true,
+        label:
+            '${l10n.tripCreateTitle}. ${l10n.tripRouteLabel}. ${l10n.tripTargetCityLabel}',
+        child: ListView(
+          padding: const EdgeInsets.all(24),
+          children: [
+            TextField(
+              key: const Key('trip_route_field'),
+              controller: _routeCtrl,
+              decoration: InputDecoration(
+                labelText: l10n.tripRouteLabel,
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: (_) => setState(() {}),
             ),
-            onChanged: (_) => setState(() {}),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            key: const Key('trip_city_field'),
-            controller: _cityCtrl,
-            decoration: InputDecoration(
-              labelText: l10n.tripTargetCityLabel,
-              border: const OutlineInputBorder(),
+            const SizedBox(height: 16),
+            TextField(
+              key: const Key('trip_city_field'),
+              controller: _cityCtrl,
+              decoration: InputDecoration(
+                labelText: l10n.tripTargetCityLabel,
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: (_) => setState(() {}),
             ),
-            onChanged: (_) => setState(() {}),
-          ),
-          const SizedBox(height: 16),
-          ListTile(
-            title: Text(l10n.tripDepartureLabel),
-            subtitle: Text(l10n.tripDepartureValue(_formatDt(_departure))),
-            trailing: const Icon(Icons.calendar_today),
-            onTap: _pickDeparture,
-          ),
-          const SizedBox(height: 8),
-          Text(l10n.tripRoleLabel),
-          SegmentedButton<TripTransportRole>(
-            segments: [
-              ButtonSegment(
-                value: TripTransportRole.driver,
-                label: Text(l10n.tripRoleDriver),
-              ),
-              ButtonSegment(
-                value: TripTransportRole.passenger,
-                label: Text(l10n.tripRolePassenger),
-              ),
-              ButtonSegment(
-                value: TripTransportRole.either,
-                label: Text(l10n.tripRoleEither),
-              ),
-            ],
-            selected: {_role},
-            onSelectionChanged: (s) => setState(() => _role = s.first),
-          ),
-          const SizedBox(height: 16),
-          Text(l10n.tripCapacityLabel(_capacity.round())),
-          Slider(
-            key: const Key('trip_capacity_slider'),
-            value: _capacity,
-            min: 1,
-            max: 20,
-            divisions: 19,
-            label: '${_capacity.round()}',
-            onChanged: (v) => setState(() => _capacity = v),
-          ),
-          const SizedBox(height: 24),
-          FilledButton(
-            key: const Key('trip_create_submit'),
-            onPressed: (_formValid && !_saving) ? _submit : null,
-            child: _saving
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : Text(l10n.tripCreateSubmit),
-          ),
-        ],
+            const SizedBox(height: 16),
+            ListTile(
+              title: Text(l10n.tripDepartureLabel),
+              subtitle: Text(l10n.tripDepartureValue(_formatDt(_departure))),
+              trailing: const Icon(Icons.calendar_today),
+              onTap: _pickDeparture,
+            ),
+            const SizedBox(height: 8),
+            Text(l10n.tripRoleLabel),
+            SegmentedButton<TripTransportRole>(
+              segments: [
+                ButtonSegment(
+                  value: TripTransportRole.driver,
+                  label: Text(l10n.tripRoleDriver),
+                ),
+                ButtonSegment(
+                  value: TripTransportRole.passenger,
+                  label: Text(l10n.tripRolePassenger),
+                ),
+                ButtonSegment(
+                  value: TripTransportRole.either,
+                  label: Text(l10n.tripRoleEither),
+                ),
+              ],
+              selected: {_role},
+              onSelectionChanged: (s) => setState(() => _role = s.first),
+            ),
+            const SizedBox(height: 16),
+            Text(l10n.tripCapacityLabel(_capacity.round())),
+            Slider(
+              key: const Key('trip_capacity_slider'),
+              value: _capacity,
+              min: 1,
+              max: 20,
+              divisions: 19,
+              label: '${_capacity.round()}',
+              onChanged: (v) => setState(() => _capacity = v),
+            ),
+            const SizedBox(height: 24),
+            FilledButton(
+              key: const Key('trip_create_submit'),
+              onPressed: (_formValid && !_saving) ? _submit : null,
+              child: _saving
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(l10n.tripCreateSubmit),
+            ),
+          ],
+        ),
       ),
     );
   }

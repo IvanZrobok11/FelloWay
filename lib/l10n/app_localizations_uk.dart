@@ -120,6 +120,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get eventCardGuestHint => 'Увійдіть, щоб побачити, хто ще їде.';
 
   @override
+  String get eventCardOpenHint => 'Подвійне натискання, щоб відкрити подію';
+
+  @override
   String get eventCardAttendeeTeaser => 'Також їдуть:';
 
   @override

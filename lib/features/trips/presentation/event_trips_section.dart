@@ -8,6 +8,9 @@ import '../domain/trip_chat.dart';
 import 'trip_join_flow.dart';
 
 /// Trip chats for an event (FR-013–FR-018). Shown on event detail when attending.
+///
+/// Network: one [TripsRepository.listTrips] call per refresh; [UsersRepository.getMe]
+/// runs once in [_bootstrap] for join policy (not per trip row — no N+1 on the list).
 class EventTripsSection extends StatefulWidget {
   const EventTripsSection({
     super.key,
@@ -103,9 +106,12 @@ class _EventTripsSectionState extends State<EventTripsSection> {
         Row(
           children: [
             Expanded(
-              child: Text(
-                l10n.tripsSectionTitle,
-                style: Theme.of(context).textTheme.titleMedium,
+              child: Semantics(
+                header: true,
+                child: Text(
+                  l10n.tripsSectionTitle,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
             ),
             TextButton.icon(
@@ -174,36 +180,41 @@ class _TripCard extends StatelessWidget {
       TripTransportRole.either => l10n.tripRoleEither,
     };
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              trip.routeLabel,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l10n.tripCardMeta(
-                l10n.tripDepartureValue(_format(trip.departureAt)),
-                trip.targetCityLabel,
-                roleLabel,
-                trip.memberCount,
-                trip.capacity,
+    return Semantics(
+      container: true,
+      label:
+          '${trip.routeLabel}. ${l10n.tripCardMeta(l10n.tripDepartureValue(_format(trip.departureAt)), trip.targetCityLabel, roleLabel, trip.memberCount, trip.capacity)}',
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 12),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                trip.routeLabel,
+                style: Theme.of(context).textTheme.titleSmall,
               ),
-            ),
-            const SizedBox(height: 8),
-            TripJoinBar(
-              trip: trip,
-              eventId: eventId,
-              userHomeCity: userHomeCity,
-              streamReady: streamReady,
-              onUpdated: onUpdated,
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                l10n.tripCardMeta(
+                  l10n.tripDepartureValue(_format(trip.departureAt)),
+                  trip.targetCityLabel,
+                  roleLabel,
+                  trip.memberCount,
+                  trip.capacity,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TripJoinBar(
+                trip: trip,
+                eventId: eventId,
+                userHomeCity: userHomeCity,
+                streamReady: streamReady,
+                onUpdated: onUpdated,
+              ),
+            ],
+          ),
         ),
       ),
     );

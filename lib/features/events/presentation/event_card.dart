@@ -20,90 +20,108 @@ class EventCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final cover = summary.imageUrls.isNotEmpty ? summary.imageUrls.first : null;
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+    final maxW = MediaQuery.sizeOf(context).width;
+    final cacheW = (maxW * dpr).round().clamp(1, 1200);
+    final cacheH = ((maxW * 9 / 16) * dpr).round().clamp(1, 800);
+    final semanticLabel =
+        '${summary.title}, ${summary.city}, ${_formatDate(summary.startsAt)}';
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: cover != null
-                  ? Image.network(
-                      cover,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => ColoredBox(
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      hint: l10n.eventCardOpenHint,
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: cover != null
+                    ? Image.network(
+                        cover,
+                        fit: BoxFit.cover,
+                        cacheWidth: cacheW,
+                        cacheHeight: cacheH,
+                        filterQuality: FilterQuality.medium,
+                        errorBuilder: (context, error, stackTrace) =>
+                            ColoredBox(
+                              color: theme.colorScheme.surfaceContainerHighest,
+                              child: const Icon(Icons.event, size: 48),
+                            ),
+                      )
+                    : ColoredBox(
                         color: theme.colorScheme.surfaceContainerHighest,
                         child: const Icon(Icons.event, size: 48),
                       ),
-                    )
-                  : ColoredBox(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      child: const Icon(Icons.event, size: 48),
-                    ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    summary.title,
-                    style: theme.textTheme.titleMedium,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${summary.city} · ${_formatDate(summary.startsAt)}',
-                    style: theme.textTheme.bodySmall,
-                  ),
-                  if (summary.tags.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 4,
-                      children: summary.tags
-                          .take(4)
-                          .map(
-                            (t) => Chip(
-                              label: Text(t, style: theme.textTheme.labelSmall),
-                              visualDensity: VisualDensity.compact,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
-                  const SizedBox(height: 8),
-                  if (isGuest)
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      l10n.eventCardGuestHint,
-                      style: theme.textTheme.bodySmall,
-                    )
-                  else if (summary.attendeePreview.isNotEmpty)
-                    Text(
-                      l10n.eventCardAttendeeTeaser,
-                      style: theme.textTheme.bodySmall,
-                    ),
-                  if (!isGuest && summary.attendeePreview.isNotEmpty)
-                    const SizedBox(height: 4),
-                  if (!isGuest && summary.attendeePreview.isNotEmpty)
-                    Text(
-                      summary.attendeePreview
-                          .map((a) => '${a.displayName} (${a.city})')
-                          .take(3)
-                          .join(', '),
-                      style: theme.textTheme.bodyMedium,
+                      summary.title,
+                      style: theme.textTheme.titleMedium,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                ],
+                    const SizedBox(height: 4),
+                    Text(
+                      '${summary.city} · ${_formatDate(summary.startsAt)}',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                    if (summary.tags.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 4,
+                        children: summary.tags
+                            .take(4)
+                            .map(
+                              (t) => Chip(
+                                label: Text(
+                                  t,
+                                  style: theme.textTheme.labelSmall,
+                                ),
+                                visualDensity: VisualDensity.compact,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                    const SizedBox(height: 8),
+                    if (isGuest)
+                      Text(
+                        l10n.eventCardGuestHint,
+                        style: theme.textTheme.bodySmall,
+                      )
+                    else if (summary.attendeePreview.isNotEmpty)
+                      Text(
+                        l10n.eventCardAttendeeTeaser,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    if (!isGuest && summary.attendeePreview.isNotEmpty)
+                      const SizedBox(height: 4),
+                    if (!isGuest && summary.attendeePreview.isNotEmpty)
+                      Text(
+                        summary.attendeePreview
+                            .map((a) => '${a.displayName} (${a.city})')
+                            .take(3)
+                            .join(', '),
+                        style: theme.textTheme.bodyMedium,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

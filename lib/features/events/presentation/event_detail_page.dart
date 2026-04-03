@@ -206,6 +206,10 @@ class _EventDetailPageState extends State<EventDetailPage> {
     final attending = e.attendStatus == AttendStatus.attending;
     final streamReady = AppScope.streamChatOf(context).isReady;
     final eventEnded = DateTime.now().isAfter(e.endsAt);
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+    final maxW = MediaQuery.sizeOf(context).width - 32;
+    final heroCacheW = (maxW * dpr).round().clamp(1, 1400);
+    final heroCacheH = ((maxW * 9 / 16) * dpr).round().clamp(1, 900);
 
     return Scaffold(
       appBar: AppBar(title: Text(e.title)),
@@ -220,6 +224,9 @@ class _EventDetailPageState extends State<EventDetailPage> {
                 child: Image.network(
                   e.imageUrls.first,
                   fit: BoxFit.cover,
+                  cacheWidth: heroCacheW,
+                  cacheHeight: heroCacheH,
+                  filterQuality: FilterQuality.medium,
                   errorBuilder: (context, error, stackTrace) =>
                       const SizedBox.shrink(),
                 ),
@@ -235,9 +242,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
           if (e.priceLabel != null) Text(l10n.eventPrice(e.priceLabel!)),
           if (e.officialUrl != null) Text(l10n.eventOfficialLink),
           const SizedBox(height: 16),
-          Text(
-            l10n.eventParticipantsTitle,
-            style: Theme.of(context).textTheme.titleMedium,
+          Semantics(
+            header: true,
+            child: Text(
+              l10n.eventParticipantsTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
           const SizedBox(height: 8),
           if (!auth)

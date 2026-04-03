@@ -48,6 +48,7 @@
   "eventsScreenTitle": "Events",
   "eventsSearchHint": "Search by name, tag, or city",
   "eventCardGuestHint": "Sign in to see who else is going.",
+  "eventCardOpenHint": "Double tap to open event details",
   "eventCardAttendeeTeaser": "People also attending:",
   "eventJoin": "I'm going",
   "eventLeave": "Cancel attendance",

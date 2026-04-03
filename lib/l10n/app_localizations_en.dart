@@ -120,6 +120,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eventCardGuestHint => 'Sign in to see who else is going.';
 
   @override
+  String get eventCardOpenHint => 'Double tap to open event details';
+
+  @override
   String get eventCardAttendeeTeaser => 'People also attending:';
 
   @override

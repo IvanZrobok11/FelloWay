@@ -88,45 +88,49 @@ class _CityPageState extends State<CityPage> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.onboardingCityTitle)),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            InputDecorator(
-              decoration: InputDecoration(
-                labelText: l10n.onboardingCityLabel,
-                border: const OutlineInputBorder(),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  value: _cities.contains(_city) ? _city : null,
-                  hint: Text(l10n.onboardingCityLabel),
-                  items: _cities
-                      .map((c) => DropdownMenuItem(value: c, child: Text(c)))
-                      .toList(),
-                  onChanged: (v) => setState(() {
-                    _city = v;
-                    if (v != null) {
-                      draft.homeCityLabel = v;
-                    }
-                  }),
+      body: Semantics(
+        container: true,
+        label: '${l10n.onboardingCityTitle}. ${l10n.onboardingCityLabel}',
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              InputDecorator(
+                decoration: InputDecoration(
+                  labelText: l10n.onboardingCityLabel,
+                  border: const OutlineInputBorder(),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    value: _cities.contains(_city) ? _city : null,
+                    hint: Text(l10n.onboardingCityLabel),
+                    items: _cities
+                        .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                        .toList(),
+                    onChanged: (v) => setState(() {
+                      _city = v;
+                      if (v != null) {
+                        draft.homeCityLabel = v;
+                      }
+                    }),
+                  ),
                 ),
               ),
-            ),
-            const Spacer(),
-            FilledButton(
-              onPressed: _saving ? null : () => _finish(context),
-              child: _saving
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(l10n.onboardingGoToEvents),
-            ),
-          ],
+              const Spacer(),
+              FilledButton(
+                onPressed: _saving ? null : () => _finish(context),
+                child: _saving
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(l10n.onboardingGoToEvents),
+              ),
+            ],
+          ),
         ),
       ),
     );

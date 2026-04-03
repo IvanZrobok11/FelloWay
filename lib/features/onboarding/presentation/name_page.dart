@@ -39,30 +39,34 @@ class _NamePageState extends State<NamePage> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.onboardingNameTitle)),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                labelText: l10n.onboardingNameLabel,
-                border: const OutlineInputBorder(),
+      body: Semantics(
+        container: true,
+        label: '${l10n.onboardingNameTitle}. ${l10n.onboardingNameLabel}',
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  labelText: l10n.onboardingNameLabel,
+                  border: const OutlineInputBorder(),
+                ),
+                textInputAction: TextInputAction.next,
+                onChanged: (v) => draft.displayName = v,
               ),
-              textInputAction: TextInputAction.next,
-              onChanged: (v) => draft.displayName = v,
-            ),
-            const SizedBox(height: 24),
-            FilledButton(
-              onPressed: () {
-                draft.displayName = controller.text.trim();
-                if (draft.displayName.isEmpty) return;
-                context.go('/onboarding/interests', extra: draft);
-              },
-              child: Text(l10n.onboardingContinue),
-            ),
-          ],
+              const SizedBox(height: 24),
+              FilledButton(
+                onPressed: () {
+                  draft.displayName = controller.text.trim();
+                  if (draft.displayName.isEmpty) return;
+                  context.go('/onboarding/interests', extra: draft);
+                },
+                child: Text(l10n.onboardingContinue),
+              ),
+            ],
+          ),
         ),
       ),
     );

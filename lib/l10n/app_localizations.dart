@@ -308,6 +308,12 @@ abstract class AppLocalizations {
   /// **'Sign in to see who else is going.'**
   String get eventCardGuestHint;
 
+  /// No description provided for @eventCardOpenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to open event details'**
+  String get eventCardOpenHint;
+
   /// No description provided for @eventCardAttendeeTeaser.
   ///
   /// In en, this message translates to:

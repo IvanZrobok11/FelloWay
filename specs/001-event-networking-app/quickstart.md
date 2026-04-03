@@ -78,6 +78,11 @@ Commit generated `test/golden/goldens/*.png` when goldens change; expect possibl
 
 ## Device Checks (Manual)
 
+- Onboarding screens: TalkBack / VoiceOver reads section labels (Semantics on S2–S4); event list search field is exposed as a text field
+- Event list / cards: cover images use decoded cache bounds (smaller memory); pull-to-refresh + infinite scroll uses one list request per page
+- Chats: Stream channel list uses SDK lazy loading; chat connection errors use shared `ErrorDisplay` + localized retry
+- Trips on event detail: one `GET …/trips` per refresh; profile loaded once for join policy (see `EventTripsSection` doc comment)
+
 - OAuth redirect opens and returns to app (iOS + Android)
 - Token persistence across app restart
 - Push: wire FCM/APNs to `PushHandler.handleForegroundData` / `handleNotificationOpened` (`lib/app/notifications/push_handler.dart`); verify deep link opens event or `/chats/channel`

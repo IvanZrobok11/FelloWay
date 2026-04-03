@@ -5,6 +5,7 @@ import 'package:stream_chat/stream_chat.dart' as sm;
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../shared/widgets/error_display.dart';
 import '../data/stream_chat_service.dart';
 
 class ChatsListPage extends StatelessWidget {
@@ -83,29 +84,14 @@ class ChatsListPage extends StatelessWidget {
           case StreamChatConnectStatus.error:
             return Scaffold(
               appBar: AppBar(title: Text(l10n.chatsPlaceholderTitle)),
-              body: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        l10n.chatsLoadError(stream.errorMessage ?? '—'),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      FilledButton(
-                        onPressed: () {
-                          stream.syncWithSession(
-                            isAuthenticated: true,
-                            usersRepository: users,
-                          );
-                        },
-                        child: Text(l10n.commonRetry),
-                      ),
-                    ],
-                  ),
-                ),
+              body: ErrorDisplay(
+                message: l10n.chatsLoadError(stream.errorMessage ?? '—'),
+                onRetry: () {
+                  stream.syncWithSession(
+                    isAuthenticated: true,
+                    usersRepository: users,
+                  );
+                },
               ),
             );
           case StreamChatConnectStatus.disconnected:

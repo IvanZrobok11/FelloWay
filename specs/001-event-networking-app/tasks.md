@@ -81,8 +81,8 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 - [x] T028 [US1] Guest blur / sign-in CTA on detail per PRD in `lib/features/events/presentation/event_detail_page.dart`
 - [x] T029 [US1] Map tab: map SDK setup, event markers, date/interest filters, popup → navigate to event in `lib/features/map/presentation/map_page.dart`
 - [x] T030 [US1] Profile tab read-only MVP: avatar, name, links, interests, rating display from `GET /users/me` in `lib/features/profile/presentation/profile_page.dart`
-- [ ] T031 [US1] Verify UX/a11y (semantics, contrast) on onboarding + list + detail
-- [ ] T032 [US1] Verify list scroll and image loading performance (caching, pagination batch size)
+- [x] T031 [US1] Verify UX/a11y (semantics, contrast) on onboarding + list + detail
+- [x] T032 [US1] Verify list scroll and image loading performance (caching, pagination batch size)
 
 **Checkpoint**: US1 acceptance scenarios in [spec.md](./spec.md) pass
 
@@ -109,8 +109,8 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 - [x] T040 [US2] Enforce unjoin: disconnect/remove event + trip channels; DM read-only composer lock in `lib/features/chats/application/chat_access_controller.dart` (or equivalent state layer)
 - [x] T041 [US2] Report message/user entry points (UI + `POST` report when contract finalized) in `lib/features/chats/presentation/report_sheet.dart`
 - [x] T042 [US2] Block user action from profile/chat (`POST /users/{id}/block`) in `lib/features/profile/presentation/block_user_action.dart`
-- [ ] T043 [US2] Verify UX consistency with shared widgets and l10n for chat errors
-- [ ] T044 [US2] Verify chat list scroll performance under typical channel count
+- [x] T043 [US2] Verify UX consistency with shared widgets and l10n for chat errors
+- [x] T044 [US2] Verify chat list scroll performance under typical channel count
 
 **Checkpoint**: US2 acceptance scenarios in [spec.md](./spec.md) pass
 
@@ -138,8 +138,8 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 - [x] T053 [US3] Owner inbox: approve + show requester rating warning in `lib/features/trips/presentation/trip_owner_requests_page.dart`
 - [x] T054 [US3] Open Stream trip channel after membership granted in `lib/features/trips/presentation/trip_channel_opener.dart`
 - [x] T055 [US3] Support multiple trip chats per event (navigation + list state)
-- [ ] T056 [US3] Verify UX/a11y for trips section and forms
-- [ ] T057 [US3] Verify no N+1 network patterns on trip list refresh
+- [x] T056 [US3] Verify UX/a11y for trips section and forms
+- [x] T057 [US3] Verify no N+1 network patterns on trip list refresh
 
 **Checkpoint**: US3 acceptance scenarios in [spec.md](./spec.md) pass
 

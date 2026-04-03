@@ -45,6 +45,7 @@
   "eventsScreenTitle": "Події",
   "eventsSearchHint": "Пошук за назвою, тегом або містом",
   "eventCardGuestHint": "Увійдіть, щоб побачити, хто ще їде.",
+  "eventCardOpenHint": "Подвійне натискання, щоб відкрити подію",
   "eventCardAttendeeTeaser": "Також їдуть:",
   "eventJoin": "Йду",
   "eventLeave": "Скасувати участь",
