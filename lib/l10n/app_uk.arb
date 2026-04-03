@@ -26,6 +26,8 @@
   },
   "onboardingWelcomeTitle": "Ласкаво просимо",
   "onboardingWelcomeBody": "FelloWay допомагає нетворкитися перед IT-конференціями та домовлятися про спільні поїздки.",
+  "onboardingWelcomeGetStarted": "Почати",
+  "onboardingWelcomeLogIn": "Увійти",
   "onboardingContinue": "Далі",
   "onboardingNameTitle": "Ваше ім'я",
   "onboardingNameLabel": "Ім'я або нікнейм",
@@ -181,5 +183,5 @@
   "profileMenuEdit": "Редагувати профіль",
   "profileMenuNotifications": "Налаштування сповіщень",
   "profileMenuReviews": "Відгуки про вас",
-  "onboardingWelcomeSemanticsLabel": "Ласкаво просимо до FelloWay. Нетворкінг перед IT-конференціями та координація поїздок."
+  "onboardingWelcomeSemanticsLabel": "Ласкаво просимо до FelloWay. Нетворкінг перед IT-конференціями та координація поїздок. Натисніть Почати, щоб створити профіль, або Увійти, якщо вже маєте обліковий запис."
 }

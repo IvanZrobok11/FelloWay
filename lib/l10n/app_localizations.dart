@@ -224,6 +224,18 @@ abstract class AppLocalizations {
   /// **'FelloWay helps you network before IT conferences and coordinate rides.'**
   String get onboardingWelcomeBody;
 
+  /// No description provided for @onboardingWelcomeGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get onboardingWelcomeGetStarted;
+
+  /// No description provided for @onboardingWelcomeLogIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get onboardingWelcomeLogIn;
+
   /// No description provided for @onboardingContinue.
   ///
   /// In en, this message translates to:
@@ -935,7 +947,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingWelcomeSemanticsLabel.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to FelloWay. Networking before IT conferences and trip coordination.'**
+  /// **'Welcome to FelloWay. Networking before IT conferences and trip coordination. Get started to create your profile, or log in if you already have an account.'**
   String get onboardingWelcomeSemanticsLabel;
 }
 

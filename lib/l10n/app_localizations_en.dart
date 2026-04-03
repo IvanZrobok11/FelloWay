@@ -76,6 +76,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'FelloWay helps you network before IT conferences and coordinate rides.';
 
   @override
+  String get onboardingWelcomeGetStarted => 'Get started';
+
+  @override
+  String get onboardingWelcomeLogIn => 'Log in';
+
+  @override
   String get onboardingContinue => 'Continue';
 
   @override
@@ -468,5 +474,5 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingWelcomeSemanticsLabel =>
-      'Welcome to FelloWay. Networking before IT conferences and trip coordination.';
+      'Welcome to FelloWay. Networking before IT conferences and trip coordination. Get started to create your profile, or log in if you already have an account.';
 }

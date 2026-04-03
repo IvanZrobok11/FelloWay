@@ -78,7 +78,8 @@ Commit generated `test/golden/goldens/*.png` when goldens change; expect possibl
 
 ## Device Checks (Manual)
 
-- Onboarding screens: TalkBack / VoiceOver reads section labels (Semantics on S2–S4); event list search field is exposed as a text field
+- **Welcome (S1)**: **Get started** continues to name/interests/city; **Log in** pushes `/sign-in` (OAuth). Screen reader label summarizes both paths (`onboardingWelcomeSemanticsLabel`).
+- Onboarding **S2–S4**: TalkBack / VoiceOver reads section labels (Semantics); event list search field is exposed as a text field
 - Event list / cards: cover images use decoded cache bounds (smaller memory); pull-to-refresh + infinite scroll uses one list request per page
 - Chats: Stream channel list uses SDK lazy loading; chat connection errors use shared `ErrorDisplay` + localized retry
 - Trips on event detail: one `GET …/trips` per refresh; profile loaded once for join policy (see `EventTripsSection` doc comment)

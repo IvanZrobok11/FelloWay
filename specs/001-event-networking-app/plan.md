@@ -8,7 +8,7 @@
 
 ## Summary
 
-Deliver the FelloWay event-networking MVP as a Flutter client: OAuth onboarding (LinkedIn/Facebook), four-tab shell (events, map, chats, profile), event discovery with guest vs signed-in behavior, event detail and join/unjoin, map discovery with filters, GetStream-powered chat list and channels (event-wide, trip-local, DM), trip-chat flows on the event screen, push handling and notification preferences, ratings/reviews UI, and reporting/blocking entry points. The app consumes REST APIs and GetStream; it does not implement server logic.
+Deliver the FelloWay event-networking MVP as a Flutter client: onboarding **S1 welcome** (get started vs log in) plus **S2–S4** profile steps, **OAuth** (LinkedIn/Facebook) on a dedicated sign-in screen and other entry points, four-tab shell (events, map, chats, profile), event discovery with guest vs signed-in behavior, event detail and join/unjoin, map discovery with filters, GetStream-powered chat list and channels (event-wide, trip-local, DM), trip-chat flows on the event screen, push handling and notification preferences, ratings/reviews UI, and reporting/blocking entry points. The app consumes REST APIs and GetStream; it does not implement server logic.
 
 ## Technical Context
 
@@ -56,7 +56,7 @@ Aligned with `TECH_PLAN.md` **Flutter** bullets only; backend phases are referen
 | Plan phase | TECH_PLAN phase | Flutter focus |
 |------------|-----------------|---------------|
 | P0 | 0 (shared prep) | Repo/app setup: l10n, analysis, CI, env/flavors, secure storage, OAuth redirect config placeholders, GetStream app key wiring (staging) |
-| P1 | 1 | Onboarding S1–S4, OAuth via appauth, tokens in secure storage, tab shell + router, profile tab (avatar, name, links, interests, rating display) |
+| P1 | 1 | Onboarding S1 (welcome: get started → S2–S4, log in → `/sign-in`) + S2–S4, OAuth via appauth on sign-in route, tokens in secure storage, tab shell + router, profile tab (avatar, name, links, interests, rating display) |
 | P2 | 2 | Events tab: paginated list, search, guest vs auth card behavior, event detail, join/unjoin; Map tab: provider choice, markers, filters, popup → event |
 | P3 | 3 | Chats tab via Stream SDK; event trips section; create trip chat; join requests + approval UI; low-rating warning on requests; DM entry from participants |
 | P4 | 4 | Push foreground/background handling; profile notification settings; post-event feedback screen; reviews list UI |

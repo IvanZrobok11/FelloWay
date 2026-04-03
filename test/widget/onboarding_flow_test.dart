@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  testWidgets('WelcomePage shows title and continue', (tester) async {
+  testWidgets('WelcomePage shows hero, get started, and log in', (tester) async {
     final router = GoRouter(
       initialLocation: '/welcome',
       routes: [
@@ -31,8 +31,11 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.textContaining('Welcome'), findsOneWidget);
+    expect(find.textContaining('Welcome'), findsWidgets);
+    expect(find.text('Get started'), findsOneWidget);
+    expect(find.text('Log in'), findsOneWidget);
     expect(find.byType(FilledButton), findsOneWidget);
+    expect(find.byType(OutlinedButton), findsOneWidget);
   });
 
   testWidgets('NamePage requires non-empty name to enable flow', (

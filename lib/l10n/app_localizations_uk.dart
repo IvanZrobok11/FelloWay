@@ -76,6 +76,12 @@ class AppLocalizationsUk extends AppLocalizations {
       'FelloWay допомагає нетворкитися перед IT-конференціями та домовлятися про спільні поїздки.';
 
   @override
+  String get onboardingWelcomeGetStarted => 'Почати';
+
+  @override
+  String get onboardingWelcomeLogIn => 'Увійти';
+
+  @override
   String get onboardingContinue => 'Далі';
 
   @override
@@ -469,5 +475,5 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get onboardingWelcomeSemanticsLabel =>
-      'Ласкаво просимо до FelloWay. Нетворкінг перед IT-конференціями та координація поїздок.';
+      'Ласкаво просимо до FelloWay. Нетворкінг перед IT-конференціями та координація поїздок. Натисніть Почати, щоб створити профіль, або Увійти, якщо вже маєте обліковий запис.';
 }

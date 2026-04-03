@@ -29,6 +29,8 @@
   },
   "onboardingWelcomeTitle": "Welcome",
   "onboardingWelcomeBody": "FelloWay helps you network before IT conferences and coordinate rides.",
+  "onboardingWelcomeGetStarted": "Get started",
+  "onboardingWelcomeLogIn": "Log in",
   "onboardingContinue": "Continue",
   "onboardingNameTitle": "Your name",
   "onboardingNameLabel": "Name or nickname",
@@ -218,5 +220,5 @@
   "profileMenuEdit": "Edit profile",
   "profileMenuNotifications": "Notification settings",
   "profileMenuReviews": "Reviews about you",
-  "onboardingWelcomeSemanticsLabel": "Welcome to FelloWay. Networking before IT conferences and trip coordination."
+  "onboardingWelcomeSemanticsLabel": "Welcome to FelloWay. Networking before IT conferences and trip coordination. Get started to create your profile, or log in if you already have an account."
 }

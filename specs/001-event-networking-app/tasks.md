@@ -54,7 +54,7 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 ## Phase 3: User Story 1 — Join and Discover Events (Priority: P1) 🎯 MVP
 
-**Goal**: OAuth onboarding S1–S4, personalized event list with pagination/search, guest vs signed-in card behavior, event detail, join/unjoin, map discovery (FR-003–FR-008, FR-021, FR-001–FR-002, FR-005–FR-006)
+**Goal**: Onboarding S1–S4 (S1: welcome with get started + log in; OAuth on `/sign-in` and other CTAs), personalized event list with pagination/search, guest vs signed-in card behavior, event detail, join/unjoin, map discovery (FR-003–FR-008, FR-021, FR-001–FR-002, FR-005–FR-006)
 
 **Independent Test**: New user completes onboarding, sees event list, opens detail, joins; guest is prompted to sign in on join
 
@@ -72,7 +72,7 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 - [x] T019 [P] [US1] Domain models `Event`, `EventSummary`, `AttendStatus` in `lib/features/events/domain/event.dart`
 - [x] T020 [US1] `EventsRepository` + DTO mapping in `lib/features/events/data/events_repository.dart` (`GET /events`, `GET /events/{id}`, attend/delete attend)
 - [x] T021 [US1] OAuth sign-in flow (LinkedIn/Facebook) in `lib/features/auth/presentation/oauth_sign_in_page.dart` using `flutter_appauth`
-- [x] T022 [US1] Onboarding S1 welcome + provider buttons in `lib/features/onboarding/presentation/welcome_page.dart`
+- [x] T022 [US1] Onboarding S1 welcome (hero, get started → S2, log in → `/sign-in`) in `lib/features/onboarding/presentation/welcome_page.dart`; OAuth providers remain on `oauth_sign_in_page.dart` (T021)
 - [x] T023 [US1] Onboarding S2 display name in `lib/features/onboarding/presentation/name_page.dart` + `PUT /users/me` wiring
 - [x] T024 [US1] Onboarding S3 interests/hobbies chips in `lib/features/onboarding/presentation/interests_page.dart`
 - [x] T025 [US1] Onboarding S4 cascade city selection in `lib/features/onboarding/presentation/city_page.dart` + persist via `PUT /users/me`

@@ -20,13 +20,17 @@ open event details, join an event, and see joined status in one session.
 
 **Acceptance Scenarios**:
 
-1. **Given** a first-time user opens the app, **When** they complete sign-in and
-   mandatory onboarding fields, **Then** they are taken to the event list with a
+1. **Given** a first-time user opens the app, **When** they choose **Get started**
+   on the welcome screen and complete mandatory onboarding fields (and sign in
+   when the flow requires it), **Then** they are taken to the event list with a
    personalized ordering.
-2. **Given** a signed-in user opens an event card, **When** they select "Join",
+2. **Given** a user is on the welcome screen, **When** they choose **Log in**,
+   **Then** they are taken to the OAuth sign-in screen and, after successful
+   authentication, routed according to session and onboarding completion state.
+3. **Given** a signed-in user opens an event card, **When** they select "Join",
    **Then** their participation status updates immediately and they are added to
    the event participant set.
-3. **Given** a guest user opens an event card, **When** they attempt to join,
+4. **Given** a guest user opens an event card, **When** they attempt to join,
    **Then** they are prompted to authenticate before participation is allowed.
 
 ---
@@ -209,6 +213,9 @@ chats for one event.
 
 - MVP scope targets mobile attendee experience; organizer administration is
   handled outside this feature scope.
+- The Flutter client shows **OAuth provider choice on a dedicated sign-in
+  screen**; the **welcome** screen separates **profile onboarding (get started)**
+  from **log in** rather than embedding LinkedIn/Facebook on S1.
 - Users have a valid social account supported by the platform for sign-in.
 - Event and location reference data are available from existing business sources.
 - Push delivery infrastructure is available for notification triggers.
