@@ -7,6 +7,7 @@ import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
 import 'package:felloway_client/features/events/data/events_repository.dart';
 import 'package:felloway_client/features/onboarding/data/onboarding_preferences.dart';
 import 'package:felloway_client/features/profile/data/users_repository.dart';
+import 'package:felloway_client/features/trips/data/trips_repository.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:felloway_client/shared/network/api_client.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,7 @@ void main() {
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
     final eventsRepository = EventsRepository(apiClient);
     final usersRepository = UsersRepository(apiClient);
+    final tripsRepository = TripsRepository(apiClient, config);
     final streamChatService = StreamChatService(
       config: config,
       apiClient: apiClient,
@@ -73,6 +75,7 @@ void main() {
         onboardingPreferences: onboarding,
         eventsRepository: eventsRepository,
         usersRepository: usersRepository,
+        tripsRepository: tripsRepository,
         streamChatService: streamChatService,
         chatAccessController: chatAccessController,
       ),

@@ -10,6 +10,7 @@ import 'features/chats/data/stream_chat_service.dart';
 import 'features/events/data/events_repository.dart';
 import 'features/onboarding/data/onboarding_preferences.dart';
 import 'features/profile/data/users_repository.dart';
+import 'features/trips/data/trips_repository.dart';
 import 'shared/network/api_client.dart';
 
 Future<void> main() async {
@@ -27,6 +28,7 @@ Future<void> main() async {
   );
   final eventsRepository = EventsRepository(apiClient);
   final usersRepository = UsersRepository(apiClient);
+  final tripsRepository = TripsRepository(apiClient, config);
   final streamChatService = StreamChatService(
     config: config,
     apiClient: apiClient,
@@ -40,6 +42,7 @@ Future<void> main() async {
       onboardingPreferences: onboardingPreferences,
       eventsRepository: eventsRepository,
       usersRepository: usersRepository,
+      tripsRepository: tripsRepository,
       streamChatService: streamChatService,
       chatAccessController: chatAccessController,
     ),

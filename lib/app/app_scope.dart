@@ -7,6 +7,7 @@ import '../features/chats/data/stream_chat_service.dart';
 import '../features/events/data/events_repository.dart';
 import '../features/onboarding/data/onboarding_preferences.dart';
 import '../features/profile/data/users_repository.dart';
+import '../features/trips/data/trips_repository.dart';
 import '../shared/network/api_client.dart';
 
 class AppScope extends InheritedWidget {
@@ -20,6 +21,7 @@ class AppScope extends InheritedWidget {
     required this.usersRepository,
     required this.streamChatService,
     required this.chatAccessController,
+    required this.tripsRepository,
     required super.child,
   });
 
@@ -31,6 +33,7 @@ class AppScope extends InheritedWidget {
   final UsersRepository usersRepository;
   final StreamChatService streamChatService;
   final ChatAccessController chatAccessController;
+  final TripsRepository tripsRepository;
 
   static AppScope _of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -60,6 +63,9 @@ class AppScope extends InheritedWidget {
   static ChatAccessController chatAccessOf(BuildContext context) =>
       _of(context).chatAccessController;
 
+  static TripsRepository tripsOf(BuildContext context) =>
+      _of(context).tripsRepository;
+
   @override
   bool updateShouldNotify(covariant AppScope oldWidget) {
     return oldWidget.config != config ||
@@ -69,6 +75,7 @@ class AppScope extends InheritedWidget {
         oldWidget.eventsRepository != eventsRepository ||
         oldWidget.usersRepository != usersRepository ||
         oldWidget.streamChatService != streamChatService ||
-        oldWidget.chatAccessController != chatAccessController;
+        oldWidget.chatAccessController != chatAccessController ||
+        oldWidget.tripsRepository != tripsRepository;
   }
 }

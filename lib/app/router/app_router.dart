@@ -15,6 +15,8 @@ import '../../features/onboarding/presentation/interests_page.dart';
 import '../../features/onboarding/presentation/name_page.dart';
 import '../../features/onboarding/presentation/welcome_page.dart';
 import '../../features/profile/presentation/profile_page.dart';
+import '../../features/trips/presentation/create_trip_page.dart';
+import '../../features/trips/presentation/trip_owner_requests_page.dart';
 
 GoRouter createAppRouter({
   required AuthSession authSession,
@@ -72,6 +74,26 @@ GoRouter createAppRouter({
         path: '/event/:eventId',
         builder: (context, state) =>
             EventDetailPage(eventId: state.pathParameters['eventId']!),
+      ),
+      GoRoute(
+        path: '/event/:eventId/trips/create',
+        builder: (context, state) {
+          final city = state.uri.queryParameters['city'] ?? '';
+          return CreateTripPage(
+            eventId: state.pathParameters['eventId']!,
+            suggestedCity: city.isEmpty ? '' : Uri.decodeComponent(city),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/trips/:tripId/requests',
+        builder: (context, state) {
+          final eid = state.uri.queryParameters['eventId'] ?? '';
+          return TripOwnerRequestsPage(
+            tripId: state.pathParameters['tripId']!,
+            eventId: eid.isEmpty ? '' : Uri.decodeComponent(eid),
+          );
+        },
       ),
       GoRoute(
         path: '/chats/channel',

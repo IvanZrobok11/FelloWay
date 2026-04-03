@@ -260,4 +260,115 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get profilePlaceholderTitle => 'Профіль';
+
+  @override
+  String get tripsSectionTitle => 'Поїздки в чатах';
+
+  @override
+  String get tripsJoinEventHint =>
+      'Приєднайтеся до події, щоб бачити поїздки й домовлятися про транспорт.';
+
+  @override
+  String get tripsEmpty =>
+      'Ще немає поїздок — створіть чат для свого маршруту.';
+
+  @override
+  String get tripCreateCta => 'Нова поїздка';
+
+  @override
+  String get tripCreateTitle => 'Створити чат поїздки';
+
+  @override
+  String get tripRouteLabel => 'Маршрут';
+
+  @override
+  String get tripTargetCityLabel => 'Місто призначення';
+
+  @override
+  String get tripDepartureLabel => 'Виїзд';
+
+  @override
+  String tripDepartureValue(Object value) {
+    return '$value';
+  }
+
+  @override
+  String get tripRoleLabel => 'Ваша роль';
+
+  @override
+  String get tripRoleDriver => 'Водій';
+
+  @override
+  String get tripRolePassenger => 'Пасажир';
+
+  @override
+  String get tripRoleEither => 'Будь-яка';
+
+  @override
+  String tripCapacityLabel(Object count) {
+    return 'Місця (макс. 20): $count';
+  }
+
+  @override
+  String get tripCreateSubmit => 'Створити';
+
+  @override
+  String get tripCreateSuccess => 'Чат поїздки створено.';
+
+  @override
+  String tripCardMeta(
+    Object departure,
+    Object city,
+    Object role,
+    Object members,
+    Object capacity,
+  ) {
+    return '$departure · $city · $role · $members/$capacity';
+  }
+
+  @override
+  String get tripRequestJoin => 'Запит на вступ';
+
+  @override
+  String get tripJoinAutoHint =>
+      'Те саме місто — доступ має надатися автоматично.';
+
+  @override
+  String get tripJoinManualHint => 'Інше місто — власник має схвалити запит.';
+
+  @override
+  String get tripJoinRequested => 'Запит надіслано.';
+
+  @override
+  String get tripPendingHint => 'Очікуємо схвалення.';
+
+  @override
+  String get tripCancelRequest => 'Скасувати запит';
+
+  @override
+  String get tripCancelRequestDone => 'Запит скасовано.';
+
+  @override
+  String get tripOpenChat => 'Відкрити чат';
+
+  @override
+  String get tripManageRequests => 'Запити';
+
+  @override
+  String get tripRequestsTitle => 'Запити на вступ';
+
+  @override
+  String get tripApprove => 'Схвалити';
+
+  @override
+  String get tripApproved => 'Учасника схвалено.';
+
+  @override
+  String tripRequesterCity(Object city) {
+    return 'Звідки: $city';
+  }
+
+  @override
+  String get tripLowRatingWarning =>
+      'Низький рейтинг — уважно перевірте перед схваленням.';
 }

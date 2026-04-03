@@ -120,5 +120,60 @@
   "eventsPlaceholderTitle": "Events",
   "mapPlaceholderTitle": "Map",
   "chatsPlaceholderTitle": "Chats",
-  "profilePlaceholderTitle": "Profile"
+  "profilePlaceholderTitle": "Profile",
+  "tripsSectionTitle": "Trip chats",
+  "tripsJoinEventHint": "Join this event to see trip chats and coordinate rides.",
+  "tripsEmpty": "No trip chats yet — create one for your route.",
+  "tripCreateCta": "New trip",
+  "tripCreateTitle": "Create trip chat",
+  "tripRouteLabel": "Route",
+  "tripTargetCityLabel": "Target city",
+  "tripDepartureLabel": "Departure",
+  "tripDepartureValue": "{value}",
+  "@tripDepartureValue": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "tripRoleLabel": "Your role",
+  "tripRoleDriver": "Driver",
+  "tripRolePassenger": "Passenger",
+  "tripRoleEither": "Either",
+  "tripCapacityLabel": "Seats (max 20): {count}",
+  "@tripCapacityLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "tripCreateSubmit": "Create",
+  "tripCreateSuccess": "Trip chat created.",
+  "tripCardMeta": "{departure} · {city} · {role} · {members}/{capacity}",
+  "@tripCardMeta": {
+    "placeholders": {
+      "departure": {},
+      "city": {},
+      "role": {},
+      "members": {},
+      "capacity": {}
+    }
+  },
+  "tripRequestJoin": "Request to join",
+  "tripJoinAutoHint": "Same city as this chat — you should be approved automatically.",
+  "tripJoinManualHint": "Different city — the owner must approve your request.",
+  "tripJoinRequested": "Join request sent.",
+  "tripPendingHint": "Waiting for approval.",
+  "tripCancelRequest": "Cancel request",
+  "tripCancelRequestDone": "Request cancelled.",
+  "tripOpenChat": "Open chat",
+  "tripManageRequests": "Requests",
+  "tripRequestsTitle": "Join requests",
+  "tripApprove": "Approve",
+  "tripApproved": "Member approved.",
+  "tripRequesterCity": "From: {city}",
+  "@tripRequesterCity": {
+    "placeholders": {
+      "city": {}
+    }
+  },
+  "tripLowRatingWarning": "Low rating — review carefully before approving."
 }

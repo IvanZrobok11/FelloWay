@@ -8,6 +8,7 @@ import '../features/chats/data/stream_chat_service.dart';
 import '../features/events/data/events_repository.dart';
 import '../features/onboarding/data/onboarding_preferences.dart';
 import '../features/profile/data/users_repository.dart';
+import '../features/trips/data/trips_repository.dart';
 import '../shared/network/api_client.dart';
 import 'app_scope.dart';
 import 'auth/auth_session.dart';
@@ -26,6 +27,7 @@ class FellowayApp extends StatefulWidget {
     required this.usersRepository,
     required this.streamChatService,
     required this.chatAccessController,
+    required this.tripsRepository,
   });
 
   final AppConfig config;
@@ -36,6 +38,7 @@ class FellowayApp extends StatefulWidget {
   final UsersRepository usersRepository;
   final StreamChatService streamChatService;
   final ChatAccessController chatAccessController;
+  final TripsRepository tripsRepository;
 
   @override
   State<FellowayApp> createState() => _FellowayAppState();
@@ -91,6 +94,7 @@ class _FellowayAppState extends State<FellowayApp> {
       usersRepository: widget.usersRepository,
       streamChatService: widget.streamChatService,
       chatAccessController: widget.chatAccessController,
+      tripsRepository: widget.tripsRepository,
       child: MaterialApp.router(
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         theme: AppTheme.light(),

@@ -559,6 +559,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get profilePlaceholderTitle;
+
+  /// No description provided for @tripsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip chats'**
+  String get tripsSectionTitle;
+
+  /// No description provided for @tripsJoinEventHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Join this event to see trip chats and coordinate rides.'**
+  String get tripsJoinEventHint;
+
+  /// No description provided for @tripsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No trip chats yet — create one for your route.'**
+  String get tripsEmpty;
+
+  /// No description provided for @tripCreateCta.
+  ///
+  /// In en, this message translates to:
+  /// **'New trip'**
+  String get tripCreateCta;
+
+  /// No description provided for @tripCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create trip chat'**
+  String get tripCreateTitle;
+
+  /// No description provided for @tripRouteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Route'**
+  String get tripRouteLabel;
+
+  /// No description provided for @tripTargetCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Target city'**
+  String get tripTargetCityLabel;
+
+  /// No description provided for @tripDepartureLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Departure'**
+  String get tripDepartureLabel;
+
+  /// No description provided for @tripDepartureValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}'**
+  String tripDepartureValue(Object value);
+
+  /// No description provided for @tripRoleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your role'**
+  String get tripRoleLabel;
+
+  /// No description provided for @tripRoleDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver'**
+  String get tripRoleDriver;
+
+  /// No description provided for @tripRolePassenger.
+  ///
+  /// In en, this message translates to:
+  /// **'Passenger'**
+  String get tripRolePassenger;
+
+  /// No description provided for @tripRoleEither.
+  ///
+  /// In en, this message translates to:
+  /// **'Either'**
+  String get tripRoleEither;
+
+  /// No description provided for @tripCapacityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Seats (max 20): {count}'**
+  String tripCapacityLabel(Object count);
+
+  /// No description provided for @tripCreateSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get tripCreateSubmit;
+
+  /// No description provided for @tripCreateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip chat created.'**
+  String get tripCreateSuccess;
+
+  /// No description provided for @tripCardMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'{departure} · {city} · {role} · {members}/{capacity}'**
+  String tripCardMeta(
+    Object departure,
+    Object city,
+    Object role,
+    Object members,
+    Object capacity,
+  );
+
+  /// No description provided for @tripRequestJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Request to join'**
+  String get tripRequestJoin;
+
+  /// No description provided for @tripJoinAutoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Same city as this chat — you should be approved automatically.'**
+  String get tripJoinAutoHint;
+
+  /// No description provided for @tripJoinManualHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Different city — the owner must approve your request.'**
+  String get tripJoinManualHint;
+
+  /// No description provided for @tripJoinRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Join request sent.'**
+  String get tripJoinRequested;
+
+  /// No description provided for @tripPendingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for approval.'**
+  String get tripPendingHint;
+
+  /// No description provided for @tripCancelRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request'**
+  String get tripCancelRequest;
+
+  /// No description provided for @tripCancelRequestDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Request cancelled.'**
+  String get tripCancelRequestDone;
+
+  /// No description provided for @tripOpenChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open chat'**
+  String get tripOpenChat;
+
+  /// No description provided for @tripManageRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests'**
+  String get tripManageRequests;
+
+  /// No description provided for @tripRequestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Join requests'**
+  String get tripRequestsTitle;
+
+  /// No description provided for @tripApprove.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get tripApprove;
+
+  /// No description provided for @tripApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Member approved.'**
+  String get tripApproved;
+
+  /// No description provided for @tripRequesterCity.
+  ///
+  /// In en, this message translates to:
+  /// **'From: {city}'**
+  String tripRequesterCity(Object city);
+
+  /// No description provided for @tripLowRatingWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Low rating — review carefully before approving.'**
+  String get tripLowRatingWarning;
 }
 
 class _AppLocalizationsDelegate

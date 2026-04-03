@@ -124,20 +124,20 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 ### Tests for User Story 3 (REQUIRED) ⚠️
 
-- [ ] T045 [P] [US3] Unit tests for join approval mode (city match vs manual) in `test/unit/trip_join_policy_test.dart`
-- [ ] T046 [P] [US3] Widget test for trip create form validation in `test/widget/trip_create_form_test.dart`
-- [ ] T047 [US3] Widget test for pending requests list + low-rating banner in `test/widget/trip_requests_test.dart`
+- [x] T045 [P] [US3] Unit tests for join approval mode (city match vs manual) in `test/unit/trip_join_policy_test.dart`
+- [x] T046 [P] [US3] Widget test for trip create form validation in `test/widget/trip_create_form_test.dart`
+- [x] T047 [US3] Widget test for pending requests list + low-rating banner in `test/widget/trip_requests_test.dart`
 
 ### Implementation for User Story 3
 
-- [ ] T048 [P] [US3] Domain models `TripChat`, `TripJoinRequest`, transport role enum in `lib/features/trips/domain/trip_chat.dart`
-- [ ] T049 [US3] `TripsRepository` in `lib/features/trips/data/trips_repository.dart` (`POST /events/{id}/trips`, `POST /trips/{id}/join`, `POST /trips/{id}/approve/{userId}`)
-- [ ] T050 [US3] Trips section on event detail in `lib/features/trips/presentation/event_trips_section.dart`
-- [ ] T051 [US3] Create trip flow in `lib/features/trips/presentation/create_trip_page.dart`
-- [ ] T052 [US3] Join request + cancel request UI in `lib/features/trips/presentation/trip_join_flow.dart`
-- [ ] T053 [US3] Owner inbox: approve + show requester rating warning in `lib/features/trips/presentation/trip_owner_requests_page.dart`
-- [ ] T054 [US3] Open Stream trip channel after membership granted in `lib/features/trips/presentation/trip_channel_opener.dart`
-- [ ] T055 [US3] Support multiple trip chats per event (navigation + list state)
+- [x] T048 [P] [US3] Domain models `TripChat`, `TripJoinRequest`, transport role enum in `lib/features/trips/domain/trip_chat.dart`
+- [x] T049 [US3] `TripsRepository` in `lib/features/trips/data/trips_repository.dart` (`POST /events/{id}/trips`, `POST /trips/{id}/join`, `POST /trips/{id}/approve/{userId}`)
+- [x] T050 [US3] Trips section on event detail in `lib/features/trips/presentation/event_trips_section.dart`
+- [x] T051 [US3] Create trip flow in `lib/features/trips/presentation/create_trip_page.dart`
+- [x] T052 [US3] Join request + cancel request UI in `lib/features/trips/presentation/trip_join_flow.dart`
+- [x] T053 [US3] Owner inbox: approve + show requester rating warning in `lib/features/trips/presentation/trip_owner_requests_page.dart`
+- [x] T054 [US3] Open Stream trip channel after membership granted in `lib/features/trips/presentation/trip_channel_opener.dart`
+- [x] T055 [US3] Support multiple trip chats per event (navigation + list state)
 - [ ] T056 [US3] Verify UX/a11y for trips section and forms
 - [ ] T057 [US3] Verify no N+1 network patterns on trip list refresh
 

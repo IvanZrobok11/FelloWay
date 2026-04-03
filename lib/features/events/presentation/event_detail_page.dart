@@ -8,6 +8,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart' show StreamChat;
 import '../../../app/app_scope.dart';
 import '../../../shared/errors/result.dart';
 import '../../chats/presentation/dm_launcher.dart';
+import '../../trips/presentation/event_trips_section.dart';
 import '../data/demo_events.dart';
 import '../domain/event.dart';
 
@@ -257,6 +258,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
+          EventTripsSection(
+            eventId: e.id,
+            eventCity: e.city,
+            attending: attending,
+            authenticated: auth,
+          ),
           const SizedBox(height: 24),
           if (auth) ...[
             attending

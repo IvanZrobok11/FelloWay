@@ -26,8 +26,11 @@ Derived from `TECH_PLAN.md` backend bullets. Paths and payloads are indicative; 
 
 | Method | Path | Use on client |
 |--------|------|----------------|
+| GET | `/events/{id}/trips` | List trip chats for event (`items` array) |
 | POST | `/events/{id}/trips` | Create trip chat |
 | POST | `/trips/{id}/join` | Request join |
+| DELETE | `/trips/{id}/join` | Cancel pending join request (FR-018) |
+| GET | `/trips/{id}/join-requests` | Owner: pending requests (`items`) |
 | POST | `/trips/{id}/approve/{userId}` | Owner approves (client may only trigger if authorized) |
 
 ## Reviews & push prefs

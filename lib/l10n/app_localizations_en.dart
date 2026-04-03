@@ -260,4 +260,115 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profilePlaceholderTitle => 'Profile';
+
+  @override
+  String get tripsSectionTitle => 'Trip chats';
+
+  @override
+  String get tripsJoinEventHint =>
+      'Join this event to see trip chats and coordinate rides.';
+
+  @override
+  String get tripsEmpty => 'No trip chats yet — create one for your route.';
+
+  @override
+  String get tripCreateCta => 'New trip';
+
+  @override
+  String get tripCreateTitle => 'Create trip chat';
+
+  @override
+  String get tripRouteLabel => 'Route';
+
+  @override
+  String get tripTargetCityLabel => 'Target city';
+
+  @override
+  String get tripDepartureLabel => 'Departure';
+
+  @override
+  String tripDepartureValue(Object value) {
+    return '$value';
+  }
+
+  @override
+  String get tripRoleLabel => 'Your role';
+
+  @override
+  String get tripRoleDriver => 'Driver';
+
+  @override
+  String get tripRolePassenger => 'Passenger';
+
+  @override
+  String get tripRoleEither => 'Either';
+
+  @override
+  String tripCapacityLabel(Object count) {
+    return 'Seats (max 20): $count';
+  }
+
+  @override
+  String get tripCreateSubmit => 'Create';
+
+  @override
+  String get tripCreateSuccess => 'Trip chat created.';
+
+  @override
+  String tripCardMeta(
+    Object departure,
+    Object city,
+    Object role,
+    Object members,
+    Object capacity,
+  ) {
+    return '$departure · $city · $role · $members/$capacity';
+  }
+
+  @override
+  String get tripRequestJoin => 'Request to join';
+
+  @override
+  String get tripJoinAutoHint =>
+      'Same city as this chat — you should be approved automatically.';
+
+  @override
+  String get tripJoinManualHint =>
+      'Different city — the owner must approve your request.';
+
+  @override
+  String get tripJoinRequested => 'Join request sent.';
+
+  @override
+  String get tripPendingHint => 'Waiting for approval.';
+
+  @override
+  String get tripCancelRequest => 'Cancel request';
+
+  @override
+  String get tripCancelRequestDone => 'Request cancelled.';
+
+  @override
+  String get tripOpenChat => 'Open chat';
+
+  @override
+  String get tripManageRequests => 'Requests';
+
+  @override
+  String get tripRequestsTitle => 'Join requests';
+
+  @override
+  String get tripApprove => 'Approve';
+
+  @override
+  String get tripApproved => 'Member approved.';
+
+  @override
+  String tripRequesterCity(Object city) {
+    return 'From: $city';
+  }
+
+  @override
+  String get tripLowRatingWarning =>
+      'Low rating — review carefully before approving.';
 }
