@@ -22,10 +22,18 @@ Use flavor or `--dart-define` for environment once introduced (API base URL, Str
 
 ## Quality Gates (Constitution)
 
+Run from repository root (`felloway_client/`):
+
 ```bash
 dart format .
 flutter analyze
 flutter test
+```
+
+Optional integration tests (device or emulator):
+
+```bash
+flutter test integration_test/app_test.dart
 ```
 
 ## Device Checks (Manual)

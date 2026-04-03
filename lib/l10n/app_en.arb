@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+  "appTitle": "FelloWay",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  "tabEvents": "Events",
+  "tabMap": "Map",
+  "tabChats": "Chats",
+  "tabProfile": "Profile",
+  "commonLoading": "Loading…",
+  "commonRetry": "Retry",
+  "commonErrorTitle": "Something went wrong",
+  "emptyStateTitle": "Nothing here yet",
+  "guestSignInPrompt": "Sign in to continue",
+  "eventsPlaceholderTitle": "Events",
+  "mapPlaceholderTitle": "Map",
+  "chatsPlaceholderTitle": "Chats",
+  "profilePlaceholderTitle": "Profile"
+}

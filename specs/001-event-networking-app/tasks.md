@@ -24,11 +24,11 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 **Purpose**: Dependencies, l10n, repo layout, CI alignment with constitution
 
-- [ ] T001 [-] Create `lib/app/`, `lib/features/{auth,onboarding,events,map,chats,profile,trips}/`, `lib/shared/` per [plan.md](./plan.md)
-- [ ] T002 [-] Add dependencies in `pubspec.yaml`: `flutter_appauth`, `flutter_secure_storage`, HTTP client (e.g. `dio`), router (e.g. `go_router`), Stream Chat Flutter SDK, `flutter_localizations`; enable `generate: true` for l10n
-- [ ] T003 [P] [-] Add `l10n.yaml` and `lib/l10n/app_en.arb`, `lib/l10n/app_uk.arb` with shell strings (welcome, tabs, common actions)
-- [ ] T004 [P] [-] Configure `analysis_options.yaml` / `flutter_lints` for project standards; document `dart format` + `flutter analyze` in CI or `specs/.../quickstart.md`
-- [ ] T005 [P] [-] Add `test/unit/`, `test/widget/`, `test/golden/`, `integration_test/` placeholders and a smoke `test/widget/app_smoke_test.dart`
+- [x] T001 [-] Create `lib/app/`, `lib/features/{auth,onboarding,events,map,chats,profile,trips}/`, `lib/shared/` per [plan.md](./plan.md)
+- [x] T002 [-] Add dependencies in `pubspec.yaml`: `flutter_appauth`, `flutter_secure_storage`, HTTP client (e.g. `dio`), router (e.g. `go_router`), Stream Chat Flutter SDK, `flutter_localizations`; enable `generate: true` for l10n
+- [x] T003 [P] [-] Add `l10n.yaml` and `lib/l10n/app_en.arb`, `lib/l10n/app_uk.arb` with shell strings (welcome, tabs, common actions)
+- [x] T004 [P] [-] Configure `analysis_options.yaml` / `flutter_lints` for project standards; document `dart format` + `flutter analyze` in CI or `specs/.../quickstart.md`
+- [x] T005 [P] [-] Add `test/unit/`, `test/widget/`, `test/golden/`, `integration_test/` placeholders and a smoke `test/widget/app_smoke_test.dart`
 
 ---
 
@@ -38,15 +38,15 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 **⚠️ CRITICAL**: Blocks all of US1–US3
 
-- [ ] T006 [-] Implement root `MaterialApp` / theme in `lib/app/theme/app_theme.dart` and wire in `lib/app/app.dart`
-- [ ] T007 [-] Implement environment config (e.g. `--dart-define=API_BASE_URL=`) in `lib/app/config/app_config.dart`
-- [ ] T008 [-] Implement secure token read/write in `lib/features/auth/data/token_storage.dart` using `flutter_secure_storage`
-- [ ] T009 [-] Implement REST client with auth header injection and 401 → refresh/re-login handling in `lib/shared/network/api_client.dart` (contracts in [contracts/rest-endpoints.md](./contracts/rest-endpoints.md))
-- [ ] T010 [-] Implement app router with authenticated vs guest redirects in `lib/app/router/app_router.dart` (shell route for four tabs)
-- [ ] T011 [-] Implement main tab shell (Events, Map, Chats, Profile) in `lib/app/shell/main_shell.dart`
-- [ ] T012 [P] [-] Add shared error/empty/loading widgets in `lib/shared/widgets/`
-- [ ] T013 [P] [-] Add shared domain errors and `Result`-style handling in `lib/shared/errors/`
-- [ ] T014 [-] Wire `main.dart` to `App` + router + localization delegates
+- [x] T006 [-] Implement root `MaterialApp` / theme in `lib/app/theme/app_theme.dart` and wire in `lib/app/app.dart`
+- [x] T007 [-] Implement environment config (e.g. `--dart-define=API_BASE_URL=`) in `lib/app/config/app_config.dart`
+- [x] T008 [-] Implement secure token read/write in `lib/features/auth/data/token_storage.dart` using `flutter_secure_storage`
+- [x] T009 [-] Implement REST client with auth header injection and 401 → refresh/re-login handling in `lib/shared/network/api_client.dart` (contracts in [contracts/rest-endpoints.md](./contracts/rest-endpoints.md))
+- [x] T010 [-] Implement app router with authenticated vs guest redirects in `lib/app/router/app_router.dart` (shell route for four tabs)
+- [x] T011 [-] Implement main tab shell (Events, Map, Chats, Profile) in `lib/app/shell/main_shell.dart`
+- [x] T012 [P] [-] Add shared error/empty/loading widgets in `lib/shared/widgets/`
+- [x] T013 [P] [-] Add shared domain errors and `Result`-style handling in `lib/shared/errors/`
+- [x] T014 [-] Wire `main.dart` to `App` + router + localization delegates
 
 **Checkpoint**: Cold start shows shell; unauthenticated users can reach guest-safe routes per spec
 

@@ -1,0 +1,17 @@
+{
+  "@@locale": "uk",
+  "appTitle": "FelloWay",
+  "tabEvents": "Події",
+  "tabMap": "Карта",
+  "tabChats": "Чати",
+  "tabProfile": "Профіль",
+  "commonLoading": "Завантаження…",
+  "commonRetry": "Повторити",
+  "commonErrorTitle": "Щось пішло не так",
+  "emptyStateTitle": "Поки що порожньо",
+  "guestSignInPrompt": "Увійдіть, щоб продовжити",
+  "eventsPlaceholderTitle": "Події",
+  "mapPlaceholderTitle": "Карта",
+  "chatsPlaceholderTitle": "Чати",
+  "profilePlaceholderTitle": "Профіль"
+}
