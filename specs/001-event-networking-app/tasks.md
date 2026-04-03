@@ -62,25 +62,25 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 > Write these tests **first**; they MUST fail before implementation
 
-- [ ] T015 [P] [US1] Unit tests for onboarding completion guard in `test/unit/onboarding_completion_test.dart`
-- [ ] T016 [P] [US1] Widget tests for onboarding steps S1–S4 in `test/widget/onboarding_flow_test.dart`
-- [ ] T017 [P] [US1] Widget tests for event card guest vs authenticated preview in `test/widget/event_card_visibility_test.dart`
-- [ ] T018 [US1] Integration test: guest browse → sign-in prompt on join in `integration_test/us1_discover_join_test.dart` (mock API or staging)
+- [x] T015 [P] [US1] Unit tests for onboarding completion guard in `test/unit/onboarding_completion_test.dart`
+- [x] T016 [P] [US1] Widget tests for onboarding steps S1–S4 in `test/widget/onboarding_flow_test.dart`
+- [x] T017 [P] [US1] Widget tests for event card guest vs authenticated preview in `test/widget/event_card_visibility_test.dart`
+- [x] T018 [US1] Integration test: guest browse → sign-in prompt on join in `integration_test/us1_discover_join_test.dart` (mock API or staging)
 
 ### Implementation for User Story 1
 
-- [ ] T019 [P] [US1] Domain models `Event`, `EventSummary`, `AttendStatus` in `lib/features/events/domain/event.dart`
-- [ ] T020 [US1] `EventsRepository` + DTO mapping in `lib/features/events/data/events_repository.dart` (`GET /events`, `GET /events/{id}`, attend/delete attend)
-- [ ] T021 [US1] OAuth sign-in flow (LinkedIn/Facebook) in `lib/features/auth/presentation/oauth_sign_in_page.dart` using `flutter_appauth`
-- [ ] T022 [US1] Onboarding S1 welcome + provider buttons in `lib/features/onboarding/presentation/welcome_page.dart`
-- [ ] T023 [US1] Onboarding S2 display name in `lib/features/onboarding/presentation/name_page.dart` + `PUT /users/me` wiring
-- [ ] T024 [US1] Onboarding S3 interests/hobbies chips in `lib/features/onboarding/presentation/interests_page.dart`
-- [ ] T025 [US1] Onboarding S4 cascade city selection in `lib/features/onboarding/presentation/city_page.dart` + persist via `PUT /users/me`
-- [ ] T026 [US1] Events list with infinite scroll + search (name/tag/city) in `lib/features/events/presentation/events_list_page.dart`
-- [ ] T027 [US1] Event detail: required fields, optional fields, participant list, join/unjoin in `lib/features/events/presentation/event_detail_page.dart`
-- [ ] T028 [US1] Guest blur / sign-in CTA on detail per PRD in `lib/features/events/presentation/event_detail_page.dart`
-- [ ] T029 [US1] Map tab: map SDK setup, event markers, date/interest filters, popup → navigate to event in `lib/features/map/presentation/map_page.dart`
-- [ ] T030 [US1] Profile tab read-only MVP: avatar, name, links, interests, rating display from `GET /users/me` in `lib/features/profile/presentation/profile_page.dart`
+- [x] T019 [P] [US1] Domain models `Event`, `EventSummary`, `AttendStatus` in `lib/features/events/domain/event.dart`
+- [x] T020 [US1] `EventsRepository` + DTO mapping in `lib/features/events/data/events_repository.dart` (`GET /events`, `GET /events/{id}`, attend/delete attend)
+- [x] T021 [US1] OAuth sign-in flow (LinkedIn/Facebook) in `lib/features/auth/presentation/oauth_sign_in_page.dart` using `flutter_appauth`
+- [x] T022 [US1] Onboarding S1 welcome + provider buttons in `lib/features/onboarding/presentation/welcome_page.dart`
+- [x] T023 [US1] Onboarding S2 display name in `lib/features/onboarding/presentation/name_page.dart` + `PUT /users/me` wiring
+- [x] T024 [US1] Onboarding S3 interests/hobbies chips in `lib/features/onboarding/presentation/interests_page.dart`
+- [x] T025 [US1] Onboarding S4 cascade city selection in `lib/features/onboarding/presentation/city_page.dart` + persist via `PUT /users/me`
+- [x] T026 [US1] Events list with infinite scroll + search (name/tag/city) in `lib/features/events/presentation/events_list_page.dart`
+- [x] T027 [US1] Event detail: required fields, optional fields, participant list, join/unjoin in `lib/features/events/presentation/event_detail_page.dart`
+- [x] T028 [US1] Guest blur / sign-in CTA on detail per PRD in `lib/features/events/presentation/event_detail_page.dart`
+- [x] T029 [US1] Map tab: map SDK setup, event markers, date/interest filters, popup → navigate to event in `lib/features/map/presentation/map_page.dart`
+- [x] T030 [US1] Profile tab read-only MVP: avatar, name, links, interests, rating display from `GET /users/me` in `lib/features/profile/presentation/profile_page.dart`
 - [ ] T031 [US1] Verify UX/a11y (semantics, contrast) on onboarding + list + detail
 - [ ] T032 [US1] Verify list scroll and image loading performance (caching, pagination batch size)
 

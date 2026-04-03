@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get commonRetry;
 
+  /// No description provided for @commonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
   /// No description provided for @commonErrorTitle.
   ///
   /// In en, this message translates to:
@@ -157,6 +163,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign in to continue'**
   String get guestSignInPrompt;
+
+  /// No description provided for @signInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get signInTitle;
+
+  /// No description provided for @signInSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use LinkedIn or Facebook to continue.'**
+  String get signInSubtitle;
+
+  /// No description provided for @oauthLinkedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with LinkedIn'**
+  String get oauthLinkedIn;
+
+  /// No description provided for @oauthFacebook.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Facebook'**
+  String get oauthFacebook;
+
+  /// No description provided for @demoSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo sign-in (debug)'**
+  String get demoSignIn;
+
+  /// No description provided for @oauthNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'OAuth is not configured. Set OAUTH_* dart-define values.'**
+  String get oauthNotConfigured;
+
+  /// No description provided for @oauthMissingTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'No access token returned.'**
+  String get oauthMissingTokens;
+
+  /// No description provided for @oauthFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in failed: {message}'**
+  String oauthFailed(Object message);
+
+  /// No description provided for @onboardingWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get onboardingWelcomeTitle;
+
+  /// No description provided for @onboardingWelcomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'FelloWay helps you network before IT conferences and coordinate rides.'**
+  String get onboardingWelcomeBody;
+
+  /// No description provided for @onboardingContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardingContinue;
+
+  /// No description provided for @onboardingNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get onboardingNameTitle;
+
+  /// No description provided for @onboardingNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name or nickname'**
+  String get onboardingNameLabel;
+
+  /// No description provided for @onboardingInterestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests and hobbies'**
+  String get onboardingInterestsTitle;
+
+  /// No description provided for @onboardingInterestsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Professional interests'**
+  String get onboardingInterestsSection;
+
+  /// No description provided for @onboardingHobbiesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Hobbies'**
+  String get onboardingHobbiesSection;
+
+  /// No description provided for @onboardingHobbiesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What do you enjoy?'**
+  String get onboardingHobbiesLabel;
+
+  /// No description provided for @onboardingCityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home city'**
+  String get onboardingCityTitle;
+
+  /// No description provided for @onboardingCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get onboardingCityLabel;
+
+  /// No description provided for @onboardingGoToEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to events'**
+  String get onboardingGoToEvents;
+
+  /// No description provided for @onboardingSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save profile: {message}'**
+  String onboardingSaveFailed(Object message);
+
+  /// No description provided for @eventsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get eventsScreenTitle;
+
+  /// No description provided for @eventsSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name, tag, or city'**
+  String get eventsSearchHint;
+
+  /// No description provided for @eventCardGuestHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to see who else is going.'**
+  String get eventCardGuestHint;
+
+  /// No description provided for @eventCardAttendeeTeaser.
+  ///
+  /// In en, this message translates to:
+  /// **'People also attending:'**
+  String get eventCardAttendeeTeaser;
+
+  /// No description provided for @eventJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m going'**
+  String get eventJoin;
+
+  /// No description provided for @eventLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel attendance'**
+  String get eventLeave;
+
+  /// No description provided for @eventJoinSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to join'**
+  String get eventJoinSignIn;
+
+  /// No description provided for @eventParticipantsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Participants'**
+  String get eventParticipantsTitle;
+
+  /// No description provided for @eventGuestBlurHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to see participants.'**
+  String get eventGuestBlurHint;
+
+  /// No description provided for @eventSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} – {end}'**
+  String eventSchedule(Object start, Object end);
+
+  /// No description provided for @eventCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity: {count}'**
+  String eventCapacity(Object count);
+
+  /// No description provided for @eventPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price: {price}'**
+  String eventPrice(Object price);
+
+  /// No description provided for @eventOfficialLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Official website'**
+  String get eventOfficialLink;
+
+  /// No description provided for @mapScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get mapScreenTitle;
+
+  /// No description provided for @mapDiscoveryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse events by interest. Full map tiles can be enabled with a maps API key.'**
+  String get mapDiscoveryHint;
+
+  /// No description provided for @mapFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get mapFilterAll;
+
+  /// No description provided for @profileScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileScreenTitle;
+
+  /// No description provided for @profileGuestMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to view your profile.'**
+  String get profileGuestMessage;
+
+  /// No description provided for @profileSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get profileSignOut;
+
+  /// No description provided for @profileRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating: {value}'**
+  String profileRating(Object value);
+
+  /// No description provided for @profileLinkedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn'**
+  String get profileLinkedIn;
+
+  /// No description provided for @profileFacebook.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook'**
+  String get profileFacebook;
+
+  /// No description provided for @profileInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests'**
+  String get profileInterests;
+
+  /// No description provided for @profileHobbies.
+  ///
+  /// In en, this message translates to:
+  /// **'Hobbies'**
+  String get profileHobbies;
+
+  /// No description provided for @chatsGuestMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to see your chats.'**
+  String get chatsGuestMessage;
 
   /// No description provided for @eventsPlaceholderTitle.
   ///

@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonRetry => 'Retry';
 
   @override
+  String get commonCancel => 'Cancel';
+
+  @override
   String get commonErrorTitle => 'Something went wrong';
 
   @override
@@ -37,6 +40,159 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guestSignInPrompt => 'Sign in to continue';
+
+  @override
+  String get signInTitle => 'Sign in';
+
+  @override
+  String get signInSubtitle => 'Use LinkedIn or Facebook to continue.';
+
+  @override
+  String get oauthLinkedIn => 'Continue with LinkedIn';
+
+  @override
+  String get oauthFacebook => 'Continue with Facebook';
+
+  @override
+  String get demoSignIn => 'Demo sign-in (debug)';
+
+  @override
+  String get oauthNotConfigured =>
+      'OAuth is not configured. Set OAUTH_* dart-define values.';
+
+  @override
+  String get oauthMissingTokens => 'No access token returned.';
+
+  @override
+  String oauthFailed(Object message) {
+    return 'Sign-in failed: $message';
+  }
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome';
+
+  @override
+  String get onboardingWelcomeBody =>
+      'FelloWay helps you network before IT conferences and coordinate rides.';
+
+  @override
+  String get onboardingContinue => 'Continue';
+
+  @override
+  String get onboardingNameTitle => 'Your name';
+
+  @override
+  String get onboardingNameLabel => 'Name or nickname';
+
+  @override
+  String get onboardingInterestsTitle => 'Interests and hobbies';
+
+  @override
+  String get onboardingInterestsSection => 'Professional interests';
+
+  @override
+  String get onboardingHobbiesSection => 'Hobbies';
+
+  @override
+  String get onboardingHobbiesLabel => 'What do you enjoy?';
+
+  @override
+  String get onboardingCityTitle => 'Home city';
+
+  @override
+  String get onboardingCityLabel => 'City';
+
+  @override
+  String get onboardingGoToEvents => 'Go to events';
+
+  @override
+  String onboardingSaveFailed(Object message) {
+    return 'Could not save profile: $message';
+  }
+
+  @override
+  String get eventsScreenTitle => 'Events';
+
+  @override
+  String get eventsSearchHint => 'Search by name, tag, or city';
+
+  @override
+  String get eventCardGuestHint => 'Sign in to see who else is going.';
+
+  @override
+  String get eventCardAttendeeTeaser => 'People also attending:';
+
+  @override
+  String get eventJoin => 'I\'m going';
+
+  @override
+  String get eventLeave => 'Cancel attendance';
+
+  @override
+  String get eventJoinSignIn => 'Sign in to join';
+
+  @override
+  String get eventParticipantsTitle => 'Participants';
+
+  @override
+  String get eventGuestBlurHint => 'Sign in to see participants.';
+
+  @override
+  String eventSchedule(Object start, Object end) {
+    return '$start – $end';
+  }
+
+  @override
+  String eventCapacity(Object count) {
+    return 'Capacity: $count';
+  }
+
+  @override
+  String eventPrice(Object price) {
+    return 'Price: $price';
+  }
+
+  @override
+  String get eventOfficialLink => 'Official website';
+
+  @override
+  String get mapScreenTitle => 'Map';
+
+  @override
+  String get mapDiscoveryHint =>
+      'Browse events by interest. Full map tiles can be enabled with a maps API key.';
+
+  @override
+  String get mapFilterAll => 'All';
+
+  @override
+  String get profileScreenTitle => 'Profile';
+
+  @override
+  String get profileGuestMessage => 'Sign in to view your profile.';
+
+  @override
+  String get profileSignOut => 'Sign out';
+
+  @override
+  String profileRating(Object value) {
+    return 'Rating: $value';
+  }
+
+  @override
+  String get profileLinkedIn => 'LinkedIn';
+
+  @override
+  String get profileFacebook => 'Facebook';
+
+  @override
+  String get profileInterests => 'Interests';
+
+  @override
+  String get profileHobbies => 'Hobbies';
+
+  @override
+  String get chatsGuestMessage => 'Sign in to see your chats.';
 
   @override
   String get eventsPlaceholderTitle => 'Events';

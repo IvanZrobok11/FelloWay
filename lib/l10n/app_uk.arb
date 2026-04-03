@@ -7,9 +7,87 @@
   "tabProfile": "Профіль",
   "commonLoading": "Завантаження…",
   "commonRetry": "Повторити",
+  "commonCancel": "Скасувати",
   "commonErrorTitle": "Щось пішло не так",
   "emptyStateTitle": "Поки що порожньо",
   "guestSignInPrompt": "Увійдіть, щоб продовжити",
+  "signInTitle": "Увійти",
+  "signInSubtitle": "Продовжити через LinkedIn або Facebook.",
+  "oauthLinkedIn": "Продовжити з LinkedIn",
+  "oauthFacebook": "Продовжити з Facebook",
+  "demoSignIn": "Демо-вхід (debug)",
+  "oauthNotConfigured": "OAuth не налаштовано. Задайте OAUTH_* у dart-define.",
+  "oauthMissingTokens": "Токен доступу не отримано.",
+  "oauthFailed": "Помилка входу: {message}",
+  "@oauthFailed": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "onboardingWelcomeTitle": "Ласкаво просимо",
+  "onboardingWelcomeBody": "FelloWay допомагає нетворкитися перед IT-конференціями та домовлятися про спільні поїздки.",
+  "onboardingContinue": "Далі",
+  "onboardingNameTitle": "Ваше ім'я",
+  "onboardingNameLabel": "Ім'я або нікнейм",
+  "onboardingInterestsTitle": "Інтереси та хобі",
+  "onboardingInterestsSection": "Професійні інтереси",
+  "onboardingHobbiesSection": "Хобі",
+  "onboardingHobbiesLabel": "Що вам подобається?",
+  "onboardingCityTitle": "Місто проживання",
+  "onboardingCityLabel": "Місто",
+  "onboardingGoToEvents": "До подій",
+  "onboardingSaveFailed": "Не вдалося зберегти профіль: {message}",
+  "@onboardingSaveFailed": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "eventsScreenTitle": "Події",
+  "eventsSearchHint": "Пошук за назвою, тегом або містом",
+  "eventCardGuestHint": "Увійдіть, щоб побачити, хто ще їде.",
+  "eventCardAttendeeTeaser": "Також їдуть:",
+  "eventJoin": "Йду",
+  "eventLeave": "Скасувати участь",
+  "eventJoinSignIn": "Увійти, щоб приєднатися",
+  "eventParticipantsTitle": "Учасники",
+  "eventGuestBlurHint": "Увійдіть, щоб побачити учасників.",
+  "eventSchedule": "{start} – {end}",
+  "@eventSchedule": {
+    "placeholders": {
+      "start": {},
+      "end": {}
+    }
+  },
+  "eventCapacity": "Місць: {count}",
+  "@eventCapacity": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "eventPrice": "Ціна: {price}",
+  "@eventPrice": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "eventOfficialLink": "Офіційний сайт",
+  "mapScreenTitle": "Карта",
+  "mapDiscoveryHint": "Перегляд подій за інтересами. Повноцінну карту можна увімкнути з ключем maps API.",
+  "mapFilterAll": "Усі",
+  "profileScreenTitle": "Профіль",
+  "profileGuestMessage": "Увійдіть, щоб переглянути профіль.",
+  "profileSignOut": "Вийти",
+  "profileRating": "Рейтинг: {value}",
+  "@profileRating": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "profileLinkedIn": "LinkedIn",
+  "profileFacebook": "Facebook",
+  "profileInterests": "Інтереси",
+  "profileHobbies": "Хобі",
+  "chatsGuestMessage": "Увійдіть, щоб побачити чати.",
   "eventsPlaceholderTitle": "Події",
   "mapPlaceholderTitle": "Карта",
   "chatsPlaceholderTitle": "Чати",

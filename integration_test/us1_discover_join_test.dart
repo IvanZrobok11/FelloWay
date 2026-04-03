@@ -9,10 +9,11 @@ import 'package:felloway_client/shared/network/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   const secureStorageChannel = MethodChannel(
     'plugins.it_nomads.com/flutter_secure_storage',
@@ -25,12 +26,6 @@ void main() {
           switch (call.method) {
             case 'read':
               return null;
-            case 'write':
-            case 'delete':
-            case 'deleteAll':
-            case 'containsKey':
-            case 'readAll':
-              return null;
             default:
               return null;
           }
@@ -42,16 +37,19 @@ void main() {
         .setMockMethodCallHandler(secureStorageChannel, null);
   });
 
-  testWidgets('app loads shell with bottom navigation', (tester) async {
+  testWidgets('guest can open event and sees join sign-in prompt', (
+    tester,
+  ) async {
+    WidgetsFlutterBinding.ensureInitialized();
     final prefs = await SharedPreferences.getInstance();
     final onboarding = OnboardingPreferences(prefs);
+    const config = AppConfig(
+      apiBaseUrl: 'https://api.example.com',
+      streamApiKey: '',
+    );
     final tokenStorage = TokenStorage();
     final authSession = AuthSession(tokenStorage: tokenStorage);
     await authSession.restore();
-    const config = AppConfig(
-      apiBaseUrl: 'https://test.local',
-      streamApiKey: '',
-    );
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
     final eventsRepository = EventsRepository(apiClient);
     final usersRepository = UsersRepository(apiClient);
@@ -68,6 +66,12 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(NavigationBar), findsOneWidget);
+    await tester.tap(find.textContaining('Flutter').first);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.textContaining('приєднатися').first);
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Увійдіть'), findsWidgets);
   });
 }

@@ -2,16 +2,23 @@ import 'package:felloway_client/app/app.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
+import 'package:felloway_client/features/events/data/events_repository.dart';
+import 'package:felloway_client/features/onboarding/data/onboarding_preferences.dart';
+import 'package:felloway_client/features/profile/data/users_repository.dart';
 import 'package:felloway_client/shared/network/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('app shows main navigation shell', (tester) async {
     WidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final onboarding = OnboardingPreferences(prefs);
     final config = AppConfig.fromEnvironment();
     final tokenStorage = TokenStorage();
     final authSession = AuthSession(tokenStorage: tokenStorage);
@@ -21,12 +28,17 @@ void main() {
       tokenStorage: tokenStorage,
       onUnauthorized: authSession.signOut,
     );
+    final eventsRepository = EventsRepository(apiClient);
+    final usersRepository = UsersRepository(apiClient);
 
     await tester.pumpWidget(
       FellowayApp(
         config: config,
         authSession: authSession,
         apiClient: apiClient,
+        onboardingPreferences: onboarding,
+        eventsRepository: eventsRepository,
+        usersRepository: usersRepository,
       ),
     );
     await tester.pumpAndSettle();

@@ -10,9 +10,87 @@
   "tabProfile": "Profile",
   "commonLoading": "Loading…",
   "commonRetry": "Retry",
+  "commonCancel": "Cancel",
   "commonErrorTitle": "Something went wrong",
   "emptyStateTitle": "Nothing here yet",
   "guestSignInPrompt": "Sign in to continue",
+  "signInTitle": "Sign in",
+  "signInSubtitle": "Use LinkedIn or Facebook to continue.",
+  "oauthLinkedIn": "Continue with LinkedIn",
+  "oauthFacebook": "Continue with Facebook",
+  "demoSignIn": "Demo sign-in (debug)",
+  "oauthNotConfigured": "OAuth is not configured. Set OAUTH_* dart-define values.",
+  "oauthMissingTokens": "No access token returned.",
+  "oauthFailed": "Sign-in failed: {message}",
+  "@oauthFailed": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "onboardingWelcomeTitle": "Welcome",
+  "onboardingWelcomeBody": "FelloWay helps you network before IT conferences and coordinate rides.",
+  "onboardingContinue": "Continue",
+  "onboardingNameTitle": "Your name",
+  "onboardingNameLabel": "Name or nickname",
+  "onboardingInterestsTitle": "Interests and hobbies",
+  "onboardingInterestsSection": "Professional interests",
+  "onboardingHobbiesSection": "Hobbies",
+  "onboardingHobbiesLabel": "What do you enjoy?",
+  "onboardingCityTitle": "Home city",
+  "onboardingCityLabel": "City",
+  "onboardingGoToEvents": "Go to events",
+  "onboardingSaveFailed": "Could not save profile: {message}",
+  "@onboardingSaveFailed": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "eventsScreenTitle": "Events",
+  "eventsSearchHint": "Search by name, tag, or city",
+  "eventCardGuestHint": "Sign in to see who else is going.",
+  "eventCardAttendeeTeaser": "People also attending:",
+  "eventJoin": "I'm going",
+  "eventLeave": "Cancel attendance",
+  "eventJoinSignIn": "Sign in to join",
+  "eventParticipantsTitle": "Participants",
+  "eventGuestBlurHint": "Sign in to see participants.",
+  "eventSchedule": "{start} – {end}",
+  "@eventSchedule": {
+    "placeholders": {
+      "start": {},
+      "end": {}
+    }
+  },
+  "eventCapacity": "Capacity: {count}",
+  "@eventCapacity": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "eventPrice": "Price: {price}",
+  "@eventPrice": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "eventOfficialLink": "Official website",
+  "mapScreenTitle": "Map",
+  "mapDiscoveryHint": "Browse events by interest. Full map tiles can be enabled with a maps API key.",
+  "mapFilterAll": "All",
+  "profileScreenTitle": "Profile",
+  "profileGuestMessage": "Sign in to view your profile.",
+  "profileSignOut": "Sign out",
+  "profileRating": "Rating: {value}",
+  "@profileRating": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "profileLinkedIn": "LinkedIn",
+  "profileFacebook": "Facebook",
+  "profileInterests": "Interests",
+  "profileHobbies": "Hobbies",
+  "chatsGuestMessage": "Sign in to see your chats.",
   "eventsPlaceholderTitle": "Events",
   "mapPlaceholderTitle": "Map",
   "chatsPlaceholderTitle": "Chats",
