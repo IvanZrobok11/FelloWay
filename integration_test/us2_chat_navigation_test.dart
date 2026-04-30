@@ -48,6 +48,7 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
     final prefs = await SharedPreferences.getInstance();
     final onboarding = OnboardingPreferences(prefs);
+    final draftStore = OnboardingDraftStore(prefs);
     const config = AppConfig(
       apiBaseUrl: 'https://api.example.com',
       streamApiKey: '',

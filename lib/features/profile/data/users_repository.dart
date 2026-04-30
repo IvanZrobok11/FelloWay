@@ -3,10 +3,10 @@ import 'package:dio/dio.dart';
 import '../../../app/config/app_config.dart';
 import '../../../shared/errors/app_failure.dart';
 import '../../../shared/errors/result.dart';
+import '../../../shared/mocks/mock_api_catalog.dart';
 import '../../../shared/network/api_client.dart';
 import '../domain/user_profile.dart';
 import '../domain/user_review.dart';
-import 'demo_reviews.dart';
 
 class PushPreferenceDraft {
   const PushPreferenceDraft({
@@ -36,6 +36,9 @@ class UsersRepository {
   final AppConfig _config;
 
   Future<Result<UserProfile>> getMe() async {
+    if (_config.useMockApi) {
+      return Success(MockApiCatalog.demoUserProfile);
+    }
     try {
       final res = await _api.dio.get<Map<String, dynamic>>('/users/me');
       final data = res.data;
@@ -49,7 +52,7 @@ class UsersRepository {
   }
 
   Future<Result<bool>> updateMe(UserProfile draft) async {
-    if (_config.isDemoBackend) {
+    if (_config.useMockApi) {
       return const Success(true);
     }
     try {
@@ -61,6 +64,9 @@ class UsersRepository {
   }
 
   Future<Result<bool>> blockUser(String userId) async {
+    if (_config.useMockApi) {
+      return const Success(true);
+    }
     try {
       await _api.dio.post<void>('/users/$userId/block');
       return const Success(true);
@@ -70,8 +76,8 @@ class UsersRepository {
   }
 
   Future<Result<List<UserReview>>> getUserReviews(String userId) async {
-    if (_config.isDemoBackend) {
-      return Success(demoReviewsForUser(userId));
+    if (_config.useMockApi) {
+      return Success(MockApiCatalog.reviewsForUser(userId));
     }
     try {
       final res = await _api.dio.get<Map<String, dynamic>>(
@@ -92,7 +98,7 @@ class UsersRepository {
   }
 
   Future<Result<String?>> uploadAvatar(String filePath) async {
-    if (_config.isDemoBackend) {
+    if (_config.useMockApi) {
       return const Success('https://api.example.com/avatars/demo.png');
     }
     try {
@@ -113,7 +119,7 @@ class UsersRepository {
 
   /// Syncs toggles from [NotificationSettingsPage] when backend exposes prefs.
   Future<Result<bool>> syncPushPreferences(PushPreferenceDraft draft) async {
-    if (_config.isDemoBackend) {
+    if (_config.useMockApi) {
       return const Success(true);
     }
     try {

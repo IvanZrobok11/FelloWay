@@ -165,8 +165,9 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 ### Phase Dependencies
 
-- **Phase 1** → **Phase 2** → **Phase 3 (US1)** → **Phase 4 (US2)** → **Phase 5 (US3)** → **Phase 6**
+- **Phase 1** → **Phase 2** → **Phase 3 (US1)** → **Phase 4 (US2)** → **Phase 5 (US3)** → **Phase 6** → **Phase 7 (optional hardening)**
 - US2/US3 assume US1 event join + profile data exist; still keep access-policy logic testable in isolation
+- **Phase 7** depends on Phase 6 (or any build where repositories exist); can start after T020+T049+T036 are present
 
 ### Within Each User Story
 
@@ -183,6 +184,38 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 - T033/T034 parallel in US2 tests
 - T045/T046 parallel in US3 tests
 - T058/T063/T064/T065 in Phase 6 where independent
+- **Phase 7**: T070/T071/T072/T073 after T069; T071–T073 parallel once T070 exists; T077 parallel with parts of T076
+
+---
+
+## Phase 7: API mocks & config-driven networking (cross-cutting)
+
+**Purpose**: One explicit **mock vs live** switch in config; **all REST-shaped services** (`EventsRepository`, `UsersRepository`, `TripsRepository`, `StreamChatService` token fetch) use the same rule; **no stray** URL-only checks scattered in widgets. Enables `API_BASE_URL` pointing at a real host while still forcing mocks for UI work, or the opposite.
+
+**Context**: Today `AppConfig.isDemoBackend` is `apiBaseUrl.contains('example.com')`, with duplicate mock branches in repositories **and** several presentation files. This phase centralizes behavior and adds **`--dart-define`** overrides.
+
+**Independent test**: With `API_MODE=mock`, app runs offline-capable lists/detail/profile/trips/chat-tab states without hitting real HTTP; with `API_MODE=live` and a non-demo base URL, repositories call `ApiClient.dio` only (Stream still requires key + token endpoint per existing rules).
+
+### Tests for Phase 7
+
+- [x] T067 [P] [-] Unit tests for API mode resolution (defines + URL fallback) in `test/unit/app_config_api_mode_test.dart`
+
+### Implementation for Phase 7
+
+- [x] T068 [-] Add `ApiMode` (`mock` / `live`) and parsing from `--dart-define=API_MODE=mock|live` in `lib/app/config/app_config.dart`; document precedence: explicit `API_MODE` wins; else **mock** if base URL matches legacy demo heuristic (`example.com`); else **live**
+- [x] T069 [-] Expose a single predicate e.g. `bool get useMockApi` on `AppConfig` and deprecate or alias `isDemoBackend` to it; update all `lib/` call sites to use the new name
+- [x] T070 [-] Create `lib/shared/mocks/mock_api_catalog.dart` (or `lib/shared/mocks/` split by domain) holding shared maps/DTOs for events, event detail, users/me, trips, join requests, stream-token shape; migrate bodies from `lib/features/events/data/demo_events.dart` and `lib/features/trips/data/demo_trips.dart` into this layer
+- [x] T071 [P] [-] Refactor `lib/features/events/data/events_repository.dart` to branch on `useMockApi` only and import mock payloads from `lib/shared/mocks/` (remove duplicated inline JSON where any)
+- [x] T072 [P] [-] Refactor `lib/features/profile/data/users_repository.dart` to branch on `useMockApi` only and use `lib/shared/mocks/` for stub profile, reviews, avatar, preferences responses
+- [x] T073 [P] [-] Refactor `lib/features/trips/data/trips_repository.dart` to branch on `useMockApi` only and use `lib/shared/mocks/` (re-export from `demo_trips` if kept as thin wrappers)
+- [x] T074 [-] Refactor `lib/features/chats/data/stream_chat_service.dart` so mock/demo skip and token `GET` behavior follow `useMockApi` (not a separate URL substring rule inconsistent with T068)
+- [x] T075 [-] Remove redundant presentation-layer mock branches in `lib/features/events/presentation/events_list_page.dart`, `event_detail_page.dart`, `lib/features/map/presentation/map_page.dart`, `lib/features/profile/presentation/profile_page.dart`, `profile_edit_page.dart`, `event_feedback_page.dart`, `reviews_list.dart` — UI should consume repository/`Future` results only so mock vs live is one pipeline
+- [x] T076 [-] Update `lib/main.dart`, `lib/features/auth/presentation/oauth_sign_in_page.dart` (if it keys off demo mode), and every `AppConfig(` / `FellowayApp(` construction in `test/**` and `integration_test/**` for the new config API
+- [x] T077 [P] [-] Document `API_MODE`, `API_BASE_URL`, Stream key, and mock behavior in `specs/001-event-networking-app/quickstart.md` and `TECH_PLAN.md`
+- [x] T078 [P] [-] Add a short note to `specs/001-event-networking-app/contracts/rest-endpoints.md` that the client may satisfy these contracts via in-process mocks when `API_MODE=mock`
+- [x] T079 [-] Run `dart format .`, `flutter analyze`, and `flutter test`; fix any regressions from Phase 7 refactors
+
+**Checkpoint**: Mock vs live is **only** controlled via `AppConfig` / dart-defines; repositories + stream token path are aligned; widgets do not re-implement demo data.
 
 ---
 
@@ -191,3 +224,4 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 - Backend and admin web are **out of scope**; use mocks or staging per [plan.md](./plan.md)
 - Map provider (Google vs Mapbox) per [research.md](./research.md) — complete before T029
 - Stream channel IDs and token endpoint: align with backend when available
+- **Phase 7**: Optional follow-on to harden mock/live switching; does not replace shipped Phases 1–6

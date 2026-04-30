@@ -25,7 +25,6 @@ class _ProfileReviewsPageState extends State<ProfileReviewsPage> {
 
   Future<void> _load() async {
     final users = AppScope.usersOf(context);
-    final config = AppScope.configOf(context);
     final res = await users.getMe();
     if (!mounted) return;
     switch (res) {
@@ -35,14 +34,7 @@ class _ProfileReviewsPageState extends State<ProfileReviewsPage> {
           _loading = false;
         });
       case Failure():
-        if (config.isDemoBackend) {
-          setState(() {
-            _userId = 'demo';
-            _loading = false;
-          });
-        } else {
-          setState(() => _loading = false);
-        }
+        setState(() => _loading = false);
     }
   }
 

@@ -1,6 +1,6 @@
 import '../domain/event.dart';
 
-/// Sample events when backend is not configured ([AppConfig.isDemoBackend]).
+/// Sample events used by `MockApiCatalog` when the app uses mock REST responses.
 List<EventSummary> demoEventSummaries() {
   final now = DateTime.now();
   return [

@@ -26,7 +26,6 @@ class _ProfilePageState extends State<ProfilePage> {
       _error = null;
     });
     final users = AppScope.usersOf(context);
-    final config = AppScope.configOf(context);
     final res = await users.getMe();
     if (!mounted) return;
     switch (res) {
@@ -37,25 +36,10 @@ class _ProfilePageState extends State<ProfilePage> {
           _error = null;
         });
       case Failure(:final error):
-        if (config.isDemoBackend) {
-          setState(() {
-            _profile = UserProfile(
-              id: 'demo',
-              displayName: 'Demo User',
-              interests: const ['IT'],
-              hobbies: 'Coffee',
-              homeCityLabel: 'Kyiv',
-              ratingAverage: 4.2,
-            );
-            _loading = false;
-            _error = null;
-          });
-        } else {
-          setState(() {
-            _loading = false;
-            _error = error.message;
-          });
-        }
+        setState(() {
+          _loading = false;
+          _error = error.message;
+        });
     }
   }
 

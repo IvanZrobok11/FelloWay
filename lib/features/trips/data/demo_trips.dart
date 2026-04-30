@@ -1,6 +1,6 @@
 import '../domain/trip_chat.dart';
 
-/// Demo trips for [AppConfig.isDemoBackend] (e.g. `demo-1` event).
+/// Sample trips used by `MockApiCatalog` for mock REST responses.
 List<TripChatSummary> demoTripsForEvent(String eventId) {
   if (eventId != 'demo-1' && !eventId.startsWith('demo')) {
     return const [];

@@ -9,7 +9,6 @@ import '../../../app/app_scope.dart';
 import '../../../shared/errors/result.dart';
 import '../../chats/presentation/dm_launcher.dart';
 import '../../trips/presentation/event_trips_section.dart';
-import '../data/demo_events.dart';
 import '../domain/event.dart';
 
 class EventDetailPage extends StatefulWidget {
@@ -38,7 +37,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
       _error = null;
     });
     final repo = AppScope.eventsOf(context);
-    final config = AppScope.configOf(context);
     final res = await repo.getEvent(widget.eventId);
     if (!mounted) return;
     switch (res) {
@@ -54,25 +52,10 @@ class _EventDetailPageState extends State<EventDetailPage> {
           _loading = false;
         });
       case Failure(:final error):
-        if (config.isDemoBackend) {
-          final demo = demoEventDetail(widget.eventId);
-          if (mounted) {
-            AppScope.chatAccessOf(context).setEventAttendance(
-              demo.id,
-              demo.attendStatus == AttendStatus.attending,
-            );
-          }
-          setState(() {
-            _event = demo;
-            _loading = false;
-            _error = null;
-          });
-        } else {
-          setState(() {
-            _error = error.message;
-            _loading = false;
-          });
-        }
+        setState(() {
+          _error = error.message;
+          _loading = false;
+        });
     }
   }
 
@@ -105,7 +88,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
     final repo = AppScope.eventsOf(context);
     final r = await repo.attend(widget.eventId);
     if (!mounted) return;
-    final config = AppScope.configOf(context);
     switch (r) {
       case Success():
         if (mounted) {
@@ -115,14 +97,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
         }
         await _load();
       case Failure(:final error):
-        if (config.isDemoBackend && _event != null) {
-          if (mounted) {
-            AppScope.chatAccessOf(
-              context,
-            ).setEventAttendance(widget.eventId, true);
-          }
-          setState(() => _event = _withAttend(_event!, AttendStatus.attending));
-        } else if (mounted) {
+        if (mounted) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(error.message)));
@@ -132,7 +107,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
 
   Future<void> _leave() async {
     final repo = AppScope.eventsOf(context);
-    final config = AppScope.configOf(context);
     final r = await repo.leave(widget.eventId);
     if (!mounted) return;
     switch (r) {
@@ -145,43 +119,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
         }
         await _load();
       case Failure(:final error):
-        if (config.isDemoBackend && _event != null) {
-          if (mounted) {
-            AppScope.chatAccessOf(
-              context,
-            ).setEventAttendance(widget.eventId, false);
-            await AppScope.streamChatOf(context).onLeftEvent(widget.eventId);
-          }
-          setState(
-            () => _event = _withAttend(_event!, AttendStatus.notAttending),
-          );
-        } else if (mounted) {
+        if (mounted) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(error.message)));
         }
     }
-  }
-
-  Event _withAttend(Event e, AttendStatus status) {
-    return Event(
-      id: e.id,
-      title: e.title,
-      startsAt: e.startsAt,
-      endsAt: e.endsAt,
-      city: e.city,
-      venueName: e.venueName,
-      imageUrls: e.imageUrls,
-      tags: e.tags,
-      capacity: e.capacity,
-      priceLabel: e.priceLabel,
-      officialUrl: e.officialUrl,
-      attendStatus: status,
-      attendeePreview: e.attendeePreview,
-      latitude: e.latitude,
-      longitude: e.longitude,
-      attendees: e.attendees,
-    );
   }
 
   @override

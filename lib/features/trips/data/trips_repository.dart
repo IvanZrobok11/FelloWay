@@ -3,9 +3,9 @@ import 'package:dio/dio.dart';
 import '../../../app/config/app_config.dart';
 import '../../../shared/errors/app_failure.dart';
 import '../../../shared/errors/result.dart';
+import '../../../shared/mocks/mock_api_catalog.dart';
 import '../../../shared/network/api_client.dart';
 import '../domain/trip_chat.dart';
-import 'demo_trips.dart';
 
 class CreateTripDraft {
   const CreateTripDraft({
@@ -51,8 +51,8 @@ class TripsRepository {
   final AppConfig _config;
 
   Future<Result<List<TripChatSummary>>> listTrips(String eventId) async {
-    if (_config.isDemoBackend) {
-      return Success(demoTripsForEvent(eventId));
+    if (_config.useMockApi) {
+      return Success(MockApiCatalog.tripsForEvent(eventId));
     }
     try {
       final res = await _api.dio.get<Map<String, dynamic>>(
@@ -73,7 +73,7 @@ class TripsRepository {
     String eventId,
     CreateTripDraft draft,
   ) async {
-    if (_config.isDemoBackend) {
+    if (_config.useMockApi) {
       final id = 'demo-trip-${DateTime.now().millisecondsSinceEpoch}';
       return Success(
         TripChatSummary(
@@ -106,7 +106,7 @@ class TripsRepository {
   }
 
   Future<Result<bool>> requestJoin(String tripId) async {
-    if (_config.isDemoBackend) {
+    if (_config.useMockApi) {
       return const Success(true);
     }
     try {
@@ -118,7 +118,7 @@ class TripsRepository {
   }
 
   Future<Result<bool>> cancelJoinRequest(String tripId) async {
-    if (_config.isDemoBackend) {
+    if (_config.useMockApi) {
       return const Success(true);
     }
     try {
@@ -130,21 +130,8 @@ class TripsRepository {
   }
 
   Future<Result<List<TripJoinRequest>>> listJoinRequests(String tripId) async {
-    if (_config.isDemoBackend) {
-      return const Success([
-        TripJoinRequest(
-          userId: 'u-low',
-          displayName: 'Pat',
-          homeCityLabel: 'Odesa',
-          ratingAverage: 2.8,
-        ),
-        TripJoinRequest(
-          userId: 'u-ok',
-          displayName: 'Jan',
-          homeCityLabel: 'Kyiv',
-          ratingAverage: 4.5,
-        ),
-      ]);
+    if (_config.useMockApi) {
+      return Success(MockApiCatalog.demoJoinRequests());
     }
     try {
       final res = await _api.dio.get<Map<String, dynamic>>(
@@ -172,7 +159,7 @@ class TripsRepository {
   }
 
   Future<Result<bool>> approveJoin(String tripId, String userId) async {
-    if (_config.isDemoBackend) {
+    if (_config.useMockApi) {
       return const Success(true);
     }
     try {

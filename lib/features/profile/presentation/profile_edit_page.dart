@@ -47,7 +47,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   Future<void> _load() async {
     final users = AppScope.usersOf(context);
-    final config = AppScope.configOf(context);
     final res = await users.getMe();
     if (!mounted) return;
     switch (res) {
@@ -55,21 +54,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         _applyProfile(value);
         setState(() => _loading = false);
       case Failure():
-        if (config.isDemoBackend) {
-          _applyProfile(
-            UserProfile(
-              id: 'demo',
-              displayName: 'Demo User',
-              interests: const ['IT'],
-              hobbies: 'Coffee',
-              homeCityLabel: 'Kyiv',
-              ratingAverage: 4.2,
-            ),
-          );
-          setState(() => _loading = false);
-        } else {
-          setState(() => _loading = false);
-        }
+        setState(() => _loading = false);
     }
   }
 

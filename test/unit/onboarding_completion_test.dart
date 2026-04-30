@@ -8,7 +8,6 @@ void main() {
         OnboardingCompletion.isSatisfied(
           displayName: '',
           interests: ['IT'],
-          hobbies: 'music',
           homeCityLabel: 'Kyiv',
         ),
         isFalse,
@@ -17,7 +16,6 @@ void main() {
         OnboardingCompletion.isSatisfied(
           displayName: 'Ann',
           interests: [],
-          hobbies: 'music',
           homeCityLabel: 'Kyiv',
         ),
         isFalse,
@@ -26,16 +24,6 @@ void main() {
         OnboardingCompletion.isSatisfied(
           displayName: 'Ann',
           interests: ['IT'],
-          hobbies: '',
-          homeCityLabel: 'Kyiv',
-        ),
-        isFalse,
-      );
-      expect(
-        OnboardingCompletion.isSatisfied(
-          displayName: 'Ann',
-          interests: ['IT'],
-          hobbies: 'music',
           homeCityLabel: '',
         ),
         isFalse,
@@ -47,7 +35,6 @@ void main() {
         OnboardingCompletion.isSatisfied(
           displayName: 'Ann',
           interests: ['IT'],
-          hobbies: 'music',
           homeCityLabel: 'Kyiv',
         ),
         isTrue,

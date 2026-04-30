@@ -24,17 +24,24 @@ The app reads build-time defines in `AppConfig.fromEnvironment()`:
 
 | Define | Purpose | Default (dev) |
 |--------|---------|----------------|
-| `API_BASE_URL` | REST base URL | `https://api.example.com` (demo stubs when host is `example.com`) |
+| `API_BASE_URL` | REST base URL | `https://api.example.com` |
+| `API_MODE` | `mock` = in-app REST stubs; `live` = always use HTTP; omit or `auto` = mock if URL contains `example.com`, else live | `auto` (implicit) |
 | `STREAM_API_KEY` | GetStream client key | empty (chat UI limited without key) |
 | `OAUTH_ISSUER` | OIDC issuer | empty |
 | `OAUTH_CLIENT_ID` | Native client id | empty |
 | `OAUTH_REDIRECT_URL` | Redirect URI | `com.felloway.app:/oauthredirect` |
 | `OAUTH_DISCOVERY_URL` | Optional discovery override | empty |
 
-Example:
+Example (real backend, even if the hostname happens to include `example.com`):
 
 ```bash
-flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=STREAM_API_KEY=your_key
+flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=API_MODE=live --dart-define=STREAM_API_KEY=your_key
+```
+
+Example (force offline-friendly stubs against any base URL):
+
+```bash
+flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=API_MODE=mock
 ```
 
 ### Flavors
@@ -92,4 +99,4 @@ Commit generated `test/golden/goldens/*.png` when goldens change; expect possibl
 
 ## Frontend-Only Caveat
 
-Without a running backend, use **mock servers** or **stub repositories** for REST and a **Stream test app** for chat UI iteration. `API_BASE_URL` containing `example.com` enables demo stubs in several repositories.
+Without a running backend, use **`API_MODE=mock`** (or default `API_MODE=auto` with `API_BASE_URL` containing `example.com`) so REST repositories return in-app data; use a **Stream test app** for chat UI iteration.

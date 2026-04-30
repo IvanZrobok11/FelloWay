@@ -46,7 +46,6 @@ class _CityPageState extends State<CityPage> {
     if (!OnboardingCompletion.isSatisfied(
       displayName: draft.displayName,
       interests: draft.interests,
-      hobbies: draft.hobbies,
       homeCityLabel: draft.homeCityLabel,
     )) {
       return;
@@ -54,10 +53,12 @@ class _CityPageState extends State<CityPage> {
 
     setState(() => _saving = true);
     final store = AppScope.onboardingDraftStoreOf(context);
+    final onboarding = AppScope.onboardingOf(context);
     await store.savePending(draft);
+    await onboarding.setComplete(true);
     if (!context.mounted) return;
     setState(() => _saving = false);
-    context.push('/sign-in');
+    context.go('/events');
   }
 
   @override
@@ -106,7 +107,7 @@ class _CityPageState extends State<CityPage> {
                         height: 24,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Text(l10n.onboardingSignInToFinish),
+                    : Text(l10n.onboardingWelcomeGetStarted),
               ),
             ],
           ),

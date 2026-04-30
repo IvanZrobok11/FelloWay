@@ -90,8 +90,8 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
       final pending = store.loadPending();
 
       if (pending != null) {
-        var pushDraft = config.isDemoBackend;
-        if (!config.isDemoBackend) {
+        var pushDraft = config.useMockApi;
+        if (!config.useMockApi) {
           final me = await users.getMe();
           if (!mounted) return;
           switch (me) {

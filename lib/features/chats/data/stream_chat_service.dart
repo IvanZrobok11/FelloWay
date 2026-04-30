@@ -51,7 +51,7 @@ class StreamChatService extends ChangeNotifier {
       _setState(StreamChatConnectStatus.missingApiKey, null);
       return;
     }
-    if (_config.isDemoBackend) {
+    if (_config.useMockApi) {
       await disconnect();
       _setState(StreamChatConnectStatus.demoSkipped, null);
       return;

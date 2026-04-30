@@ -15,24 +15,13 @@ class InterestsPage extends StatefulWidget {
 
 class _InterestsPageState extends State<InterestsPage> {
   OnboardingDraft? _draft;
-  final _hobbiesController = TextEditingController();
-
+ 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _draft ??=
         GoRouterState.of(context).extra as OnboardingDraft? ??
         OnboardingDraft();
-    final d = _draft!;
-    if (_hobbiesController.text.isEmpty) {
-      _hobbiesController.text = d.hobbies;
-    }
-  }
-
-  @override
-  void dispose() {
-    _hobbiesController.dispose();
-    super.dispose();
   }
 
   @override
@@ -44,8 +33,7 @@ class _InterestsPageState extends State<InterestsPage> {
       appBar: AppBar(title: Text(l10n.onboardingInterestsTitle)),
       body: Semantics(
         container: true,
-        label:
-            '${l10n.onboardingInterestsTitle}. ${l10n.onboardingInterestsSection}. ${l10n.onboardingHobbiesSection}',
+        label: '${l10n.onboardingInterestsTitle}. ${l10n.onboardingInterestsSection}',
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
@@ -80,26 +68,10 @@ class _InterestsPageState extends State<InterestsPage> {
               }).toList(),
             ),
             const SizedBox(height: 24),
-            Text(
-              l10n.onboardingHobbiesSection,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _hobbiesController,
-              decoration: InputDecoration(
-                labelText: l10n.onboardingHobbiesLabel,
-                border: const OutlineInputBorder(),
-              ),
-              minLines: 2,
-              maxLines: 4,
-              onChanged: (v) => draft.hobbies = v,
-            ),
-            const SizedBox(height: 24),
             FilledButton(
               onPressed: () {
-                draft.hobbies = _hobbiesController.text.trim();
-                if (draft.interests.isEmpty || draft.hobbies.isEmpty) return;
+                draft.hobbies = '';
+                if (draft.interests.isEmpty) return;
                 context.go('/onboarding/city', extra: draft);
               },
               child: Text(l10n.onboardingContinue),

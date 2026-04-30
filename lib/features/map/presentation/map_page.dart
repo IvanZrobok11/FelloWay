@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
 import '../../../shared/errors/result.dart';
-import '../../events/data/demo_events.dart';
 import '../../events/domain/event.dart';
 
 class MapPage extends StatefulWidget {
@@ -28,7 +27,6 @@ class _MapPageState extends State<MapPage> {
   Future<void> _load() async {
     setState(() => _loading = true);
     final repo = AppScope.eventsOf(context);
-    final config = AppScope.configOf(context);
     final res = await repo.listEvents(interest: _interestFilter);
     if (!mounted) return;
     switch (res) {
@@ -38,20 +36,7 @@ class _MapPageState extends State<MapPage> {
           _loading = false;
         });
       case Failure():
-        if (config.isDemoBackend) {
-          var items = demoEventSummaries();
-          if (_interestFilter != null) {
-            items = items
-                .where((e) => e.tags.contains(_interestFilter))
-                .toList();
-          }
-          setState(() {
-            _events = items;
-            _loading = false;
-          });
-        } else {
-          setState(() => _loading = false);
-        }
+        setState(() => _loading = false);
     }
   }
 

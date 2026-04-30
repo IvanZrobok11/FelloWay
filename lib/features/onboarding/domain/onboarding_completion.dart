@@ -4,13 +4,11 @@ abstract final class OnboardingCompletion {
   static bool isSatisfied({
     required String displayName,
     required List<String> interests,
-    required String hobbies,
     required String homeCityLabel,
   }) {
     final nameOk = displayName.trim().isNotEmpty;
     final interestsOk = interests.isNotEmpty;
-    final hobbiesOk = hobbies.trim().isNotEmpty;
     final cityOk = homeCityLabel.trim().isNotEmpty;
-    return nameOk && interestsOk && hobbiesOk && cityOk;
+    return nameOk && interestsOk && cityOk;
   }
 }

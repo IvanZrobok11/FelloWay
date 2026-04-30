@@ -35,7 +35,6 @@ class _EventFeedbackPageState extends State<EventFeedbackPage> {
 
   Future<void> _loadUser() async {
     final users = AppScope.usersOf(context);
-    final config = AppScope.configOf(context);
     final res = await users.getMe();
     if (!mounted) return;
     switch (res) {
@@ -45,14 +44,7 @@ class _EventFeedbackPageState extends State<EventFeedbackPage> {
           _loadingUser = false;
         });
       case Failure():
-        if (config.isDemoBackend) {
-          setState(() {
-            _userId = 'demo';
-            _loadingUser = false;
-          });
-        } else {
-          setState(() => _loadingUser = false);
-        }
+        setState(() => _loadingUser = false);
     }
   }
 

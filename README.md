@@ -1,19 +1,61 @@
 # felloway_client
 
-A new Flutter project.
+Flutter mobile client for FelloWay.
 
-## Getting Started
+## Run the app
 
-This project is a starting point for a Flutter application.
+1. Install Flutter (stable) and verify setup:
+   - `flutter doctor`
+2. Install dependencies:
+   - `flutter pub get`
+3. Run on connected device/emulator:
+   - `flutter run`
 
-A few resources to get you started if this is your first Flutter project:
+You can pass runtime config with `--dart-define`.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Example:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=API_MODE=live --dart-define=STREAM_API_KEY=your_stream_key
+```
+
+## Runtime config
+
+Main defines:
+
+- `API_BASE_URL` (default: `https://api.example.com`)
+- `API_MODE` (`auto`, `mock`, `live`)
+- `STREAM_API_KEY`
+- `OAUTH_ISSUER`
+- `OAUTH_CLIENT_ID`
+- `OAUTH_REDIRECT_URL` (default: `com.felloway.app:/oauthredirect`)
+- `OAUTH_DISCOVERY_URL`
+
+## API modes (`API_MODE`)
+
+- `mock`:
+  - Forces in-app mock data for supported REST flows.
+  - Useful for UI development without backend availability.
+- `live`:
+  - Forces real HTTP calls to `API_BASE_URL`.
+  - Use this when working against staging/production backend.
+- `auto` (default):
+  - Chooses mode from URL heuristic:
+    - if `API_BASE_URL` contains `example.com` -> mock
+    - otherwise -> live
+
+Quick examples:
+
+```bash
+# Force mocks
+flutter run --dart-define=API_MODE=mock
+
+# Force live API
+flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=API_MODE=live
+
+# Default behavior (auto)
+flutter run
+```
 
 ## Development Standards
 

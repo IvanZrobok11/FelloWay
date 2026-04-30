@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../../app/app_scope.dart';
 import '../../../shared/errors/result.dart';
 import '../../../shared/widgets/error_display.dart';
-import '../data/demo_events.dart';
 import '../domain/event.dart';
 import 'event_card.dart';
 
@@ -74,7 +73,6 @@ class _EventsListPageState extends State<EventsListPage> {
 
   Future<void> _fetch({required bool reset}) async {
     final repo = AppScope.eventsOf(context);
-    final config = AppScope.configOf(context);
     final q = _searchController.text.trim();
     final result = await repo.listEvents(
       query: q.isEmpty ? null : q,
@@ -95,17 +93,9 @@ class _EventsListPageState extends State<EventsListPage> {
           _error = null;
         });
       case Failure(:final error):
-        if (config.isDemoBackend) {
-          setState(() {
-            _items = demoEventSummaries();
-            _cursor = null;
-            _error = null;
-          });
-        } else {
-          setState(() {
-            _error = error.message;
-          });
-        }
+        setState(() {
+          _error = error.message;
+        });
     }
   }
 
