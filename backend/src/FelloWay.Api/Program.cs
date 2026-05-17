@@ -22,6 +22,7 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddFelloWayHealthChecks();
+builder.Services.AddFelloWayCors(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
@@ -31,12 +32,18 @@ await app.ApplyDatabaseAsync();
 var wwwroot = Path.Combine(app.Environment.ContentRootPath, "wwwroot");
 Directory.CreateDirectory(Path.Combine(wwwroot, "avatars"));
 app.UseStaticFiles();
+app.UseCors(CorsExtensions.PolicyName);
+
+var hangfireEnabled = !app.Configuration.GetValue("Database:DisableHangfire", false);
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseHangfireDashboard("/hangfire");
+    if (hangfireEnabled)
+    {
+        app.UseHangfireDashboard("/hangfire");
+    }
 }
 
 app.UseMiddleware<CorrelationIdMiddleware>();
@@ -46,7 +53,7 @@ app.UseAuthorization();
 app.MapFelloWayHealthChecks();
 app.MapControllers();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() && hangfireEnabled)
 {
     RecurringJob.AddOrUpdate<PostEventReviewReminderJob>(
         "post-event-review-reminder",

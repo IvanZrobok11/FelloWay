@@ -57,9 +57,14 @@ flutter run --dart-define=API_BASE_URL=http://localhost:5161 --dart-define=API_M
 
 # Local backend (Android Emulator)
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:5161 --dart-define=API_MODE=live
+
+# Flutter web + local HTTPS API (requires backend CORS in Development)
+flutter run -d chrome --dart-define=API_BASE_URL=https://localhost:7086 --dart-define=API_MODE=live
 ```
 
-Use **Sign in (local backend)** on the sign-in screen when OAuth is not configured. Start the API with `dotnet run --project backend/src/FelloWay.Api`. See [specs/005-api-backend-integration/quickstart.md](../specs/005-api-backend-integration/quickstart.md).
+Use **Sign in (local backend)** on the sign-in screen when OAuth is not configured.
+
+For Flutter web against a local API, start the backend with the `https` launch profile and see [specs/007-api-cors-policy/quickstart.md](../specs/007-api-cors-policy/quickstart.md). Start the API with `dotnet run --project backend/src/FelloWay.Api`. See [specs/005-api-backend-integration/quickstart.md](../specs/005-api-backend-integration/quickstart.md).
 
 ### Live vs mock by feature (live mode)
 

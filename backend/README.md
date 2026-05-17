@@ -41,6 +41,12 @@ dotnet test FelloWay.slnx --filter "Category=Integration"
 
 See [specs/006-hybrid-test-database/quickstart.md](../specs/006-hybrid-test-database/quickstart.md).
 
+## CORS (browser / Flutter web)
+
+Configure allowed web origins in `Cors:AllowedOrigins` (see `appsettings.json`). In **Development**, any `http(s)://localhost` or `127.0.0.1` origin is permitted automatically. Staging/production must list explicit origins only.
+
+See [specs/007-api-cors-policy/quickstart.md](../specs/007-api-cors-policy/quickstart.md).
+
 PR checklist: [`.github/pull_request_template.md`](../.github/pull_request_template.md)
 
 Load smoke (k6): [`scripts/load-smoke.js`](scripts/load-smoke.js)

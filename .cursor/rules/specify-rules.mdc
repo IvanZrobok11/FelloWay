@@ -18,6 +18,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-17
 - `TokenStorage` (secure prefs) for access/refresh tokens (005-api-backend-integration)
 - .NET 8, C# 12, xUnit 2.5 + `Microsoft.AspNetCore.Mvc.Testing`, `Microsoft.EntityFrameworkCore.InMemory`, `Testcontainers.PostgreSql` 4.3, Npgsql, Hangfire.PostgreSql (006-hybrid-test-database)
 - InMemory (fast suite); PostgreSQL (integration suite) (006-hybrid-test-database)
+- C# 12 / .NET 8 + ASP.NET Core built-in CORS middleware (`AddCors` / `UseCors`) (007-api-cors-policy)
+- Configuration `Cors:AllowedOrigins`; Development localhost predicate (007-api-cors-policy)
 
 - C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
 
@@ -38,9 +40,9 @@ tests/
 C# 12 / .NET 8: Follow standard conventions
 
 ## Recent Changes
+- 007-api-cors-policy: Added [e.g., Dart 3.x, Flutter stable channel or NEEDS CLARIFICATION] + [e.g., flutter_bloc, freezed, dio, go_router or NEEDS CLARIFICATION]
 - 006-hybrid-test-database: Added .NET 8, C# 12, xUnit 2.5 + `Microsoft.AspNetCore.Mvc.Testing`, `Microsoft.EntityFrameworkCore.InMemory`, `Testcontainers.PostgreSql` 4.3, Npgsql, Hangfire.PostgreSql
 - 005-api-backend-integration: Added Dart 3.10+ / Flutter stable; .NET 8 backend (verification only) + `dio`, `flutter_appauth`, `felloway_api` (path dep, optional mappers), ASP.NET JWT auth (002)
-- 004-openapi-dart-codegen: Added Bash 5+; Node.js 18+; Dart 3.10+ / Flutter + `@redocly/cli` (bundle/join); `@openapitools/openapi-generator-cli` 7.10.x (global or npx); Java 11+ (JVM for generator)
 
 
 <!-- MANUAL ADDITIONS START -->

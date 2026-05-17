@@ -137,7 +137,7 @@ GitHub Actions [`.github/workflows/backend-ci.yml`](../../.github/workflows/back
 3. **Key Vault** — store `Jwt:SigningKey`, OAuth client secrets, Stream keys, Blob connection; use managed identity for App Service access.
 4. **Run migrations** — `dotnet ef database update` in release pipeline or startup job (one-time per release).
 5. **Hangfire** — uses same PostgreSQL; ensure dashboard is not public in staging/production.
-6. **CORS** — allow Flutter/web admin origins when configured.
+6. **CORS** — set `Cors:AllowedOrigins` for staging/production web clients; see [007-api-cors-policy/quickstart.md](../007-api-cors-policy/quickstart.md).
 7. **Health** — wire App Service liveness to `GET /health` and readiness to `GET /health/ready` (ASP.NET Core built-in health checks; see [003 health contract](../003-custom-health-checks/contracts/health-probes.md)). Expect **200** when healthy, **503** on readiness when the database is unreachable; liveness stays **200** if only the DB is down.
 
 ## Load smoke (NFR-B001)
