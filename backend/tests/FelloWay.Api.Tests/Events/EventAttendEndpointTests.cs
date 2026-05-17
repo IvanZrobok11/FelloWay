@@ -13,7 +13,6 @@ public class EventAttendEndpointTests : IClassFixture<FelloWayWebApplicationFact
     public EventAttendEndpointTests(FelloWayWebApplicationFactory factory)
     {
         _factory = factory;
-        factory.EnsureDatabaseCreated();
         EventsTestHelper.SeedAsync(factory).GetAwaiter().GetResult();
         _client = factory.CreateClient();
     }

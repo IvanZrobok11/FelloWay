@@ -18,7 +18,6 @@ public class UsersMeEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
     public UsersMeEndpointTests(FelloWayWebApplicationFactory factory)
     {
         _factory = factory;
-        factory.EnsureDatabaseCreated();
         SeedAsync(factory).GetAwaiter().GetResult();
         _client = factory.CreateClient();
     }

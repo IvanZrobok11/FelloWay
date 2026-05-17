@@ -6,7 +6,6 @@ public class CorrelationIdMiddlewareTests : IClassFixture<FelloWayWebApplication
 
     public CorrelationIdMiddlewareTests(FelloWayWebApplicationFactory factory)
     {
-        factory.EnsureDatabaseCreated();
         _client = factory.CreateClient();
     }
 

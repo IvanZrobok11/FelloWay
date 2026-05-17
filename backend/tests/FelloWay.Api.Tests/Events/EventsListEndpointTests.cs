@@ -14,7 +14,6 @@ public class EventsListEndpointTests : IClassFixture<FelloWayWebApplicationFacto
     public EventsListEndpointTests(FelloWayWebApplicationFactory factory)
     {
         _factory = factory;
-        factory.EnsureDatabaseCreated();
         EventsTestHelper.SeedAsync(factory).GetAwaiter().GetResult();
         _client = factory.CreateClient();
     }

@@ -7,20 +7,19 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace FelloWay.Api.Tests.Infrastructure;
 
+/// <summary>
+/// Default fast-suite host: in-memory EF, no PostgreSQL, no Hangfire, no startup DB init.
+/// </summary>
 public class FelloWayWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly string _databaseName = $"FelloWayTests_{Guid.NewGuid():N}";
-
-    public void EnsureDatabaseCreated()
-    {
-        using var scope = Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<FelloWayDbContext>();
-        db.Database.EnsureCreated();
-    }
+    private readonly string _databaseName = $"felloway_mem_{Guid.NewGuid():N}";
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
+        // UseSetting applies before Program.cs reads configuration (AddInfrastructure).
+        builder.UseSetting("Database:SkipInitialization", "true");
+        builder.UseSetting("Database:DisableHangfire", "true");
 
         builder.ConfigureServices(services =>
         {

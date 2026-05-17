@@ -17,7 +17,6 @@ public class OAuthTokenEndpointTests : IClassFixture<FelloWayWebApplicationFacto
     public OAuthTokenEndpointTests(FelloWayWebApplicationFactory factory)
     {
         _factory = factory;
-        factory.EnsureDatabaseCreated();
         SeedAsync(factory).GetAwaiter().GetResult();
         _client = factory.CreateClient();
     }

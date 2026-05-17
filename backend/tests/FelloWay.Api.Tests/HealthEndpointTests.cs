@@ -10,7 +10,6 @@ public class HealthEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
 
     public HealthEndpointTests(FelloWayWebApplicationFactory factory)
     {
-        factory.EnsureDatabaseCreated();
         _client = factory.CreateClient();
     }
 
@@ -26,7 +25,7 @@ public class HealthEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
     }
 
     [Fact]
-    public async Task GetReady_ReturnsOk_WhenDatabaseAvailable()
+    public async Task GetReady_ReturnsOk_WhenInMemoryDatabaseConfigured()
     {
         var response = await _client.GetAsync("/health/ready");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

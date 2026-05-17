@@ -33,8 +33,13 @@ OpenAPI drafts: [shared/api-contracts/](../shared/api-contracts/)
 ```bash
 dotnet format FelloWay.slnx --verify-no-changes
 dotnet build FelloWay.slnx
-dotnet test FelloWay.slnx
+# Fast suite (in-memory, no PostgreSQL required)
+dotnet test FelloWay.slnx --filter "Category!=Integration"
+# Integration suite (real PostgreSQL — Docker or FELLOWAY_TEST_CONNECTION)
+dotnet test FelloWay.slnx --filter "Category=Integration"
 ```
+
+See [specs/006-hybrid-test-database/quickstart.md](../specs/006-hybrid-test-database/quickstart.md).
 
 PR checklist: [`.github/pull_request_template.md`](../.github/pull_request_template.md)
 

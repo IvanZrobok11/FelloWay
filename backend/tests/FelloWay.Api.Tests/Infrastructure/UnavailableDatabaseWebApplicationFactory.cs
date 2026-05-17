@@ -7,11 +7,16 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace FelloWay.Api.Tests.Infrastructure;
 
+/// <summary>
+/// Fast-suite host with unreachable PostgreSQL for readiness tests.
+/// </summary>
 public class UnavailableDatabaseWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
+        builder.UseSetting("Database:SkipInitialization", "true");
+        builder.UseSetting("Database:DisableHangfire", "true");
 
         builder.ConfigureServices(services =>
         {

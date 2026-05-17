@@ -15,7 +15,6 @@ public class StreamTokenEndpointTests : IClassFixture<FelloWayWebApplicationFact
     public StreamTokenEndpointTests(FelloWayWebApplicationFactory factory)
     {
         _factory = factory;
-        factory.EnsureDatabaseCreated();
         using var scope = factory.Services.CreateScope();
         scope.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync().GetAwaiter().GetResult();
     }

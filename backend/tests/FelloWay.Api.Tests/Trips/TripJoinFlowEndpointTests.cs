@@ -19,7 +19,6 @@ public class TripJoinFlowEndpointTests : IClassFixture<FelloWayWebApplicationFac
     public TripJoinFlowEndpointTests(FelloWayWebApplicationFactory factory)
     {
         _factory = factory;
-        factory.EnsureDatabaseCreated();
         EventsTestHelper.SeedAsync(factory).GetAwaiter().GetResult();
         _client = factory.CreateClient();
     }

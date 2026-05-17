@@ -1,6 +1,4 @@
-using FelloWay.Application.Auth;
 using FelloWay.Application.Common.Interfaces;
-using FelloWay.Application.Users;
 using FelloWay.Infrastructure.Auth;
 using FelloWay.Infrastructure.Jobs;
 using FelloWay.Infrastructure.Notifications;
@@ -25,7 +23,7 @@ public static class DependencyInjection
         IHostEnvironment environment)
     {
         var connectionString = configuration.GetConnectionString("Default")
-            ?? "Host=localhost;Database=felloway;Username=postgres;Password=postgres";
+            ?? throw new InvalidOperationException("No connection string");
 
         services.AddDbContext<FelloWayDbContext>(options =>
             options.UseNpgsql(connectionString));
@@ -50,7 +48,7 @@ public static class DependencyInjection
         services.AddSingleton<CustomPushDispatcher>();
         services.AddScoped<PostEventReviewReminderJob>();
 
-        if (!environment.IsEnvironment("Testing"))
+        if (!configuration.GetValue("Database:DisableHangfire", false))
         {
             services.AddHangfire(config => config
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
