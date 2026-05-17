@@ -178,6 +178,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapFilterAll => 'All';
 
   @override
+  String mapClusterEventsCount(Object count) {
+    return '$count events';
+  }
+
+  @override
   String get profileScreenTitle => 'Profile';
 
   @override

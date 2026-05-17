@@ -410,6 +410,12 @@ abstract class AppLocalizations {
   /// **'All'**
   String get mapFilterAll;
 
+  /// No description provided for @mapClusterEventsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} events'**
+  String mapClusterEventsCount(Object count);
+
   /// No description provided for @profileScreenTitle.
   ///
   /// In en, this message translates to:

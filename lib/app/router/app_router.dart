@@ -30,8 +30,9 @@ GoRouter createAppRouter({
 }) {
   return GoRouter(
     navigatorKey: navigatorKey ?? PushHandler.rootNavigatorKey,
-    initialLocation:
-        onboardingPreferences.isComplete ? '/events' : '/onboarding/welcome',
+    initialLocation: onboardingPreferences.isComplete
+        ? '/events'
+        : '/onboarding/welcome',
     refreshListenable: authSession,
     redirect: (context, state) {
       final path = state.uri.path;

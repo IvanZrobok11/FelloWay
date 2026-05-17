@@ -165,9 +165,10 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 ### Phase Dependencies
 
-- **Phase 1** → **Phase 2** → **Phase 3 (US1)** → **Phase 4 (US2)** → **Phase 5 (US3)** → **Phase 6** → **Phase 7 (optional hardening)**
+- **Phase 1** → **Phase 2** → **Phase 3 (US1)** → **Phase 4 (US2)** → **Phase 5 (US3)** → **Phase 6** → **Phase 7 (optional hardening)** → **Phase 8 (optional map clustering rework)**
 - US2/US3 assume US1 event join + profile data exist; still keep access-policy logic testable in isolation
 - **Phase 7** depends on Phase 6 (or any build where repositories exist); can start after T020+T049+T036 are present
+- **Phase 8** depends on map foundation from US1 (T029) and can start after Phase 3; recommended after Phase 7 to reuse consolidated mock/live behavior
 
 ### Within Each User Story
 
@@ -185,6 +186,7 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 - T045/T046 parallel in US3 tests
 - T058/T063/T064/T065 in Phase 6 where independent
 - **Phase 7**: T070/T071/T072/T073 after T069; T071–T073 parallel once T070 exists; T077 parallel with parts of T076
+- **Phase 8**: T082/T083 can run in parallel after T081; T086/T087 can run in parallel after T084
 
 ---
 
@@ -219,9 +221,42 @@ description: "Task list for Event Networking Mobile MVP (Flutter client only)"
 
 ---
 
+## Phase 8: Maps menu rework with clustering (US1 extension)
+
+**Purpose**: Rework `Map` tab to use zoom-aware marker clustering with smooth transitions:
+- low zoom: big clusters with event counts (e.g. `24 events`)
+- medium zoom: smaller proximity clusters
+- high zoom: disable clustering and show individual event markers with names
+- dynamic updates on zoom/pan with animated transitions between states
+
+**Independent test**: On a map with many events, pinch-zoom from far to near and pan around; verify cluster counts collapse/expand correctly and individual named markers appear at high zoom without stale cluster artifacts.
+
+### Tests for Phase 8
+
+- [x] T080 [P] [US1] Add map clustering unit tests (distance bucketing, zoom thresholds, cluster label text) in `test/unit/map_cluster_engine_test.dart`
+- [x] T081 [P] [US1] Add widget test for map state transitions (low→medium→high zoom cluster rendering contract) in `test/widget/map_clustering_state_test.dart`
+
+### Implementation for Phase 8
+
+- [x] T082 [US1] Introduce map marker domain models (`MapMarkerNode`, `MapClusterNode`, `MapViewport`) in `lib/features/map/domain/map_marker_node.dart`
+- [x] T083 [US1] Implement clustering engine service (`cluster(points, zoom, bounds)`) with low/medium/high zoom behavior in `lib/features/map/application/map_cluster_engine.dart`
+- [x] T084 [US1] Add map camera state/controller (`zoom`, `bounds`, debounced move callbacks) in `lib/features/map/application/map_camera_controller.dart`
+- [x] T085 [US1] Refactor `lib/features/map/presentation/map_page.dart` to render cluster markers and event markers from cluster engine output instead of a plain list fallback
+- [x] T086 [P] [US1] Add localized cluster count label (e.g. `{count} events`) in `lib/l10n/app_en.arb`, `lib/l10n/app_uk.arb` and regenerate l10n (`lib/l10n/app_localizations*.dart`)
+- [x] T087 [P] [US1] Implement smooth transition behavior (fade/scale or marker tween between cluster states) in `lib/features/map/presentation/widgets/map_cluster_marker.dart`
+- [x] T088 [US1] Wire dynamic recalculation on zoom and pan, including throttling to avoid jank, in `lib/features/map/presentation/map_page.dart` + `lib/features/map/application/map_camera_controller.dart`
+- [x] T089 [US1] Ensure high zoom disables clustering and displays individual event name markers in `lib/features/map/presentation/map_page.dart`
+- [x] T090 [US1] Validate performance on dense datasets (frame times, recalculation frequency) and adjust thresholds in `lib/features/map/application/map_cluster_engine.dart`
+- [x] T091 [US1] Run `dart format .`, `flutter analyze`, and map-related tests (`test/unit/map_cluster_engine_test.dart`, `test/widget/map_clustering_state_test.dart`)
+
+**Checkpoint**: Map tab behavior is zoom-aware and animated; cluster counts are accurate at low zoom, broken down at medium zoom, and replaced by individual named markers at high zoom.
+
+---
+
 ## Notes
 
 - Backend and admin web are **out of scope**; use mocks or staging per [plan.md](./plan.md)
 - Map provider (Google vs Mapbox) per [research.md](./research.md) — complete before T029
 - Stream channel IDs and token endpoint: align with backend when available
 - **Phase 7**: Optional follow-on to harden mock/live switching; does not replace shipped Phases 1–6
+- **Phase 8**: Optional US1 extension focused on map UX quality and discoverability with clustering transitions

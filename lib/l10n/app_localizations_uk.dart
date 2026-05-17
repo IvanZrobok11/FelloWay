@@ -178,6 +178,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mapFilterAll => 'Усі';
 
   @override
+  String mapClusterEventsCount(Object count) {
+    return '$count подій';
+  }
+
+  @override
   String get profileScreenTitle => 'Профіль';
 
   @override

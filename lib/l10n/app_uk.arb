@@ -78,6 +78,12 @@
   "mapScreenTitle": "Карта",
   "mapDiscoveryHint": "Перегляд подій за інтересами. Повноцінну карту можна увімкнути з ключем maps API.",
   "mapFilterAll": "Усі",
+  "mapClusterEventsCount": "{count} подій",
+  "@mapClusterEventsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "profileScreenTitle": "Профіль",
   "profileGuestMessage": "Увійдіть, щоб переглянути профіль.",
   "profileSignOut": "Вийти",

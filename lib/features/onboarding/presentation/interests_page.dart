@@ -15,7 +15,7 @@ class InterestsPage extends StatefulWidget {
 
 class _InterestsPageState extends State<InterestsPage> {
   OnboardingDraft? _draft;
- 
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -33,7 +33,8 @@ class _InterestsPageState extends State<InterestsPage> {
       appBar: AppBar(title: Text(l10n.onboardingInterestsTitle)),
       body: Semantics(
         container: true,
-        label: '${l10n.onboardingInterestsTitle}. ${l10n.onboardingInterestsSection}',
+        label:
+            '${l10n.onboardingInterestsTitle}. ${l10n.onboardingInterestsSection}',
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [

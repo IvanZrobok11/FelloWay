@@ -81,6 +81,12 @@
   "mapScreenTitle": "Map",
   "mapDiscoveryHint": "Browse events by interest. Full map tiles can be enabled with a maps API key.",
   "mapFilterAll": "All",
+  "mapClusterEventsCount": "{count} events",
+  "@mapClusterEventsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "profileScreenTitle": "Profile",
   "profileGuestMessage": "Sign in to view your profile.",
   "profileSignOut": "Sign out",
