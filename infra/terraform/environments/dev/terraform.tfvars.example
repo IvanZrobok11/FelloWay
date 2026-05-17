@@ -1,0 +1,10 @@
+domain_name     = "felloway.example.com"
+api_host          = "dev.api.felloway.example.com"
+web_host          = "dev.app.felloway.example.com"
+vpc_cidr          = "10.10.0.0/16"
+db_instance_class = "db.t4g.micro"
+jwt_signing_key   = "change-me-min-32-characters-for-jwt-signing!!"
+
+# After bootstrap, configure backend.tf with:
+# bucket = "your-state-bucket"
+# region = "eu-central-1"

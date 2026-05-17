@@ -1,0 +1,158 @@
+name: Deploy (main → dev)
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || 'eu-central-1' }}
+  PROJECT_NAME: felloway
+  ENVIRONMENT: dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Backend tests
+        working-directory: backend
+        run: dotnet test FelloWay.slnx --filter "Category!=Integration" --verbosity normal
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Flutter tests
+        working-directory: frontend
+        run: |
+          flutter pub get
+          flutter test
+
+      - name: Build web (dev)
+        working-directory: frontend
+        env:
+          API_BASE_URL: https://dev.api.${{ vars.DOMAIN_NAME }}
+        run: |
+          flutter build web --release \
+            --dart-define=API_MODE=live \
+            --dart-define=API_BASE_URL=$API_BASE_URL
+
+      - name: Upload web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: frontend/build/web
+          retention-days: 7
+
+      - name: Write deploy metadata
+        run: echo '{"image_tag":"${{ github.sha }}","environment":"dev"}' > deploy-metadata.json
+
+      - name: Upload deploy metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-metadata
+          path: deploy-metadata.json
+          retention-days: 7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build API image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: false
+          tags: felloway-api:${{ github.sha }}
+          load: true
+
+      - name: Save docker image
+        run: docker save felloway-api:${{ github.sha }} -o felloway-api-image.tar
+
+      - name: Upload docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: felloway-api-image.tar
+          retention-days: 1
+
+  deploy-dev:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Download web artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: web-build
+
+      - name: Load docker image
+        run: docker load -i felloway-api-image.tar
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ env.PROJECT_NAME }}-github-deploy-${{ env.ENVIRONMENT }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Push image to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
+        run: |
+          docker tag felloway-api:$IMAGE_TAG $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:$IMAGE_TAG
+          docker tag felloway-api:$IMAGE_TAG $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:latest
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:latest
+
+      - name: Deploy ECS service
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
+        run: |
+          aws ecs update-service \
+            --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }} \
+            --service ${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }} \
+            --force-new-deployment
+
+      - name: Sync web to S3
+        env:
+          BUCKET: ${{ env.PROJECT_NAME }}-web-${{ env.ENVIRONMENT }}-${{ vars.AWS_ACCOUNT_ID }}
+        run: aws s3 sync web-build/ s3://$BUCKET/ --delete
+
+      - name: Invalidate CloudFront
+        env:
+          DISTRIBUTION_ID: ${{ vars.DEV_CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" --paths "/*"
+          fi
+
+      - name: Smoke test API
+        run: curl -f "https://dev.api.${{ vars.DOMAIN_NAME }}/health"
+
+      - name: Smoke test web
+        run: curl -f "https://dev.app.${{ vars.DOMAIN_NAME }}/"

@@ -16,7 +16,8 @@ Monorepo for **FelloWay** — an event networking platform for IT conferences: d
 | Path | Role |
 |------|------|
 | [frontend/](frontend/) | Flutter app package `felloway_client` |
-| [backend/](backend/) | API server (not started yet) |
+| [backend/](backend/) | ASP.NET Core API |
+| [infra/](infra/) | Terraform (AWS: **dev**, **test**, **prod** only) |
 | [shared/api-contracts/](shared/api-contracts/) | Shared REST/OpenAPI contracts by domain |
 | [specs/](specs/) | Feature specs, data model, planning docs |
 | [.specify/](.specify/) | Project constitution and Spec Kit templates |
@@ -38,6 +39,8 @@ flutter run
 
 - [frontend/README.md](frontend/README.md) — `flutter doctor`, `--dart-define` runtime config, API modes (`mock` / `live` / `auto`)
 - [specs/005-api-backend-integration/quickstart.md](specs/005-api-backend-integration/quickstart.md) — connect Flutter to local backend smoke checklist
+- [specs/008-aws-deploy-pipeline/quickstart.md](specs/008-aws-deploy-pipeline/quickstart.md) — AWS deploy (push `main` → dev, promote test/prod)
+- [infra/README.md](infra/README.md) — Terraform bootstrap and three environments
 - [specs/001-event-networking-app/quickstart.md](specs/001-event-networking-app/quickstart.md) — quality gates (`flutter analyze`, tests, goldens, integration tests)
 
 Open **`frontend/`** as the Flutter project root in your IDE.

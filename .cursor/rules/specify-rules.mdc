@@ -20,6 +20,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-17
 - InMemory (fast suite); PostgreSQL (integration suite) (006-hybrid-test-database)
 - C# 12 / .NET 8 + ASP.NET Core built-in CORS middleware (`AddCors` / `UseCors`) (007-api-cors-policy)
 - Configuration `Cors:AllowedOrigins`; Development localhost predicate (007-api-cors-policy)
+- Terraform ≥ 1.5; .NET 8; Dart 3.10+ / Flutter stable; GitHub Actions + AWS provider, ECS Fargate, ECR, RDS PostgreSQL 16, ALB, S3, CloudFront, ACM, Route 53, Secrets Manager; `configure-aws-credentials` OIDC (008-aws-deploy-pipeline)
+- RDS per env; S3 web buckets; Terraform remote state S3 + DynamoDB lock (008-aws-deploy-pipeline)
 
 - C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
 
@@ -40,9 +42,9 @@ tests/
 C# 12 / .NET 8: Follow standard conventions
 
 ## Recent Changes
+- 008-aws-deploy-pipeline: Added Terraform ≥ 1.5; .NET 8; Dart 3.10+ / Flutter stable; GitHub Actions + AWS provider, ECS Fargate, ECR, RDS PostgreSQL 16, ALB, S3, CloudFront, ACM, Route 53, Secrets Manager; `configure-aws-credentials` OIDC
 - 007-api-cors-policy: Added [e.g., Dart 3.x, Flutter stable channel or NEEDS CLARIFICATION] + [e.g., flutter_bloc, freezed, dio, go_router or NEEDS CLARIFICATION]
 - 006-hybrid-test-database: Added .NET 8, C# 12, xUnit 2.5 + `Microsoft.AspNetCore.Mvc.Testing`, `Microsoft.EntityFrameworkCore.InMemory`, `Testcontainers.PostgreSql` 4.3, Npgsql, Hangfire.PostgreSql
-- 005-api-backend-integration: Added Dart 3.10+ / Flutter stable; .NET 8 backend (verification only) + `dio`, `flutter_appauth`, `felloway_api` (path dep, optional mappers), ASP.NET JWT auth (002)
 
 
 <!-- MANUAL ADDITIONS START -->

@@ -1,0 +1,115 @@
+name: Promote to prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Docker image tag promoted through test"
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || 'eu-central-1' }}
+  PROJECT_NAME: felloway
+  ENVIRONMENT: prod
+
+jobs:
+  verify-test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION || 'eu-central-1' }}
+      PROJECT_NAME: felloway
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ env.PROJECT_NAME }}-github-deploy-test
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Require image in test ECR
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          aws ecr describe-images \
+            --repository-name ${{ env.PROJECT_NAME }}-api-test \
+            --image-ids imageTag="$IMAGE_TAG" \
+            --query 'imageDetails[0].imageTags' \
+            --output text | grep -q "$IMAGE_TAG" || {
+            echo "Image tag not found in test ECR. Run 'Promote to test' first."
+            exit 1
+          }
+
+  promote:
+    needs: verify-test
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ env.PROJECT_NAME }}-github-deploy-${{ env.ENVIRONMENT }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Copy image test → prod
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          docker pull $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-test:$IMAGE_TAG
+          docker tag $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-test:$IMAGE_TAG \
+            $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-prod:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-prod:$IMAGE_TAG
+
+      - name: Deploy ECS prod
+        run: |
+          aws ecs update-service \
+            --cluster ${{ env.PROJECT_NAME }}-prod \
+            --service ${{ env.PROJECT_NAME }}-api-prod \
+            --force-new-deployment
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Build web (prod)
+        working-directory: frontend
+        env:
+          API_BASE_URL: https://api.${{ vars.DOMAIN_NAME }}
+        run: |
+          flutter pub get
+          flutter build web --release \
+            --dart-define=API_MODE=live \
+            --dart-define=API_BASE_URL=$API_BASE_URL
+
+      - name: Sync web to S3
+        env:
+          BUCKET: ${{ env.PROJECT_NAME }}-web-prod-${{ vars.AWS_ACCOUNT_ID }}
+        run: aws s3 sync frontend/build/web/ s3://$BUCKET/ --delete
+
+      - name: Invalidate CloudFront
+        env:
+          DISTRIBUTION_ID: ${{ vars.PROD_CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" --paths "/*"
+          fi
+
+      - name: Smoke test API
+        run: curl -f "https://api.${{ vars.DOMAIN_NAME }}/health"
+
+      - name: Smoke test web
+        run: curl -f "https://app.${{ vars.DOMAIN_NAME }}/"

@@ -1,0 +1,9 @@
+domain_name     = "felloway.example.com"
+api_host          = "api.felloway.example.com"
+web_host          = "app.felloway.example.com"
+vpc_cidr          = "10.30.0.0/16"
+db_instance_class = "db.t4g.small"
+ecs_cpu           = 1024
+ecs_memory        = 2048
+ecs_desired_count = 2
+jwt_signing_key   = "change-me-min-32-characters-for-jwt-signing!!"
