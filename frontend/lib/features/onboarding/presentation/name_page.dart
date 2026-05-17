@@ -38,6 +38,7 @@ class _NamePageState extends State<NamePage> {
     final controller = _controller!;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(title: Text(l10n.onboardingNameTitle)),
       body: Semantics(
         container: true,

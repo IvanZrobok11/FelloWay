@@ -18,6 +18,7 @@ import 'auth/auth_session.dart';
 import 'config/app_config.dart';
 import 'notifications/push_handler.dart';
 import 'router/app_router.dart';
+import '../shared/widgets/app_background.dart';
 import 'theme/app_theme.dart';
 
 class FellowayApp extends StatefulWidget {
@@ -118,6 +119,19 @@ class _FellowayAppState extends State<FellowayApp> {
       child: MaterialApp.router(
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         theme: AppTheme.light(),
+        builder: (context, child) {
+          // Do not use router.state here — it can be empty on first frame (No element).
+          return ListenableBuilder(
+            listenable: router.routeInformationProvider,
+            builder: (context, _) {
+              final path = router.routeInformationProvider.value.uri.path;
+              return AppBackground(
+                intro: path.startsWith('/onboarding'),
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
+          );
+        },
         locale: const Locale('uk'),
         localizationsDelegates: [
           AppLocalizations.delegate,

@@ -30,6 +30,7 @@ class _InterestsPageState extends State<InterestsPage> {
     final draft = _draft!;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(title: Text(l10n.onboardingInterestsTitle)),
       body: Semantics(
         container: true,

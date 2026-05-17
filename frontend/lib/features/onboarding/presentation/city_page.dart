@@ -67,6 +67,7 @@ class _CityPageState extends State<CityPage> {
     final draft = _draft!;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(title: Text(l10n.onboardingCityTitle)),
       body: Semantics(
         container: true,
