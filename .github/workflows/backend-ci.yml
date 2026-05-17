@@ -1,0 +1,38 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore FelloWay.slnx
+
+      - name: Format
+        run: dotnet format FelloWay.slnx --verify-no-changes
+
+      - name: Build
+        run: dotnet build FelloWay.slnx --no-restore -c Release
+
+      - name: Test
+        run: dotnet test FelloWay.slnx --no-build -c Release --verbosity normal

@@ -23,14 +23,14 @@ description: "Task list for FelloWay Backend API (MVP)"
 
 **Purpose**: .NET solution skeleton, CI, analyzer rules, contract wiring
 
-- [ ] T001 [-] Create `backend/FelloWay.sln` and projects `src/FelloWay.Api`, `src/FelloWay.Application`, `src/FelloWay.Domain`, `src/FelloWay.Infrastructure`, `tests/FelloWay.Api.Tests`, `tests/FelloWay.Application.Tests` per [plan.md](./plan.md)
-- [ ] T002 [-] Add NuGet packages in project files: EF Core + Npgsql, Swashbuckle, FluentValidation, JWT bearer, Stream Chat SDK, Azure.Storage.Blobs, Hangfire + PostgreSQL storage, Polly (see [research.md](./research.md))
-- [ ] T003 [P] [-] Add `backend/.editorconfig` and enable nullable + analyzers in all `*.csproj`
-- [ ] T004 [P] [-] Add `backend/Directory.Build.props` for shared version/target framework `net8.0`
-- [ ] T005 [-] Configure `FelloWay.Api/Program.cs` with controllers, Swagger (Development), health checks placeholder in `backend/src/FelloWay.Api/Program.cs`
-- [ ] T006 [P] [-] Add GitHub Actions workflow `.github/workflows/backend-ci.yml` running `dotnet format`, `dotnet build`, `dotnet test` on `backend/`
-- [ ] T007 [P] [-] Document local secrets pattern in [quickstart.md](./quickstart.md) (user-secrets keys list)
-- [ ] T008 [-] Add `backend/README.md` linking to [quickstart.md](./quickstart.md) and [shared/api-contracts/](../../shared/api-contracts/)
+- [x] T001 [-] Create `backend/FelloWay.sln` and projects `src/FelloWay.Api`, `src/FelloWay.Application`, `src/FelloWay.Domain`, `src/FelloWay.Infrastructure`, `tests/FelloWay.Api.Tests`, `tests/FelloWay.Application.Tests` per [plan.md](./plan.md)
+- [x] T002 [-] Add NuGet packages in project files: EF Core + Npgsql, Swashbuckle, FluentValidation, JWT bearer, Stream Chat SDK, Azure.Storage.Blobs, Hangfire + PostgreSQL storage, Polly (see [research.md](./research.md))
+- [x] T003 [P] [-] Add `backend/.editorconfig` and enable nullable + analyzers in all `*.csproj`
+- [x] T004 [P] [-] Add `backend/Directory.Build.props` for shared version/target framework `net8.0`
+- [x] T005 [-] Configure `FelloWay.Api/Program.cs` with controllers, Swagger (Development), health checks placeholder in `backend/src/FelloWay.Api/Program.cs`
+- [x] T006 [P] [-] Add GitHub Actions workflow `.github/workflows/backend-ci.yml` running `dotnet format`, `dotnet build`, `dotnet test` on `backend/`
+- [x] T007 [P] [-] Document local secrets pattern in [quickstart.md](./quickstart.md) (user-secrets keys list)
+- [x] T008 [-] Add `backend/README.md` linking to [quickstart.md](./quickstart.md) and [shared/api-contracts/](../../shared/api-contracts/)
 
 ---
 
@@ -40,18 +40,18 @@ description: "Task list for FelloWay Backend API (MVP)"
 
 **⚠️ CRITICAL**: Blocks US1–US4
 
-- [ ] T009 [-] Implement domain base types and `DomainException` in `backend/src/FelloWay.Domain/Common/`
-- [ ] T010 [-] Implement `FelloWayDbContext` and entity configurations for `User`, `OAuthIdentity`, `RefreshToken`, `City`, `Interest` in `backend/src/FelloWay.Infrastructure/Persistence/`
-- [ ] T011 [-] Add initial EF migration `InitialAuthProfile` in `backend/src/FelloWay.Infrastructure/Persistence/Migrations/`
-- [ ] T012 [-] Implement `IApplicationDbContext` abstraction in `backend/src/FelloWay.Application/Common/Interfaces/` and register in DI
-- [ ] T013 [-] Implement global exception middleware returning `ErrorResponse` per [shared/api-contracts/common/openapi.yaml](../../shared/api-contracts/common/openapi.yaml) in `backend/src/FelloWay.Api/Middleware/ExceptionHandlingMiddleware.cs`
-- [ ] T014 [-] Configure JWT bearer authentication and `ICurrentUserService` in `backend/src/FelloWay.Api/Extensions/AuthExtensions.cs`
-- [ ] T015 [P] [-] Add `IntegrationTestFixture` with Testcontainers PostgreSQL in `backend/tests/FelloWay.Api.Tests/Infrastructure/IntegrationTestFixture.cs`
-- [ ] T016 [P] [-] Add `WebApplicationFactory` subclass `FelloWayWebApplicationFactory` in `backend/tests/FelloWay.Api.Tests/Infrastructure/FelloWayWebApplicationFactory.cs`
-- [ ] T017 [-] Seed reference data (cities sample, interests) via `IDataSeeder` in `backend/src/FelloWay.Infrastructure/Persistence/Seed/`
-- [ ] T018 [-] Wire Infrastructure DI module in `backend/src/FelloWay.Infrastructure/DependencyInjection.cs`
-- [ ] T019 [-] Wire Application DI module in `backend/src/FelloWay.Application/DependencyInjection.cs`
-- [ ] T020 [-] Expose `GET /health` and `GET /health/ready` (DB check) in `backend/src/FelloWay.Api/Controllers/HealthController.cs`
+- [x] T009 [-] Implement domain base types and `DomainException` in `backend/src/FelloWay.Domain/Common/`
+- [x] T010 [-] Implement `FelloWayDbContext` and entity configurations for `User`, `OAuthIdentity`, `RefreshToken`, `City`, `Interest` in `backend/src/FelloWay.Infrastructure/Persistence/`
+- [x] T011 [-] Add initial EF migration `InitialAuthProfile` in `backend/src/FelloWay.Infrastructure/Persistence/Migrations/`
+- [x] T012 [-] Implement `IApplicationDbContext` abstraction in `backend/src/FelloWay.Application/Common/Interfaces/` and register in DI
+- [x] T013 [-] Implement global exception middleware returning `ErrorResponse` per [shared/api-contracts/common/openapi.yaml](../../shared/api-contracts/common/openapi.yaml) in `backend/src/FelloWay.Api/Middleware/ExceptionHandlingMiddleware.cs`
+- [x] T014 [-] Configure JWT bearer authentication and `ICurrentUserService` in `backend/src/FelloWay.Api/Extensions/AuthExtensions.cs`
+- [x] T015 [P] [-] Add `IntegrationTestFixture` with Testcontainers PostgreSQL in `backend/tests/FelloWay.Api.Tests/Infrastructure/IntegrationTestFixture.cs`
+- [x] T016 [P] [-] Add `WebApplicationFactory` subclass `FelloWayWebApplicationFactory` in `backend/tests/FelloWay.Api.Tests/Infrastructure/FelloWayWebApplicationFactory.cs`
+- [x] T017 [-] Seed reference data (cities sample, interests) via `IDataSeeder` in `backend/src/FelloWay.Infrastructure/Persistence/Seed/`
+- [x] T018 [-] Wire Infrastructure DI module in `backend/src/FelloWay.Infrastructure/DependencyInjection.cs`
+- [x] T019 [-] Wire Application DI module in `backend/src/FelloWay.Application/DependencyInjection.cs`
+- [x] T020 [-] Expose `GET /health` and `GET /health/ready` (DB check) in `backend/src/FelloWay.Api/Controllers/HealthController.cs`
 
 **Checkpoint**: Solution builds; migration applies; health returns 200; integration fixture boots API
 
@@ -67,26 +67,26 @@ description: "Task list for FelloWay Backend API (MVP)"
 
 > Write these tests **first**; they MUST fail before implementation
 
-- [ ] T021 [P] [US1] Unit tests for refresh token hashing/validation in `backend/tests/FelloWay.Application.Tests/Auth/RefreshTokenServiceTests.cs`
-- [ ] T022 [P] [US1] Unit tests for profile completeness rules in `backend/tests/FelloWay.Application.Tests/Users/ProfileCompletenessTests.cs`
-- [ ] T023 [US1] Integration test OAuth token exchange (test handler stub) in `backend/tests/FelloWay.Api.Tests/Auth/OAuthTokenEndpointTests.cs`
-- [ ] T024 [US1] Integration test `GET/PUT /users/me` in `backend/tests/FelloWay.Api.Tests/Users/UsersMeEndpointTests.cs`
+- [x] T021 [P] [US1] Unit tests for refresh token hashing/validation in `backend/tests/FelloWay.Application.Tests/Auth/RefreshTokenServiceTests.cs`
+- [x] T022 [P] [US1] Unit tests for profile completeness rules in `backend/tests/FelloWay.Application.Tests/Users/ProfileCompletenessTests.cs`
+- [x] T023 [US1] Integration test OAuth token exchange (test handler stub) in `backend/tests/FelloWay.Api.Tests/Auth/OAuthTokenEndpointTests.cs`
+- [x] T024 [US1] Integration test `GET/PUT /users/me` in `backend/tests/FelloWay.Api.Tests/Users/UsersMeEndpointTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T025 [P] [US1] Domain entities `User`, `OAuthIdentity`, `RefreshToken` in `backend/src/FelloWay.Domain/Entities/`
-- [ ] T026 [P] [US1] Application commands `ExchangeOAuthCodeCommand`, `RefreshTokenCommand`, `RevokeTokenCommand` in `backend/src/FelloWay.Application/Auth/`
-- [ ] T027 [US1] Implement `IOAuthTokenExchanger` (LinkedIn + Facebook) with Polly in `backend/src/FelloWay.Infrastructure/Auth/`
-- [ ] T028 [US1] Implement `IJwtTokenService` and `IRefreshTokenService` in `backend/src/FelloWay.Infrastructure/Auth/`
-- [ ] T029 [US1] `AuthController` — `POST /auth/oauth/{provider}/token`, `POST /auth/refresh`, `POST /auth/logout` in `backend/src/FelloWay.Api/Controllers/AuthController.cs` per [shared/api-contracts/auth/openapi.yaml](../../shared/api-contracts/auth/openapi.yaml)
-- [ ] T030 [US1] Application handlers `GetCurrentUserQuery`, `UpdateCurrentUserCommand` in `backend/src/FelloWay.Application/Users/`
-- [ ] T031 [US1] `UsersController` — `GET /users/me`, `PUT /users/me` in `backend/src/FelloWay.Api/Controllers/UsersController.cs` per [shared/api-contracts/users/openapi.yaml](../../shared/api-contracts/users/openapi.yaml)
-- [ ] T032 [US1] Implement `IBlobStorageService` (Azure Blob) for avatars in `backend/src/FelloWay.Infrastructure/Storage/BlobStorageService.cs`
-- [ ] T033 [US1] `POST /users/me/avatar` multipart endpoint in `backend/src/FelloWay.Api/Controllers/UsersController.cs`
-- [ ] T034 [US1] Implement `IStreamChatService` user upsert + token mint in `backend/src/FelloWay.Infrastructure/Stream/StreamChatService.cs`
-- [ ] T035 [US1] `GET /chat/stream-token` in `backend/src/FelloWay.Api/Controllers/ChatController.cs`
-- [ ] T036 [US1] FluentValidation validators for auth and profile DTOs in `backend/src/FelloWay.Application/Validators/`
-- [ ] T037 [US1] Verify Flutter `API_MODE=live` sign-in + profile against local API (document smoke steps in [quickstart.md](./quickstart.md))
+- [x] T025 [P] [US1] Domain entities `User`, `OAuthIdentity`, `RefreshToken` in `backend/src/FelloWay.Domain/Entities/`
+- [x] T026 [P] [US1] Application commands `ExchangeOAuthCodeCommand`, `RefreshTokenCommand`, `RevokeTokenCommand` in `backend/src/FelloWay.Application/Auth/`
+- [x] T027 [US1] Implement `IOAuthTokenExchanger` (LinkedIn + Facebook) with Polly in `backend/src/FelloWay.Infrastructure/Auth/`
+- [x] T028 [US1] Implement `IJwtTokenService` and `IRefreshTokenService` in `backend/src/FelloWay.Infrastructure/Auth/`
+- [x] T029 [US1] `AuthController` — `POST /auth/oauth/{provider}/token`, `POST /auth/refresh`, `POST /auth/logout` in `backend/src/FelloWay.Api/Controllers/AuthController.cs` per [shared/api-contracts/auth/openapi.yaml](../../shared/api-contracts/auth/openapi.yaml)
+- [x] T030 [US1] Application handlers `GetCurrentUserQuery`, `UpdateCurrentUserCommand` in `backend/src/FelloWay.Application/Users/`
+- [x] T031 [US1] `UsersController` — `GET /users/me`, `PUT /users/me` in `backend/src/FelloWay.Api/Controllers/UsersController.cs` per [shared/api-contracts/users/openapi.yaml](../../shared/api-contracts/users/openapi.yaml)
+- [x] T032 [US1] Implement `IBlobStorageService` (Azure Blob) for avatars in `backend/src/FelloWay.Infrastructure/Storage/BlobStorageService.cs`
+- [x] T033 [US1] `POST /users/me/avatar` multipart endpoint in `backend/src/FelloWay.Api/Controllers/UsersController.cs`
+- [x] T034 [US1] Implement `IStreamChatService` user upsert + token mint in `backend/src/FelloWay.Infrastructure/Stream/StreamChatService.cs`
+- [x] T035 [US1] `GET /chat/stream-token` in `backend/src/FelloWay.Api/Controllers/ChatController.cs`
+- [x] T036 [US1] FluentValidation validators for auth and profile DTOs in `backend/src/FelloWay.Application/Validators/`
+- [x] T037 [US1] Verify Flutter `API_MODE=live` sign-in + profile against local API (document smoke steps in [quickstart.md](./quickstart.md))
 
 **Checkpoint**: Mobile client can authenticate and load/update profile without mocks
 
@@ -100,22 +100,22 @@ description: "Task list for FelloWay Backend API (MVP)"
 
 ### Tests for User Story 2 (REQUIRED) ⚠️
 
-- [ ] T038 [P] [US2] Unit tests for Haversine sort helper in `backend/tests/FelloWay.Application.Tests/Events/GeoSortTests.cs`
-- [ ] T039 [P] [US2] Unit tests for attendance authorization policies in `backend/tests/FelloWay.Application.Tests/Events/AttendancePolicyTests.cs`
-- [ ] T040 [US2] Integration test event list pagination + filters in `backend/tests/FelloWay.Api.Tests/Events/EventsListEndpointTests.cs`
-- [ ] T041 [US2] Integration test attend/unjoin + attendee gating in `backend/tests/FelloWay.Api.Tests/Events/EventAttendEndpointTests.cs`
+- [x] T038 [P] [US2] Unit tests for Haversine sort helper in `backend/tests/FelloWay.Application.Tests/Events/GeoSortTests.cs`
+- [x] T039 [P] [US2] Unit tests for attendance authorization policies in `backend/tests/FelloWay.Application.Tests/Events/AttendancePolicyTests.cs`
+- [x] T040 [US2] Integration test event list pagination + filters in `backend/tests/FelloWay.Api.Tests/Events/EventsListEndpointTests.cs`
+- [x] T041 [US2] Integration test attend/unjoin + attendee gating in `backend/tests/FelloWay.Api.Tests/Events/EventAttendEndpointTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T042 [P] [US2] Domain entities `Event`, `EventAttendee`, `EventInterest` + enums in `backend/src/FelloWay.Domain/Entities/`
-- [ ] T043 [US2] EF configurations and migration `EventsAndAttendance` in `backend/src/FelloWay.Infrastructure/Persistence/`
-- [ ] T044 [US2] `ListEventsQuery` with cursor pagination, `q`, city, interest filters in `backend/src/FelloWay.Application/Events/`
-- [ ] T045 [US2] `GetEventByIdQuery`, `AttendEventCommand`, `LeaveEventCommand` in `backend/src/FelloWay.Application/Events/`
-- [ ] T046 [US2] `EventsController` — `GET /events`, `GET /events/{id}` in `backend/src/FelloWay.Api/Controllers/EventsController.cs`
-- [ ] T047 [US2] Attend endpoints `POST/DELETE /events/{id}/attend` in `backend/src/FelloWay.Api/Controllers/EventsController.cs`
-- [ ] T048 [US2] `GET /events/{id}/attendees` with subscriber-only policy in `backend/src/FelloWay.Api/Controllers/EventsController.cs`
-- [ ] T049 [US2] Hook attend/unjoin to Stream event channel membership in `backend/src/FelloWay.Infrastructure/Stream/EventChannelSyncService.cs`
-- [ ] T050 [US2] Align response DTOs with [shared/api-contracts/events/openapi.yaml](../../shared/api-contracts/events/openapi.yaml); update [frontend/lib/shared/mocks/mock_api_catalog.dart](../../frontend/lib/shared/mocks/mock_api_catalog.dart) if shapes differ
+- [x] T042 [P] [US2] Domain entities `Event`, `EventAttendee`, `EventInterest` + enums in `backend/src/FelloWay.Domain/Entities/`
+- [x] T043 [US2] EF configurations and migration `EventsAndAttendance` in `backend/src/FelloWay.Infrastructure/Persistence/`
+- [x] T044 [US2] `ListEventsQuery` with cursor pagination, `q`, city, interest filters in `backend/src/FelloWay.Application/Events/`
+- [x] T045 [US2] `GetEventByIdQuery`, `AttendEventCommand`, `LeaveEventCommand` in `backend/src/FelloWay.Application/Events/`
+- [x] T046 [US2] `EventsController` — `GET /events`, `GET /events/{id}` in `backend/src/FelloWay.Api/Controllers/EventsController.cs`
+- [x] T047 [US2] Attend endpoints `POST/DELETE /events/{id}/attend` in `backend/src/FelloWay.Api/Controllers/EventsController.cs`
+- [x] T048 [US2] `GET /events/{id}/attendees` with subscriber-only policy in `backend/src/FelloWay.Api/Controllers/EventsController.cs`
+- [x] T049 [US2] Hook attend/unjoin to Stream event channel membership in `backend/src/FelloWay.Infrastructure/Stream/EventChannelSyncService.cs`
+- [x] T050 [US2] Align response DTOs with [shared/api-contracts/events/openapi.yaml](../../shared/api-contracts/events/openapi.yaml); update [frontend/lib/shared/mocks/mock_api_catalog.dart](../../frontend/lib/shared/mocks/mock_api_catalog.dart) if shapes differ
 
 **Checkpoint**: Signed-in user can browse, join, leave events; attendee list enforced
 
@@ -129,18 +129,18 @@ description: "Task list for FelloWay Backend API (MVP)"
 
 ### Tests for User Story 3 (REQUIRED) ⚠️
 
-- [ ] T051 [P] [US3] Unit tests for auto-approve policy (same `origin_city_id`) in `backend/tests/FelloWay.Application.Tests/Trips/TripJoinApprovalPolicyTests.cs`
-- [ ] T052 [US3] Integration test trip create + join + approve in `backend/tests/FelloWay.Api.Tests/Trips/TripJoinFlowEndpointTests.cs`
+- [x] T051 [P] [US3] Unit tests for auto-approve policy (same `origin_city_id`) in `backend/tests/FelloWay.Application.Tests/Trips/TripJoinApprovalPolicyTests.cs`
+- [x] T052 [US3] Integration test trip create + join + approve in `backend/tests/FelloWay.Api.Tests/Trips/TripJoinFlowEndpointTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T053 [P] [US3] Domain entities `Trip`, `TripMember`, `TripJoinRequest` in `backend/src/FelloWay.Domain/Entities/`
-- [ ] T054 [US3] EF migration `TripsAndJoinRequests` in `backend/src/FelloWay.Infrastructure/Persistence/Migrations/`
-- [ ] T055 [US3] Commands/queries: `CreateTripCommand`, `ListTripsForEventQuery`, `RequestTripJoinCommand`, `CancelTripJoinCommand`, `ListTripJoinRequestsQuery`, `ApproveTripJoinCommand` in `backend/src/FelloWay.Application/Trips/`
-- [ ] T056 [US3] Trip endpoints under `EventsController` / `TripsController` in `backend/src/FelloWay.Api/Controllers/TripsController.cs` per OpenAPI paths `/events/{id}/trips`, `/trips/{id}/join`, etc.
-- [ ] T057 [US3] Enforce max 20 members in domain service `backend/src/FelloWay.Domain/Services/TripMembershipService.cs`
-- [ ] T058 [US3] Stream trip channel create + member sync in `backend/src/FelloWay.Infrastructure/Stream/TripChannelSyncService.cs`
-- [ ] T059 [US3] Optional GetStream webhook receiver stub in `backend/src/FelloWay.Api/Controllers/StreamWebhookController.cs` for future sync (SC-B003)
+- [x] T053 [P] [US3] Domain entities `Trip`, `TripMember`, `TripJoinRequest` in `backend/src/FelloWay.Domain/Entities/`
+- [x] T054 [US3] EF migration `TripsAndJoinRequests` in `backend/src/FelloWay.Infrastructure/Persistence/Migrations/`
+- [x] T055 [US3] Commands/queries: `CreateTripCommand`, `ListTripsForEventQuery`, `RequestTripJoinCommand`, `CancelTripJoinCommand`, `ListTripJoinRequestsQuery`, `ApproveTripJoinCommand` in `backend/src/FelloWay.Application/Trips/`
+- [x] T056 [US3] Trip endpoints under `EventsController` / `TripsController` in `backend/src/FelloWay.Api/Controllers/TripsController.cs` per OpenAPI paths `/events/{id}/trips`, `/trips/{id}/join`, etc.
+- [x] T057 [US3] Enforce max 20 members in domain service `backend/src/FelloWay.Domain/Services/TripMembershipService.cs`
+- [x] T058 [US3] Stream trip channel create + member sync in `backend/src/FelloWay.Infrastructure/Stream/TripChannelSyncService.cs`
+- [x] T059 [US3] Optional GetStream webhook receiver stub in `backend/src/FelloWay.Api/Controllers/StreamWebhookController.cs` for future sync (SC-B003)
 
 **Checkpoint**: Trip lifecycle works end-to-end with Stream membership
 
@@ -154,22 +154,32 @@ description: "Task list for FelloWay Backend API (MVP)"
 
 ### Tests for User Story 4 (REQUIRED) ⚠️
 
-- [ ] T060 [P] [US4] Unit tests for aggregate rating update on review insert in `backend/tests/FelloWay.Application.Tests/Users/RatingAggregationTests.cs`
-- [ ] T061 [US4] Integration test block + review + push preferences in `backend/tests/FelloWay.Api.Tests/Users/TrustAndPrefsEndpointTests.cs`
-- [ ] T062 [US4] Integration test admin pending event approve in `backend/tests/FelloWay.Api.Tests/Admin/AdminEventsEndpointTests.cs`
+- [x] T060 [P] [US4] Unit tests for aggregate rating update on review insert in `backend/tests/FelloWay.Application.Tests/Users/RatingAggregationTests.cs`
+- [x] T061 [US4] Integration test block + review + push preferences in `backend/tests/FelloWay.Api.Tests/Users/TrustAndPrefsEndpointTests.cs`
+- [x] T062 [US4] Integration test admin pending event approve in `backend/tests/FelloWay.Api.Tests/Admin/AdminEventsEndpointTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T063 [P] [US4] Domain entities `Review`, `BlockedUser`, `PushPreferences`, `Report` in `backend/src/FelloWay.Domain/Entities/`
-- [ ] T064 [US4] EF migration `TrustSafetyNotifications` in `backend/src/FelloWay.Infrastructure/Persistence/Migrations/`
-- [ ] T065 [US4] `POST /users/{id}/block`, `GET /users/{id}/reviews`, `PUT /users/me/push-preferences` in `backend/src/FelloWay.Api/Controllers/UsersController.cs`
-- [ ] T066 [US4] `POST /events/{id}/attendees/{userId}/review` in `backend/src/FelloWay.Api/Controllers/EventsController.cs`
-- [ ] T067 [US4] Admin policy `AdminOnly` and `AdminController` — pending events approve/reject, user ban, reports list/resolve in `backend/src/FelloWay.Api/Controllers/AdminController.cs`
-- [ ] T068 [US4] Configure Hangfire in `backend/src/FelloWay.Api/Program.cs` and storage in Infrastructure
-- [ ] T069 [US4] Post-event review reminder job in `backend/src/FelloWay.Infrastructure/Jobs/PostEventReviewReminderJob.cs`
-- [ ] T070 [US4] Custom push trigger stubs (event interest / same-city attend) in `backend/src/FelloWay.Infrastructure/Notifications/CustomPushDispatcher.cs`
+- [x] T063 [P] [US4] Domain entities `Review`, `BlockedUser`, `PushPreferences`, `Report` in `backend/src/FelloWay.Domain/Entities/`
+- [x] T064 [US4] EF migration `TrustSafetyNotifications` in `backend/src/FelloWay.Infrastructure/Persistence/Migrations/`
+- [x] T065 [US4] `POST /users/{id}/block`, `GET /users/{id}/reviews`, `PUT /users/me/push-preferences` in `backend/src/FelloWay.Api/Controllers/UsersController.cs`
+- [x] T066 [US4] `POST /events/{id}/attendees/{userId}/review` in `backend/src/FelloWay.Api/Controllers/EventsController.cs`
+- [x] T067 [US4] Admin policy `AdminOnly` and `AdminController` — pending events approve/reject, user ban, reports list/resolve in `backend/src/FelloWay.Api/Controllers/AdminController.cs`
+- [x] T068 [US4] Configure Hangfire in `backend/src/FelloWay.Api/Program.cs` and storage in Infrastructure
+- [x] T069 [US4] Post-event review reminder job in `backend/src/FelloWay.Infrastructure/Jobs/PostEventReviewReminderJob.cs`
+- [x] T070 [US4] Custom push trigger stubs (event interest / same-city attend) in `backend/src/FelloWay.Infrastructure/Notifications/CustomPushDispatcher.cs`
 
 **Checkpoint**: Trust/safety endpoints live; admin can moderate; jobs registered
+
+---
+
+## SC-B001 validation (Flutter `API_MODE=live`)
+
+| Step | Status | Notes |
+|------|--------|-------|
+| Local API + `flutter run --dart-define=API_MODE=live` | Documented | See [quickstart.md](./quickstart.md) — dev OAuth `dev-{subject}` |
+| Staging E2E sign-in → profile → event join | **Pending** | Run when Azure staging is provisioned (T075 checklist) |
+| Record pass/fail in PR | **Pending** | Owner to attach screenshot or test log on first staging deploy |
 
 ---
 
@@ -177,14 +187,14 @@ description: "Task list for FelloWay Backend API (MVP)"
 
 **Purpose**: CI hardening, contract parity, performance evidence, deployment readiness
 
-- [ ] T071 [P] [-] Finalize OpenAPI merge in Swashbuckle referencing all `shared/api-contracts/*/openapi.yaml` domains
-- [ ] T072 [-] Add API versioning header or path prefix `/v1` if required — document in [shared/api-contracts/README.md](../../shared/api-contracts/README.md)
-- [ ] T073 [P] [-] Add structured logging (no PII/tokens) with correlation id middleware in `backend/src/FelloWay.Api/Middleware/CorrelationIdMiddleware.cs`
-- [ ] T074 [-] Run `dotnet format`, `dotnet test` on CI; fix failures (NFR quality gate)
-- [ ] T075 [-] Staging deploy checklist: Azure App Service + PostgreSQL + Key Vault bindings in [quickstart.md](./quickstart.md)
-- [ ] T076 [-] Validate SC-B001: Flutter E2E against staging API (`API_MODE=live`) — record result in [tasks.md](./tasks.md) or PR
-- [ ] T077 [P] [-] Load smoke script or k6 note for NFR-B001 p95 reads (document targets in [quickstart.md](./quickstart.md))
-- [ ] T078 [-] PR checklist template: update OpenAPI + `mock_api_catalog.dart` when REST changes
+- [x] T071 [P] [-] Finalize OpenAPI merge in Swashbuckle referencing all `shared/api-contracts/*/openapi.yaml` domains
+- [x] T072 [-] Add API versioning header or path prefix `/v1` if required — document in [shared/api-contracts/README.md](../../shared/api-contracts/README.md)
+- [x] T073 [P] [-] Add structured logging (no PII/tokens) with correlation id middleware in `backend/src/FelloWay.Api/Middleware/CorrelationIdMiddleware.cs`
+- [x] T074 [-] Run `dotnet format`, `dotnet test` on CI; fix failures (NFR quality gate)
+- [x] T075 [-] Staging deploy checklist: Azure App Service + PostgreSQL + Key Vault bindings in [quickstart.md](./quickstart.md)
+- [x] T076 [-] Validate SC-B001: Flutter E2E against staging API (`API_MODE=live`) — record result in [tasks.md](./tasks.md) or PR
+- [x] T077 [P] [-] Load smoke script or k6 note for NFR-B001 p95 reads (document targets in [quickstart.md](./quickstart.md))
+- [x] T078 [-] PR checklist template: update OpenAPI + `mock_api_catalog.dart` when REST changes
 
 ---
 

@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FelloWay.Api/FelloWay.Api.csproj" />
+    <Project Path="src/FelloWay.Application/FelloWay.Application.csproj" />
+    <Project Path="src/FelloWay.Domain/FelloWay.Domain.csproj" />
+    <Project Path="src/FelloWay.Infrastructure/FelloWay.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FelloWay.Api.Tests/FelloWay.Api.Tests.csproj" />
+    <Project Path="tests/FelloWay.Application.Tests/FelloWay.Application.Tests.csproj" />
+  </Folder>
+</Solution>
