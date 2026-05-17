@@ -1,0 +1,35 @@
+﻿---
+description: Project Development Guidelines
+globs: ["**/*"]
+alwaysApply: true
+---
+# felloway_client Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2026-05-17
+
+## Active Technologies
+
+- C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
+
+## Project Structure
+
+```text
+backend/
+frontend/
+tests/
+```
+
+## Commands
+
+# Add commands for C# 12 / .NET 8
+
+## Code Style
+
+C# 12 / .NET 8: Follow standard conventions
+
+## Recent Changes
+
+- 002-backend-api: Added C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth)
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->

@@ -1,0 +1,311 @@
+openapi: 3.0.3
+info:
+  title: FelloWay API — Events & Trips
+  version: 0.1.0
+
+paths:
+  /events:
+    get:
+      summary: List events (paginated, filterable)
+      parameters:
+        - name: cursor
+          in: query
+          schema:
+            type: string
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: city
+          in: query
+          schema:
+            type: string
+        - name: interest
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventListPage'
+
+  /events/{id}:
+    get:
+      summary: Event detail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+  /events/{id}/attend:
+    post:
+      summary: Join event
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '204':
+          description: Joined
+    delete:
+      summary: Leave event
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '204':
+          description: Left
+
+  /events/{id}/attendees:
+    get:
+      summary: List attendees (subscribers only)
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Attendee'
+
+  /events/{id}/trips:
+    get:
+      summary: List trip chats for event
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trip'
+    post:
+      summary: Create trip chat
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripCreate'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+
+  /trips/{id}/join:
+    post:
+      summary: Request to join trip
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/TripId'
+      responses:
+        '201':
+          description: Request created
+    delete:
+      summary: Cancel pending join request
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/TripId'
+      responses:
+        '204':
+          description: Cancelled
+
+  /trips/{id}/join-requests:
+    get:
+      summary: Pending join requests (trip owner)
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/TripId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TripJoinRequest'
+
+  /trips/{id}/approve/{userId}:
+    post:
+      summary: Approve join request
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/TripId'
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Approved
+
+  /events/{id}/attendees/{userId}/review:
+    post:
+      summary: Post-event review
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rating]
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                comment:
+                  type: string
+      responses:
+        '201':
+          description: Created
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    EventId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    TripId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    EventListPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        nextCursor:
+          type: string
+          nullable: true
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        startsAt:
+          type: string
+          format: date-time
+        endsAt:
+          type: string
+          format: date-time
+        city:
+          type: string
+        coverImageUrl:
+          type: string
+        attendeeCount:
+          type: integer
+        isJoined:
+          type: boolean
+    Attendee:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+        homeCity:
+          type: string
+    Trip:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        routeLabel:
+          type: string
+        departureAt:
+          type: string
+          format: date-time
+        roleType:
+          type: string
+        memberCount:
+          type: integer
+    TripCreate:
+      type: object
+      required: [routeLabel, departureAt, roleType, originCityId]
+      properties:
+        routeLabel:
+          type: string
+        departureAt:
+          type: string
+          format: date-time
+        roleType:
+          type: string
+        originCityId:
+          type: string
+          format: uuid
+    TripJoinRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        requesterId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, approved, rejected, cancelled]

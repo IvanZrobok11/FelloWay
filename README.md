@@ -62,6 +62,16 @@ Open **`frontend/`** as the Flutter project root in your IDE.
 | [shared/api-contracts/common/](shared/api-contracts/common/) | Shared types, errors, pagination |
 | [shared/api-contracts/events/](shared/api-contracts/events/) | Events, attendance, trips, join flows |
 
+### Feature `002-backend-api`
+
+| Document | Description |
+|----------|-------------|
+| [specs/002-backend-api/spec.md](specs/002-backend-api/spec.md) | Backend MVP requirements and success criteria |
+| [specs/002-backend-api/plan.md](specs/002-backend-api/plan.md) | ASP.NET Core architecture and delivery phases |
+| [specs/002-backend-api/research.md](specs/002-backend-api/research.md) | Technology decisions (OAuth, EF, Stream, Hangfire) |
+| [specs/002-backend-api/data-model.md](specs/002-backend-api/data-model.md) | PostgreSQL schema |
+| [specs/002-backend-api/quickstart.md](specs/002-backend-api/quickstart.md) | Local API dev and quality gates |
+
 ### Feature `001-event-networking-app`
 
 | Document | Description |

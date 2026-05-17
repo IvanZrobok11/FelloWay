@@ -1,0 +1,179 @@
+openapi: 3.0.3
+info:
+  title: FelloWay API — Users
+  version: 0.1.0
+
+paths:
+  /users/me:
+    get:
+      summary: Current user profile
+      security: [{ BearerAuth: [] }]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    put:
+      summary: Update current user profile
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /users/me/avatar:
+    post:
+      summary: Upload avatar (multipart)
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatarUrl:
+                    type: string
+
+  /users/me/push-preferences:
+    put:
+      summary: Update notification toggles
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushPreferences'
+      responses:
+        '204':
+          description: Updated
+
+  /users/{id}/reviews:
+    get:
+      summary: List reviews for a user
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Review'
+
+  /users/{id}/block:
+    post:
+      summary: Block a user
+      security: [{ BearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Blocked
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+        bio:
+          type: string
+        homeCity:
+          type: string
+        interestIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        avatarUrl:
+          type: string
+        aggregateRating:
+          type: number
+          format: float
+    UserProfileUpdate:
+      type: object
+      properties:
+        displayName:
+          type: string
+        bio:
+          type: string
+        homeCityId:
+          type: string
+          format: uuid
+        interestIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+    PushPreferences:
+      type: object
+      properties:
+        globalEnabled:
+          type: boolean
+        eventMessages:
+          type: boolean
+        tripMessages:
+          type: boolean
+        directMessages:
+          type: boolean
+    Review:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        authorId:
+          type: string
+          format: uuid
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+        createdAt:
+          type: string
+          format: date-time

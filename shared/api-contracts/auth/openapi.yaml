@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: FelloWay API — Auth
+  version: 0.1.0
+
+paths:
+  /auth/oauth/{provider}/token:
+    post:
+      summary: Exchange OAuth authorization code for API tokens
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [linkedin, facebook]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code, redirectUri, codeVerifier]
+              properties:
+                code:
+                  type: string
+                redirectUri:
+                  type: string
+                codeVerifier:
+                  type: string
+                  description: PKCE verifier from mobile client
+      responses:
+        '200':
+          description: Tokens issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: New token pair
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+
+  /auth/logout:
+    post:
+      summary: Revoke refresh token
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: Revoked
+
+  /chat/stream-token:
+    get:
+      summary: GetStream user token for mobile SDK
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Stream JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [token]
+                properties:
+                  token:
+                    type: string
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    TokenResponse:
+      type: object
+      required: [accessToken, expiresIn, refreshToken]
+      properties:
+        accessToken:
+          type: string
+        expiresIn:
+          type: integer
+        refreshToken:
+          type: string
+        userId:
+          type: string
+          format: uuid
