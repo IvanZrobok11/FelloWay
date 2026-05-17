@@ -48,3 +48,12 @@ app.*.map.json
 frontend/android/app/debug
 frontend/android/app/profile
 frontend/android/app/release
+
+# Backend
+.vs/
+bin/
+obj/
+*.user
+logs/
+.idea/
+packages/

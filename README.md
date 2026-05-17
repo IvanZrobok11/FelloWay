@@ -17,7 +17,8 @@ Monorepo for **FelloWay** — an event networking platform for IT conferences: d
 |------|------|
 | [frontend/](frontend/) | Flutter app package `felloway_client` |
 | [backend/](backend/) | API server (not started yet) |
-| [specs/](specs/) | Feature specs, data model, API contracts |
+| [shared/api-contracts/](shared/api-contracts/) | Shared REST/OpenAPI contracts by domain |
+| [specs/](specs/) | Feature specs, data model, planning docs |
 | [.specify/](.specify/) | Project constitution and Spec Kit templates |
 | [.cursor/](.cursor/) | Cursor / Spec Kit command definitions |
 
@@ -51,6 +52,16 @@ Open **`frontend/`** as the Flutter project root in your IDE.
 | [PRD_Event_Networking.md](PRD_Event_Networking.md) | Product requirements (MVP scope, onboarding, events, trips, chat) |
 | [TECH_PLAN.md](TECH_PLAN.md) | Technical stack, phases, and implementation timeline |
 
+### API contracts (`shared/api-contracts/`)
+
+| Path | Description |
+|------|-------------|
+| [shared/api-contracts/README.md](shared/api-contracts/README.md) | Layout, conventions, domain index |
+| [shared/api-contracts/auth/](shared/api-contracts/auth/) | OAuth, sessions, Stream tokens |
+| [shared/api-contracts/users/](shared/api-contracts/users/) | Profile, avatar, preferences, blocks, reviews |
+| [shared/api-contracts/common/](shared/api-contracts/common/) | Shared types, errors, pagination |
+| [shared/api-contracts/events/](shared/api-contracts/events/) | Events, attendance, trips, join flows |
+
 ### Feature `001-event-networking-app`
 
 | Document | Description |
@@ -61,8 +72,8 @@ Open **`frontend/`** as the Flutter project root in your IDE.
 | [specs/001-event-networking-app/quickstart.md](specs/001-event-networking-app/quickstart.md) | Dev setup, CI checklist, manual device checks |
 | [specs/001-event-networking-app/data-model.md](specs/001-event-networking-app/data-model.md) | Domain entities and relationships |
 | [specs/001-event-networking-app/research.md](specs/001-event-networking-app/research.md) | Research notes and decisions |
-| [specs/001-event-networking-app/contracts/README.md](specs/001-event-networking-app/contracts/README.md) | REST contract overview (Flutter consumer view) |
-| [specs/001-event-networking-app/contracts/rest-endpoints.md](specs/001-event-networking-app/contracts/rest-endpoints.md) | Endpoint summary for backend alignment |
+| [specs/001-event-networking-app/contracts/README.md](specs/001-event-networking-app/contracts/README.md) | Feature-level contract notes (links to `shared/api-contracts/`) |
+| [specs/001-event-networking-app/contracts/rest-endpoints.md](specs/001-event-networking-app/contracts/rest-endpoints.md) | Legacy endpoint summary (migrate into `shared/api-contracts/`) |
 
 ### Engineering standards
 

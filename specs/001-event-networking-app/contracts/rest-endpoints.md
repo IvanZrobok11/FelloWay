@@ -1,5 +1,7 @@
 # REST Endpoints — Mobile Consumer Summary
 
+> **Canonical home:** [shared/api-contracts/](../../../shared/api-contracts/) (`auth/`, `users/`, `common/`, `events/`). This file is a legacy index until specs are split per domain.
+
 Derived from `TECH_PLAN.md` backend bullets. Paths and payloads are indicative; final shapes come from backend OpenAPI.
 
 When the Flutter client runs with **`API_MODE=mock`** (or `API_MODE=auto` and `API_BASE_URL` contains `example.com`), repositories satisfy many of these calls with in-process data (`lib/shared/mocks/mock_api_catalog.dart`) instead of HTTP.

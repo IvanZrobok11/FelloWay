@@ -104,14 +104,14 @@ integration_test/
 └── app_test.dart
 ```
 
-**Structure Decision**: Monorepo with `frontend/` (Flutter package `felloway_client`, feature-first folders under `lib/features/`) and `backend/` (API, placeholder). Optional later extraction: `packages/design_system` or `packages/api_client`.
+**Structure Decision**: Monorepo with `frontend/` (Flutter package `felloway_client`, feature-first folders under `lib/features/`), `backend/` (API, placeholder), and `shared/api-contracts/` (`auth/`, `users/`, `common/`, `events/`). Optional later extraction: `packages/design_system` or `packages/api_client`.
 
 ## Integration Boundaries (Not Implemented Here)
 
 The Flutter app **depends on** (assumed provided elsewhere):
 
 - OAuth 2.0 authorization server and token exchange compatible with `flutter_appauth`
-- REST API for users/me, events, attend, attendees, trips, join/approve, blocks, reports, reviews, preferences (see `contracts/`)
+- REST API for users/me, events, attend, attendees, trips, join/approve, blocks, reports, reviews, preferences (see `shared/api-contracts/` and feature `contracts/`)
 - GetStream project: user sync on registration (server-side), channels for event/trip/DM, push via FCM/APNs through GetStream dashboard
 
 Frontend work includes **calling** these capabilities and **handling** errors, empty states, and token refresh UX (re-login on invalid refresh).

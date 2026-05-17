@@ -1,7 +1,17 @@
-# API Contracts (Consumer View — Flutter)
+# API Contracts (feature `001-event-networking-app`)
 
-This folder documents **REST boundaries** the mobile app expects from the backend described in `TECH_PLAN.md`. The Flutter team does not implement these servers; contracts are for alignment and mocking.
+REST boundaries for this feature are maintained in the monorepo contract tree:
 
-- See [rest-endpoints.md](./rest-endpoints.md) for endpoint summary.
+**[shared/api-contracts/](../../../shared/api-contracts/)**
 
-OpenAPI YAML may be added later when the backend publishes a canonical spec.
+```
+shared/api-contracts/
+├── auth/
+├── users/
+├── common/
+└── events/
+```
+
+- [rest-endpoints.md](./rest-endpoints.md) — legacy mobile consumer summary (to be split into domain folders above).
+
+OpenAPI YAML should live under `shared/api-contracts/<domain>/` when the backend publishes canonical shapes.
