@@ -13,7 +13,7 @@
 ## Run the App
 
 ```bash
-cd felloway_client
+cd frontend
 flutter pub get
 flutter run
 ```
@@ -50,7 +50,7 @@ Product flavors (`dev` / `staging` / `prod`) are not in the template yet; use `-
 
 ## Quality Gates (Constitution)
 
-Run from repository root (`felloway_client/`):
+Run from the Flutter app directory (`frontend/`):
 
 ```bash
 dart format .

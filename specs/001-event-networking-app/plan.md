@@ -104,7 +104,7 @@ integration_test/
 └── app_test.dart
 ```
 
-**Structure Decision**: Single Flutter application package `felloway_client` with feature-first folders under `lib/features/`. No monorepo split unless the team later extracts `packages/design_system` or `packages/api_client`.
+**Structure Decision**: Monorepo with `frontend/` (Flutter package `felloway_client`, feature-first folders under `lib/features/`) and `backend/` (API, placeholder). Optional later extraction: `packages/design_system` or `packages/api_client`.
 
 ## Integration Boundaries (Not Implemented Here)
 
