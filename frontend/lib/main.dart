@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app/app.dart';
 import 'app/auth/auth_session.dart';
 import 'app/config/app_config.dart';
+import 'features/auth/data/auth_api.dart';
 import 'features/auth/data/token_storage.dart';
 import 'features/chats/application/chat_access_controller.dart';
 import 'features/chats/data/stream_chat_service.dart';
@@ -23,9 +24,11 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final onboardingPreferences = OnboardingPreferences(prefs);
   final onboardingDraftStore = OnboardingDraftStore(prefs);
+  final authApi = AuthApi(baseUrl: config.apiBaseUrl);
   final apiClient = ApiClient(
     config: config,
     tokenStorage: tokenStorage,
+    authApi: authApi,
     onUnauthorized: authSession.signOut,
   );
   final eventsRepository = EventsRepository(apiClient, config);
@@ -40,6 +43,7 @@ Future<void> main() async {
     FellowayApp(
       config: config,
       authSession: authSession,
+      authApi: authApi,
       apiClient: apiClient,
       onboardingPreferences: onboardingPreferences,
       onboardingDraftStore: onboardingDraftStore,

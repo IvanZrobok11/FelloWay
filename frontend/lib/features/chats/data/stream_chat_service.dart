@@ -8,6 +8,7 @@ import '../../../shared/errors/result.dart';
 import '../../../shared/network/api_client.dart';
 import '../../profile/data/users_repository.dart';
 
+// Live mode: Stream token path may use mock/dev until fully wired (005 quickstart).
 enum StreamChatConnectStatus {
   disconnected,
   connecting,

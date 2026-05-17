@@ -30,9 +30,40 @@ shared/api-contracts/
 
 Backend plan: [specs/002-backend-api/plan.md](../../specs/002-backend-api/plan.md).
 
+## API versioning (MVP)
+
+- **URL prefix**: Routes are **not** prefixed with `/v1` in the MVP (e.g. `GET /events`, not `GET /v1/events`).
+- **Optional header**: Clients may send `X-Api-Version: 1` for forward compatibility; the server does not reject requests without it today.
+- **OpenAPI `info.version`**: `0.1.0` on domain fragments; Swashbuckle exposes a merged `v1` document in Development.
+- Breaking changes: bump domain YAML version notes in PRs; plan `/v1` path prefix before public beta if required.
+
+## Generate merged spec + Dart client
+
+From repository root (Git Bash / WSL / macOS / Linux):
+
+```bash
+./shared/api-contracts/scripts/generate-api-client.sh
+```
+
+**Outputs**
+
+- `shared/api-contracts/openapi.json` — merged contract (committed)
+- `frontend/lib/generated/felloway_api/` — `dart-dio` client via [openapi-generator-cli](https://openapi-generator.tech)
+
+**Prerequisites** (npm only — no .NET SDK for this script):
+
+```bash
+npm install -g @openapitools/openapi-generator-cli
+# Optional: npm install -g @redocly/cli  (otherwise script uses npx @redocly/cli)
+```
+
+Also: **Node.js 18+**, **Java 11+**, **Dart/Flutter SDK**, **bash** (Git Bash / WSL on Windows). See [specs/004-openapi-dart-codegen/quickstart.md](../../specs/004-openapi-dart-codegen/quickstart.md).
+
+After generation: `cd frontend && flutter pub get`.
+
 ## Conventions
 
-- Prefer **OpenAPI 3** YAML per domain (`openapi.yaml`); merge in Swashbuckle for local dev.
+- Prefer **OpenAPI 3** YAML per domain (`openapi.yaml`); merged in Swashbuckle via `OpenApiContractMerger` (see `backend/src/FelloWay.Api/OpenApi/`) and for mobile via `scripts/generate-api-client.sh` (`@redocly/cli join` + `openapi-generator-cli`).
 - Keep breaking changes versioned or noted in PR descriptions.
 - Mobile mock catalog: `frontend/lib/shared/mocks/mock_api_catalog.dart` should stay aligned with these contracts.
 

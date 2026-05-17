@@ -1,0 +1,8 @@
+{
+  "name": "felloway-api-contracts",
+  "private": true,
+  "description": "Scripts and devDependencies for OpenAPI join + codegen",
+  "devDependencies": {
+    "@redocly/cli": "1.25.3"
+  }
+}

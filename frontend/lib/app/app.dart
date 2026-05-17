@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
+import '../features/auth/data/auth_api.dart';
 import '../features/chats/application/chat_access_controller.dart';
 import '../features/chats/data/stream_chat_service.dart';
 import '../features/events/data/events_repository.dart';
@@ -24,6 +25,7 @@ class FellowayApp extends StatefulWidget {
     super.key,
     required this.config,
     required this.authSession,
+    required this.authApi,
     required this.apiClient,
     required this.onboardingPreferences,
     required this.onboardingDraftStore,
@@ -36,6 +38,7 @@ class FellowayApp extends StatefulWidget {
 
   final AppConfig config;
   final AuthSession authSession;
+  final AuthApi authApi;
   final ApiClient apiClient;
   final OnboardingPreferences onboardingPreferences;
   final OnboardingDraftStore onboardingDraftStore;
@@ -103,6 +106,7 @@ class _FellowayAppState extends State<FellowayApp> {
     Widget child = AppScope(
       config: widget.config,
       apiClient: widget.apiClient,
+      authApi: widget.authApi,
       authSession: widget.authSession,
       onboardingPreferences: widget.onboardingPreferences,
       onboardingDraftStore: widget.onboardingDraftStore,

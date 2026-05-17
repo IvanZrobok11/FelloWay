@@ -4,6 +4,7 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../app/config/app_config.dart';
 import '../../onboarding/domain/onboarding_draft.dart';
 import '../../profile/domain/user_profile.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
@@ -18,6 +19,15 @@ class OAuthSignInPage extends StatefulWidget {
 
 class _OAuthSignInPageState extends State<OAuthSignInPage> {
   bool _finishing = false;
+
+  bool _oauthConfigured(AppConfig config) {
+    final clientId = config.oauthClientId;
+    final discovery = config.oauthDiscoveryUrl;
+    return clientId != null &&
+        clientId.isNotEmpty &&
+        discovery != null &&
+        discovery.isNotEmpty;
+  }
 
   Future<void> _exchangeOAuth() async {
     final l10n = AppLocalizations.of(context)!;
@@ -67,6 +77,32 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
     }
   }
 
+  Future<void> _devBackendSignIn() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final session = AppScope.authSessionOf(context);
+    final authApi = AppScope.authApiOf(context);
+    try {
+      final tokens = await authApi.exchangeLinkedIn(code: 'dev-smoke-user');
+      if (tokens.accessToken.isEmpty) {
+        messenger.showSnackBar(
+          const SnackBar(content: Text('Backend returned no access token')),
+        );
+        return;
+      }
+      await session.setAuthenticated(
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      );
+      if (!mounted) return;
+      await _afterAuthenticated();
+    } catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text('Dev backend sign-in failed: $e')),
+      );
+    }
+  }
+
   Future<void> _demoSignIn() async {
     final session = AppScope.authSessionOf(context);
     await session.setAuthenticated(
@@ -112,6 +148,7 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
             interests: pending.interests,
             hobbies: pending.hobbies,
             homeCityLabel: pending.homeCityLabel,
+            homeCityId: config.useMockApi ? null : _devHomeCityIdFromDefine(),
           );
           final up = await users.updateMe(profile);
           if (!mounted) return;
@@ -145,9 +182,18 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
     }
   }
 
+  static String? _devHomeCityIdFromDefine() {
+    const raw = String.fromEnvironment('DEV_HOME_CITY_ID', defaultValue: '');
+    return raw.isEmpty ? null : raw;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final config = AppScope.configOf(context);
+    final useMock = config.useMockApi;
+    final oauthReady = _oauthConfigured(config);
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.signInTitle)),
       body: Stack(
@@ -162,18 +208,27 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 24),
-                FilledButton.icon(
-                  onPressed: _finishing ? null : _exchangeOAuth,
-                  icon: const Icon(Icons.business_center_outlined),
-                  label: Text(l10n.oauthLinkedIn),
-                ),
-                const SizedBox(height: 12),
-                FilledButton.tonalIcon(
-                  onPressed: _finishing ? null : _exchangeOAuth,
-                  icon: const Icon(Icons.facebook_outlined),
-                  label: Text(l10n.oauthFacebook),
-                ),
-                if (kDebugMode) ...[
+                if (oauthReady) ...[
+                  FilledButton.icon(
+                    onPressed: _finishing ? null : _exchangeOAuth,
+                    icon: const Icon(Icons.business_center_outlined),
+                    label: Text(l10n.oauthLinkedIn),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton.tonalIcon(
+                    onPressed: _finishing ? null : _exchangeOAuth,
+                    icon: const Icon(Icons.facebook_outlined),
+                    label: Text(l10n.oauthFacebook),
+                  ),
+                ],
+                if (!useMock && !oauthReady) ...[
+                  FilledButton.icon(
+                    onPressed: _finishing ? null : _devBackendSignIn,
+                    icon: const Icon(Icons.developer_mode_outlined),
+                    label: const Text('Sign in (local backend)'),
+                  ),
+                ],
+                if (useMock && kDebugMode) ...[
                   const SizedBox(height: 24),
                   OutlinedButton(
                     onPressed: _finishing ? null : _demoSignIn,

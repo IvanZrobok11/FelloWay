@@ -44,6 +44,7 @@ class CreateTripDraft {
   }
 }
 
+// Live mode: mock-only until wired to backend (see specs/005-api-backend-integration).
 class TripsRepository {
   TripsRepository(this._api, this._config);
 

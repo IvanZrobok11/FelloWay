@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'auth/auth_session.dart';
 import 'config/app_config.dart';
+import '../features/auth/data/auth_api.dart';
 import '../features/chats/application/chat_access_controller.dart';
 import '../features/chats/data/stream_chat_service.dart';
 import '../features/events/data/events_repository.dart';
@@ -16,6 +17,7 @@ class AppScope extends InheritedWidget {
     super.key,
     required this.config,
     required this.apiClient,
+    required this.authApi,
     required this.authSession,
     required this.onboardingPreferences,
     required this.onboardingDraftStore,
@@ -29,6 +31,7 @@ class AppScope extends InheritedWidget {
 
   final AppConfig config;
   final ApiClient apiClient;
+  final AuthApi authApi;
   final AuthSession authSession;
   final OnboardingPreferences onboardingPreferences;
   final OnboardingDraftStore onboardingDraftStore;
@@ -47,6 +50,8 @@ class AppScope extends InheritedWidget {
   static AppConfig configOf(BuildContext context) => _of(context).config;
 
   static ApiClient apiClientOf(BuildContext context) => _of(context).apiClient;
+
+  static AuthApi authApiOf(BuildContext context) => _of(context).authApi;
 
   static AuthSession authSessionOf(BuildContext context) =>
       _of(context).authSession;
@@ -76,6 +81,7 @@ class AppScope extends InheritedWidget {
   bool updateShouldNotify(covariant AppScope oldWidget) {
     return oldWidget.config != config ||
         oldWidget.apiClient != apiClient ||
+        oldWidget.authApi != authApi ||
         oldWidget.authSession != authSession ||
         oldWidget.onboardingPreferences != onboardingPreferences ||
         oldWidget.onboardingDraftStore != onboardingDraftStore ||

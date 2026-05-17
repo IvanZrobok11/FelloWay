@@ -1,6 +1,7 @@
 import 'package:felloway_client/app/app.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
 import 'package:felloway_client/app/config/app_config.dart';
+import 'package:felloway_client/features/auth/data/auth_api.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
 import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
@@ -59,6 +60,7 @@ void main() {
       accessToken: 'it-access',
       refreshToken: 'it-refresh',
     );
+    final authApi = AuthApi(baseUrl: config.apiBaseUrl);
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
     final eventsRepository = EventsRepository(apiClient, config);
     final usersRepository = UsersRepository(apiClient, config);
@@ -73,6 +75,7 @@ void main() {
       FellowayApp(
         config: config,
         authSession: authSession,
+        authApi: authApi,
         apiClient: apiClient,
         onboardingPreferences: onboarding,
         onboardingDraftStore: draftStore,

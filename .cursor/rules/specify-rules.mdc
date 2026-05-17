@@ -14,6 +14,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-17
 - N/A (build artifacts in repo: `openapi.json`, generated Dart) (004-openapi-dart-codegen)
 - Bash 5+; Node.js 18+; Dart 3.10+ / Flutter + `@redocly/cli` (bundle/join); `@openapitools/openapi-generator-cli` 7.10.x (global or npx); Java 11+ (JVM for generator) (004-openapi-dart-codegen)
 - Committed `openapi.json` + `frontend/lib/generated/felloway_api/` (004-openapi-dart-codegen)
+- Dart 3.10+ / Flutter stable; .NET 8 backend (verification only) + `dio`, `flutter_appauth`, `felloway_api` (path dep, optional mappers), ASP.NET JWT auth (002) (005-api-backend-integration)
+- `TokenStorage` (secure prefs) for access/refresh tokens (005-api-backend-integration)
 
 - C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
 
@@ -34,9 +36,9 @@ tests/
 C# 12 / .NET 8: Follow standard conventions
 
 ## Recent Changes
+- 005-api-backend-integration: Added Dart 3.10+ / Flutter stable; .NET 8 backend (verification only) + `dio`, `flutter_appauth`, `felloway_api` (path dep, optional mappers), ASP.NET JWT auth (002)
 - 004-openapi-dart-codegen: Added Bash 5+; Node.js 18+; Dart 3.10+ / Flutter + `@redocly/cli` (bundle/join); `@openapitools/openapi-generator-cli` 7.10.x (global or npx); Java 11+ (JVM for generator)
 - 004-openapi-dart-codegen: Added Bash 5+; .NET 8 (merge tool); Dart 3.10+ / Flutter (consumer) + `Microsoft.OpenApi.Readers`, `YamlDotNet`, `Newtonsoft.Json` (merge tool); `@openapitools/openapi-generator-cli` 7.10.x; Java 11+ (generator JVM); Node.js 18+ (npx)
-- 003-custom-health-checks: Added C# 12 / .NET 8 + ASP.NET Core health checks (`Microsoft.Extensions.Diagnostics.HealthChecks`), EF Core health check (`Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore`), optional `AspNetCore.HealthChecks.UI.Client` 8.x for `UIResponseWriter`
 
 
 <!-- MANUAL ADDITIONS START -->

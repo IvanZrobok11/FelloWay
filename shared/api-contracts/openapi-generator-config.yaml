@@ -1,0 +1,7 @@
+pubName: felloway_api
+pubVersion: 1.0.0
+pubDescription: FelloWay generated API client (regenerate via scripts/generate-api-client.sh)
+pubAuthor: FelloWay
+disallowAdditionalPropertiesIfNotPresent: false
+nullableFields: true
+useEnumExtension: true

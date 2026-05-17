@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "id": "d4e5f6a7-b8c9-0123-def0-234567890123",
+      "title": "Flutter & Friends Kyiv",
+      "startsAt": "2026-06-15T17:00:00+00:00",
+      "endsAt": "2026-06-15T21:00:00+00:00",
+      "city": "Kyiv",
+      "venueName": "ICC",
+      "imageUrls": [],
+      "tags": ["Flutter"],
+      "capacity": 100,
+      "officialUrl": "https://example.com/event",
+      "attendeeCount": 12,
+      "isJoined": false,
+      "attendStatus": "none",
+      "latitude": 50.4501,
+      "longitude": 30.5234
+    }
+  ],
+  "nextCursor": null
+}

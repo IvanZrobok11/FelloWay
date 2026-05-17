@@ -1,18 +1,22 @@
 import 'package:dio/dio.dart';
 
 import '../../app/config/app_config.dart';
+import '../../features/auth/data/auth_api.dart';
 import '../../features/auth/data/token_storage.dart';
 import '../errors/app_failure.dart';
+import 'error_response.dart';
 
 typedef UnauthorizedCallback = Future<void> Function();
 
-/// HTTP client with bearer injection and 401 handling (refresh hook TBD).
+/// HTTP client with bearer injection, refresh-on-401, and error envelope parsing.
 class ApiClient {
   ApiClient({
     required AppConfig config,
     required TokenStorage tokenStorage,
+    AuthApi? authApi,
     UnauthorizedCallback? onUnauthorized,
   }) : _tokenStorage = tokenStorage,
+       _authApi = authApi,
        _onUnauthorized = onUnauthorized {
     _dio = Dio(
       BaseOptions(
@@ -33,7 +37,27 @@ class ApiClient {
           handler.next(options);
         },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 401) {
+          final retried = error.requestOptions.extra['retried'] == true;
+          if (error.response?.statusCode == 401 &&
+              !retried &&
+              _authApi != null) {
+            try {
+              final refreshed = await _refreshTokensOnce();
+              if (refreshed) {
+                final opts = error.requestOptions;
+                opts.extra['retried'] = true;
+                final access = await _tokenStorage.readAccessToken();
+                if (access != null && access.isNotEmpty) {
+                  opts.headers['Authorization'] = 'Bearer $access';
+                }
+                final response = await _dio.fetch<dynamic>(opts);
+                return handler.resolve(response);
+              }
+            } catch (_) {
+              // fall through to sign-out
+            }
+            await _onUnauthorized?.call();
+          } else if (error.response?.statusCode == 401) {
             await _onUnauthorized?.call();
           }
           handler.next(error);
@@ -43,15 +67,51 @@ class ApiClient {
   }
 
   final TokenStorage _tokenStorage;
+  final AuthApi? _authApi;
   final UnauthorizedCallback? _onUnauthorized;
 
   late final Dio _dio;
+  Future<bool>? _refreshInFlight;
 
   Dio get dio => _dio;
+
+  Future<bool> _refreshTokensOnce() async {
+    if (_refreshInFlight != null) {
+      return _refreshInFlight!;
+    }
+    _refreshInFlight = _doRefresh();
+    try {
+      return await _refreshInFlight!;
+    } finally {
+      _refreshInFlight = null;
+    }
+  }
+
+  Future<bool> _doRefresh() async {
+    final authApi = _authApi;
+    if (authApi == null) return false;
+    final refresh = await _tokenStorage.readRefreshToken();
+    if (refresh == null || refresh.isEmpty) return false;
+    final tokens = await authApi.refresh(refreshToken: refresh);
+    if (tokens.accessToken.isEmpty) return false;
+    await _tokenStorage.writeTokens(
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    );
+    return true;
+  }
 
   AppFailure mapDioError(Object e) {
     if (e is DioException) {
       final status = e.response?.statusCode;
+      final parsed = ErrorResponse.tryParse(e.response?.data);
+      if (parsed != null) {
+        return NetworkFailure(
+          status != null
+              ? 'HTTP $status: ${parsed.displayMessage}'
+              : parsed.displayMessage,
+        );
+      }
       final msg = e.response?.data?.toString() ?? e.message ?? 'Network error';
       return NetworkFailure(status != null ? 'HTTP $status: $msg' : msg);
     }

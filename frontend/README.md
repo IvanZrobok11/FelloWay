@@ -52,6 +52,23 @@ flutter run --dart-define=API_MODE=mock
 # Force live API
 flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=API_MODE=live
 
+# Local backend (iOS Simulator)
+flutter run --dart-define=API_BASE_URL=http://localhost:5161 --dart-define=API_MODE=live
+
+# Local backend (Android Emulator)
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:5161 --dart-define=API_MODE=live
+```
+
+Use **Sign in (local backend)** on the sign-in screen when OAuth is not configured. Start the API with `dotnet run --project backend/src/FelloWay.Api`. See [specs/005-api-backend-integration/quickstart.md](../specs/005-api-backend-integration/quickstart.md).
+
+### Live vs mock by feature (live mode)
+
+| Feature | Backend HTTP |
+|---------|----------------|
+| Auth (dev exchange), profile, events read | Yes |
+| Trips, Stream chat | Mock / dev stubs until wired |
+
+```bash
 # Default behavior (auto)
 flutter run
 ```

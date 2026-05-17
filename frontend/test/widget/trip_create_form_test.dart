@@ -1,6 +1,7 @@
 import 'package:felloway_client/app/app_scope.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
 import 'package:felloway_client/app/config/app_config.dart';
+import 'package:felloway_client/features/auth/data/auth_api.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
 import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
@@ -30,10 +31,12 @@ void main() {
       streamApiKey: '',
     );
     final tokenStorage = TokenStorage();
+    final authApi = AuthApi(baseUrl: config.apiBaseUrl);
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
     final scope = AppScope(
       config: config,
       apiClient: apiClient,
+      authApi: authApi,
       authSession: AuthSession(tokenStorage: tokenStorage),
       onboardingPreferences: OnboardingPreferences(prefs),
       onboardingDraftStore: OnboardingDraftStore(prefs),

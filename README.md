@@ -37,6 +37,7 @@ flutter run
 **Next steps**
 
 - [frontend/README.md](frontend/README.md) — `flutter doctor`, `--dart-define` runtime config, API modes (`mock` / `live` / `auto`)
+- [specs/005-api-backend-integration/quickstart.md](specs/005-api-backend-integration/quickstart.md) — connect Flutter to local backend smoke checklist
 - [specs/001-event-networking-app/quickstart.md](specs/001-event-networking-app/quickstart.md) — quality gates (`flutter analyze`, tests, goldens, integration tests)
 
 Open **`frontend/`** as the Flutter project root in your IDE.
@@ -61,6 +62,8 @@ Open **`frontend/`** as the Flutter project root in your IDE.
 | [shared/api-contracts/users/](shared/api-contracts/users/) | Profile, avatar, preferences, blocks, reviews |
 | [shared/api-contracts/common/](shared/api-contracts/common/) | Shared types, errors, pagination |
 | [shared/api-contracts/events/](shared/api-contracts/events/) | Events, attendance, trips, join flows |
+
+Run `./shared/api-contracts/scripts/generate-api-client.sh` to refresh `openapi.json` and the Dart client under `frontend/lib/generated/felloway_api/`. See [specs/004-openapi-dart-codegen/quickstart.md](specs/004-openapi-dart-codegen/quickstart.md).
 
 ### Feature `002-backend-api`
 
