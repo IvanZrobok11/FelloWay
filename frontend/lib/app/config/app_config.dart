@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'api_mode.dart';
 
 /// Runtime configuration from `--dart-define` (see
@@ -54,10 +56,15 @@ class AppConfig {
       'OAUTH_CLIENT_ID',
       defaultValue: '',
     );
-    const redirect = String.fromEnvironment(
+    const redirectFromEnv = String.fromEnvironment(
       'OAUTH_REDIRECT_URL',
-      defaultValue: 'com.felloway.app:/oauthredirect',
+      defaultValue: '',
     );
+    final redirect = redirectFromEnv.isNotEmpty
+        ? redirectFromEnv
+        : (kIsWeb
+            ? oauthRedirectUriForApi(api)
+            : 'com.felloway.app:/oauthredirect');
     const discovery = String.fromEnvironment(
       'OAUTH_DISCOVERY_URL',
       defaultValue: '',
@@ -73,6 +80,32 @@ class AppConfig {
       apiMode: _parseApiMode(apiModeRaw),
     );
   }
+
+  /// LinkedIn Developer Portal redirect URI (BFF callback on API host only).
+  ///
+  /// Register e.g. `https://localhost:7086/auth/linkedin/callback` (LinkedIn Developer Portal).
+  static String linkedInBffCallbackUriForApi(String apiBaseUrl) {
+    final normalized = apiBaseUrl.replaceAll(RegExp(r'/+$'), '');
+    if (normalized.isEmpty || normalized.contains('example.com')) {
+      return 'https://localhost:7086/auth/linkedin/callback';
+    }
+    return '$normalized/auth/linkedin/callback';
+  }
+
+  /// BFF login entry (opens server Challenge; not a client OAuth redirect).
+  static Uri linkedInBffLoginUri(String apiBaseUrl, {required String returnUrl}) {
+    return Uri.parse(apiBaseUrl).replace(
+      path: '/auth/linkedin/login',
+      queryParameters: {
+        'platform': 'web',
+        'returnUrl': returnUrl,
+      },
+    );
+  }
+
+  @Deprecated('Use linkedInBffCallbackUriForApi')
+  static String oauthRedirectUriForApi(String apiBaseUrl) =>
+      linkedInBffCallbackUriForApi(apiBaseUrl);
 
   static ApiMode _parseApiMode(String raw) {
     switch (raw.trim().toLowerCase()) {

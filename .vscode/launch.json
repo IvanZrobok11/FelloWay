@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "felloway Flutter web (Chrome, fixed port 7357)",
+      "cwd": "${workspaceFolder}/frontend",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "toolArgs": [
+        "--web-port=7357",
+        "--dart-define=API_MODE=live",
+        "--dart-define=API_BASE_URL=https://localhost:7086",
+        "--dart-define=OAUTH_REDIRECT_URL=https://localhost:7086/auth/oauth/linkedin/callback",
+        "--dart-define=OAUTH_CLIENT_ID=YOUR_LINKEDIN_CLIENT_ID"
+      ]
+    }
+  ]
+}

@@ -31,48 +31,28 @@ public class AuthService(
             request.CodeVerifier,
             cancellationToken);
 
-        var identity = await db.OAuthIdentities
-            .Include(x => x.User)
-            .FirstOrDefaultAsync(
-                x => x.Provider == provider && x.ProviderSubject == userInfo.ProviderSubject,
-                cancellationToken);
+        return await SignInFromProviderAsync(provider, userInfo, cancellationToken);
+    }
 
-        User user;
-        if (identity is null)
+    public async Task<TokenResponseDto> SignInFromProviderAsync(
+        string provider,
+        OAuthUserInfo userInfo,
+        CancellationToken cancellationToken = default)
+    {
+        var normalized = provider.ToLowerInvariant();
+        if (normalized is not "linkedin" and not "facebook")
         {
-            user = new User
-            {
-                DisplayName = userInfo.DisplayName,
-                Role = IsAdminSubject(userInfo.ProviderSubject) ? UserRole.Admin : UserRole.User,
-            };
-            db.Users.Add(user);
-            db.OAuthIdentities.Add(new OAuthIdentity
-            {
-                User = user,
-                Provider = provider,
-                ProviderSubject = userInfo.ProviderSubject,
-            });
-        }
-        else
-        {
-            user = identity.User;
-            if (IsAdminSubject(userInfo.ProviderSubject))
-            {
-                user.Role = UserRole.Admin;
-            }
-
-            if (string.IsNullOrWhiteSpace(user.DisplayName) && !string.IsNullOrWhiteSpace(userInfo.DisplayName))
-            {
-                user.DisplayName = userInfo.DisplayName;
-                user.UpdatedAt = DateTimeOffset.UtcNow;
-            }
+            throw new DomainException("Unsupported OAuth provider.");
         }
 
-        await db.SaveChangesAsync(cancellationToken);
-        await streamChatService.EnsureUserAsync(user.Id, user.DisplayName, cancellationToken);
-
+        var user = await UpsertUserFromOAuthAsync(normalized, userInfo, cancellationToken);
         return await IssueTokensAsync(user.Id, cancellationToken);
     }
+
+    public Task<TokenResponseDto> IssueTokensForUserAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default) =>
+        IssueTokensAsync(userId, cancellationToken);
 
     public async Task<TokenResponseDto> RefreshAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
@@ -106,8 +86,72 @@ public class AuthService(
         await db.SaveChangesAsync(cancellationToken);
     }
 
+    private async Task<User> UpsertUserFromOAuthAsync(
+        string provider,
+        OAuthUserInfo userInfo,
+        CancellationToken cancellationToken)
+    {
+        var identity = await db.OAuthIdentities
+            .Include(x => x.User)
+            .FirstOrDefaultAsync(
+                x => x.Provider == provider && x.ProviderSubject == userInfo.ProviderSubject,
+                cancellationToken);
+
+        User user;
+        if (identity is null)
+        {
+            user = new User
+            {
+                DisplayName = userInfo.DisplayName,
+                Email = NormalizeEmail(userInfo.Email),
+                Role = IsAdminSubject(userInfo.ProviderSubject) ? UserRole.Admin : UserRole.User,
+            };
+            db.Users.Add(user);
+            db.OAuthIdentities.Add(new OAuthIdentity
+            {
+                User = user,
+                Provider = provider,
+                ProviderSubject = userInfo.ProviderSubject,
+            });
+        }
+        else
+        {
+            user = identity.User;
+            if (IsAdminSubject(userInfo.ProviderSubject))
+            {
+                user.Role = UserRole.Admin;
+            }
+
+            if (string.IsNullOrWhiteSpace(user.DisplayName) && !string.IsNullOrWhiteSpace(userInfo.DisplayName))
+            {
+                user.DisplayName = userInfo.DisplayName;
+                user.UpdatedAt = DateTimeOffset.UtcNow;
+            }
+
+            if (string.IsNullOrWhiteSpace(user.Email) && !string.IsNullOrWhiteSpace(userInfo.Email))
+            {
+                user.Email = NormalizeEmail(userInfo.Email);
+                user.UpdatedAt = DateTimeOffset.UtcNow;
+            }
+        }
+
+        await db.SaveChangesAsync(cancellationToken);
+        await streamChatService.EnsureUserAsync(user.Id, user.DisplayName, cancellationToken);
+        return user;
+    }
+
     private static bool IsAdminSubject(string subject) =>
         subject.Equals("admin", StringComparison.OrdinalIgnoreCase);
+
+    private static string? NormalizeEmail(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return null;
+        }
+
+        return email.Trim().ToLowerInvariant();
+    }
 
     private async Task<TokenResponseDto> IssueTokensAsync(Guid userId, CancellationToken cancellationToken)
     {

@@ -33,7 +33,12 @@ public static class DependencyInjection
 
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<IRefreshTokenService, RefreshTokenService>();
-        services.AddScoped<IOAuthTokenExchanger, DevOAuthTokenExchanger>();
+
+        services.Configure<OAuthOptions>(configuration.GetSection(OAuthOptions.SectionName));
+        services.AddMemoryCache();
+        services.AddSingleton<IMobileAuthTicketStore, MobileAuthTicketStore>();
+        services.AddScoped<DevOAuthTokenExchanger>();
+        services.AddScoped<IOAuthTokenExchanger, CompositeOAuthTokenExchanger>();
         services.AddScoped<IStreamChatService, DevStreamChatService>();
         services.AddScoped<IEventChannelSyncService, DevEventChannelSyncService>();
         services.AddScoped<ITripChannelSyncService, DevTripChannelSyncService>();

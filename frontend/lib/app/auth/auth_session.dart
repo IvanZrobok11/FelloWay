@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../features/auth/data/auth_api.dart';
 import '../../features/auth/data/token_storage.dart';
 
 /// Tracks whether the user has stored credentials (hydrate in [restore]).
@@ -22,6 +23,23 @@ class AuthSession extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Web BFF: reconcile in-memory session with API session cookie (cross-origin credentialed calls).
+  Future<void> syncWebCookieSession(AuthApi authApi) async {
+    try {
+      await authApi.getSession();
+      if (!_hasSession) {
+        setAuthenticatedFromCookie();
+      }
+    } catch (_) {
+      if (_hasSession) {
+        final access = await _tokenStorage.readAccessToken();
+        if (access == null || access.isEmpty) {
+          await signOut();
+        }
+      }
+    }
+  }
+
   Future<void> setAuthenticated({
     required String accessToken,
     required String refreshToken,
@@ -30,6 +48,12 @@ class AuthSession extends ChangeNotifier {
       accessToken: accessToken,
       refreshToken: refreshToken,
     );
+    _hasSession = true;
+    notifyListeners();
+  }
+
+  /// Web BFF: session cookie on API host; no JWT in secure storage.
+  void setAuthenticatedFromCookie() {
     _hasSession = true;
     notifyListeners();
   }

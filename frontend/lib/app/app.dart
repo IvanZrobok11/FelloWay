@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -64,6 +65,8 @@ class _FellowayAppState extends State<FellowayApp> {
     _router = createAppRouter(
       authSession: widget.authSession,
       onboardingPreferences: widget.onboardingPreferences,
+      webSessionAuthApi: widget.authApi,
+      syncWebCookieSession: kIsWeb && !widget.config.useMockApi,
       navigatorKey: PushHandler.rootNavigatorKey,
     );
     PushHandler.attach(_router!);

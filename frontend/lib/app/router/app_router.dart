@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/data/auth_api.dart';
 import '../auth/auth_session.dart';
 import '../notifications/push_handler.dart';
 import '../../features/onboarding/data/onboarding_preferences.dart';
@@ -26,6 +27,8 @@ import '../../features/trips/presentation/trip_owner_requests_page.dart';
 GoRouter createAppRouter({
   required AuthSession authSession,
   required OnboardingPreferences onboardingPreferences,
+  AuthApi? webSessionAuthApi,
+  bool syncWebCookieSession = false,
   GlobalKey<NavigatorState>? navigatorKey,
 }) {
   return GoRouter(
@@ -34,13 +37,36 @@ GoRouter createAppRouter({
         ? '/events'
         : '/onboarding/welcome',
     refreshListenable: authSession,
-    redirect: (context, state) {
+    redirect: (context, state) async {
       final path = state.uri.path;
       final onOnboarding = path.startsWith('/onboarding');
       final onSignIn = path == '/sign-in';
+      final onAuthSuccess = path == '/auth/success';
+
+      if (!authSession.isAuthenticated &&
+          syncWebCookieSession &&
+          webSessionAuthApi != null) {
+        await authSession.syncWebCookieSession(webSessionAuthApi);
+      }
 
       if (!authSession.isAuthenticated) {
-        // Allow local onboarding (S1–S4) and sign-in before OAuth.
+        if (onAuthSuccess) {
+          return null;
+        }
+        if (onSignIn || onOnboarding) {
+          return null;
+        }
+        final protected =
+            path == '/events' ||
+            path == '/map' ||
+            path == '/chats' ||
+            path == '/profile' ||
+            path.startsWith('/event/') ||
+            path.startsWith('/trips/') ||
+            path.startsWith('/chats/');
+        if (protected) {
+          return '/sign-in?reason=session_expired';
+        }
         return null;
       }
 
@@ -62,6 +88,10 @@ GoRouter createAppRouter({
       GoRoute(
         path: '/sign-in',
         builder: (context, state) => const OAuthSignInPage(),
+      ),
+      GoRoute(
+        path: '/auth/success',
+        builder: (context, state) => const OAuthBffSuccessPage(),
       ),
       GoRoute(
         path: '/onboarding/welcome',

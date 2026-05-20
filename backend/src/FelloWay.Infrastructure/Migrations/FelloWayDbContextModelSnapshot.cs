@@ -527,6 +527,10 @@ namespace FelloWay.Infrastructure.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("character varying(120)");
 
+                    b.Property<string>("Email")
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)");
+
                     b.Property<Guid?>("HomeCityId")
                         .HasColumnType("uuid");
 

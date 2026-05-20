@@ -34,6 +34,10 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
             logger.LogWarning(ex, "Domain error");
             await WriteErrorAsync(context, HttpStatusCode.BadRequest, "domain_error", ex.Message);
         }
+        catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
+        {
+            // Client closed the connection or navigated away (e.g. during OAuth token exchange).
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unhandled error");

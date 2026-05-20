@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -54,12 +57,30 @@ class _ProfilePageState extends State<ProfilePage> {
     context.go('/events');
   }
 
+  Future<void> _ensureWebSession() async {
+    final config = AppScope.configOf(context);
+    if (!kIsWeb || config.useMockApi) return;
+    final session = AppScope.authSessionOf(context);
+    if (session.isAuthenticated) return;
+    await session.syncWebCookieSession(AppScope.authApiOf(context));
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (AppScope.authSessionOf(context).isAuthenticated &&
-        _profile == null &&
-        !_loading) {
+    final auth = AppScope.authSessionOf(context);
+    if (!auth.isAuthenticated && kIsWeb && !AppScope.configOf(context).useMockApi) {
+      unawaited(_ensureWebSession().then((_) {
+        if (!mounted) return;
+        if (AppScope.authSessionOf(context).isAuthenticated &&
+            _profile == null &&
+            !_loading) {
+          _load();
+        }
+      }));
+      return;
+    }
+    if (auth.isAuthenticated && _profile == null && !_loading) {
       _load();
     }
   }

@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../app/config/app_config.dart';
 import '../../features/auth/data/auth_api.dart';
 import '../../features/auth/data/token_storage.dart';
 import '../errors/app_failure.dart';
+import 'dio_credentials.dart';
 import 'error_response.dart';
 
 typedef UnauthorizedCallback = Future<void> Function();
@@ -15,9 +17,11 @@ class ApiClient {
     required TokenStorage tokenStorage,
     AuthApi? authApi,
     UnauthorizedCallback? onUnauthorized,
+    bool useCookieAuthOnWeb = false,
   }) : _tokenStorage = tokenStorage,
        _authApi = authApi,
-       _onUnauthorized = onUnauthorized {
+       _onUnauthorized = onUnauthorized,
+       _useCookieAuthOnWeb = useCookieAuthOnWeb {
     _dio = Dio(
       BaseOptions(
         baseUrl: config.apiBaseUrl,
@@ -27,34 +31,40 @@ class ApiClient {
       ),
     );
 
+    configureDioCredentials(_dio, enabled: kIsWeb && useCookieAuthOnWeb);
+
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await _tokenStorage.readAccessToken();
-          if (token != null && token.isNotEmpty) {
-            options.headers['Authorization'] = 'Bearer $token';
+          final useCookie = kIsWeb && _useCookieAuthOnWeb;
+          if (!useCookie) {
+            final token = await _tokenStorage.readAccessToken();
+            if (token != null && token.isNotEmpty) {
+              options.headers['Authorization'] = 'Bearer $token';
+            }
           }
           handler.next(options);
         },
         onError: (error, handler) async {
           final retried = error.requestOptions.extra['retried'] == true;
-          if (error.response?.statusCode == 401 &&
-              !retried &&
-              _authApi != null) {
-            try {
-              final refreshed = await _refreshTokensOnce();
-              if (refreshed) {
-                final opts = error.requestOptions;
-                opts.extra['retried'] = true;
-                final access = await _tokenStorage.readAccessToken();
-                if (access != null && access.isNotEmpty) {
-                  opts.headers['Authorization'] = 'Bearer $access';
+          final useCookie = kIsWeb && _useCookieAuthOnWeb;
+          if (error.response?.statusCode == 401 && !retried && _authApi != null) {
+            if (!useCookie) {
+              try {
+                final refreshed = await _refreshTokensOnce();
+                if (refreshed) {
+                  final opts = error.requestOptions;
+                  opts.extra['retried'] = true;
+                  final access = await _tokenStorage.readAccessToken();
+                  if (access != null && access.isNotEmpty) {
+                    opts.headers['Authorization'] = 'Bearer $access';
+                  }
+                  final response = await _dio.fetch<dynamic>(opts);
+                  return handler.resolve(response);
                 }
-                final response = await _dio.fetch<dynamic>(opts);
-                return handler.resolve(response);
+              } catch (_) {
+                // fall through to sign-out
               }
-            } catch (_) {
-              // fall through to sign-out
             }
             await _onUnauthorized?.call();
           } else if (error.response?.statusCode == 401) {
@@ -69,6 +79,7 @@ class ApiClient {
   final TokenStorage _tokenStorage;
   final AuthApi? _authApi;
   final UnauthorizedCallback? _onUnauthorized;
+  final bool _useCookieAuthOnWeb;
 
   late final Dio _dio;
   Future<bool>? _refreshInFlight;
