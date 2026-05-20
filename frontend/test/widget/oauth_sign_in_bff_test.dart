@@ -40,12 +40,7 @@ Future<Widget> _app({
     supportedLocales: AppLocalizations.supportedLocales,
     routerConfig: GoRouter(
       initialLocation: initialLocation,
-      routes: [
-        GoRoute(
-          path: '/sign-in',
-          builder: (context, state) => child,
-        ),
-      ],
+      routes: [GoRoute(path: '/sign-in', builder: (context, state) => child)],
     ),
     builder: (context, widget) {
       return AppScope(
@@ -97,5 +92,4 @@ void main() {
       findsNothing,
     );
   });
-
 }

@@ -14,6 +14,7 @@ import '../features/onboarding/data/onboarding_preferences.dart';
 import '../features/profile/data/users_repository.dart';
 import '../features/trips/data/trips_repository.dart';
 import '../shared/network/api_client.dart';
+import '../shared/widgets/connectivity_snack_bar.dart';
 import 'app_scope.dart';
 import 'auth/auth_session.dart';
 import 'config/app_config.dart';
@@ -61,6 +62,7 @@ class _FellowayAppState extends State<FellowayApp> {
   void initState() {
     super.initState();
     widget.authSession.addListener(_onAuthChanged);
+    widget.authSession.addListener(_onConnectivityNotice);
     widget.streamChatService.addListener(_onStreamChanged);
     _router = createAppRouter(
       authSession: widget.authSession,
@@ -73,12 +75,25 @@ class _FellowayAppState extends State<FellowayApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await PushHandler.registerMessagingBridge();
       await _syncChat();
+      _showConnectivityNoticeIfNeeded();
+    });
+  }
+
+  void _onConnectivityNotice() {
+    _showConnectivityNoticeIfNeeded();
+  }
+
+  void _showConnectivityNoticeIfNeeded() {
+    if (!widget.authSession.consumeConnectivityNotice()) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ConnectivitySnackBar.showGlobal();
     });
   }
 
   @override
   void dispose() {
     widget.authSession.removeListener(_onAuthChanged);
+    widget.authSession.removeListener(_onConnectivityNotice);
     widget.streamChatService.removeListener(_onStreamChanged);
     PushHandler.detach();
     _router?.dispose();

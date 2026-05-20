@@ -6,10 +6,7 @@ void linkedInBffSignInWeb({
 }) {
   final loginUri = Uri.parse(apiBaseUrl).replace(
     path: '/auth/linkedin/login',
-    queryParameters: {
-      'platform': 'web',
-      'returnUrl': returnOrigin,
-    },
+    queryParameters: {'platform': 'web', 'returnUrl': returnOrigin},
   );
   web.window.location.href = loginUri.toString();
 }

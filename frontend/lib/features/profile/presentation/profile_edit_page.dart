@@ -3,6 +3,7 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../shared/errors/connectivity_failure.dart';
 import '../../../shared/errors/result.dart';
 import '../domain/user_profile.dart';
 
@@ -94,9 +95,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           context,
         ).showSnackBar(SnackBar(content: Text(l10n.profileEditAvatarDone)));
       case Failure(:final error):
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error.message)));
+        showActionFailureSnackBar(context, error);
     }
   }
 
@@ -133,9 +132,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ).showSnackBar(SnackBar(content: Text(l10n.profileEditSaved)));
         Navigator.of(context).pop();
       case Failure(:final error):
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error.message)));
+        showActionFailureSnackBar(context, error);
     }
   }
 

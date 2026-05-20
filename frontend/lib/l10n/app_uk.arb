@@ -9,6 +9,7 @@
   "commonRetry": "Повторити",
   "commonCancel": "Скасувати",
   "commonErrorTitle": "Щось пішло не так",
+  "connectivityActionUnavailable": "Дія недоступна. Немає інтернету.",
   "emptyStateTitle": "Поки що порожньо",
   "guestSignInPrompt": "Увійдіть, щоб продовжити",
   "signInTitle": "Увійти",

@@ -3,6 +3,7 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../shared/errors/connectivity_failure.dart';
 import '../../../shared/errors/result.dart';
 import '../domain/trip_chat.dart';
 import '../domain/trip_join_policy.dart';
@@ -75,9 +76,7 @@ class TripJoinBar extends StatelessWidget {
                       SnackBar(content: Text(l10n.tripCancelRequestDone)),
                     );
                   case Failure(:final error):
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(error.message)));
+                    showActionFailureSnackBar(context, error);
                 }
               },
               child: Text(l10n.tripCancelRequest),
@@ -114,9 +113,7 @@ class TripJoinBar extends StatelessWidget {
                       SnackBar(content: Text(l10n.tripJoinRequested)),
                     );
                   case Failure(:final error):
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(error.message)));
+                    showActionFailureSnackBar(context, error);
                 }
               },
               child: Text(l10n.tripRequestJoin),

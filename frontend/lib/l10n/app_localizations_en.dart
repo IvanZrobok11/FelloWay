@@ -36,6 +36,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonErrorTitle => 'Something went wrong';
 
   @override
+  String get connectivityActionUnavailable =>
+      'Action unavailable. No internet connection.';
+
+  @override
   String get emptyStateTitle => 'Nothing here yet';
 
   @override

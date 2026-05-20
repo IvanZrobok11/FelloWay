@@ -31,6 +31,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-20
 - [e.g., shared_preferences, hive, sqflite, secure storage, remote API, or N/A] (009-linkedin-bff-auth)
 - C# 12 / .NET 8 (API); Dart 3.10+ / Flutter stable (client) + `AspNet.Security.OAuth.LinkedIn` 8.x, `Microsoft.AspNetCore.Authentication.Cookies`, `Microsoft.AspNetCore.Authentication.JwtBearer`, EF Core 8 + Npgsql; Flutter: `dio`, `flutter_web_auth_2` (mobile only), `go_router`, `flutter_secure_storage` (009-linkedin-bff-auth)
 - PostgreSQL (`users`, `oauth_identities`, `refresh_tokens`); `IMemoryCache` for `MobileAuthTicket` (ephemeral) (009-linkedin-bff-auth)
+- Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `flutter` (Material `SnackBar`, `ScaffoldMessenger`), `dio` (error classification only), existing `app_localizations` (010-connectivity-snackbar)
+- N/A (ephemeral UI) (010-connectivity-snackbar)
 
 - C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
 
@@ -51,9 +53,9 @@ tests/
 C# 12 / .NET 8: Follow standard conventions
 
 ## Recent Changes
+- 010-connectivity-snackbar: Added Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `flutter` (Material `SnackBar`, `ScaffoldMessenger`), `dio` (error classification only), existing `app_localizations`
 - 009-linkedin-bff-auth: Added C# 12 / .NET 8 (API); Dart 3.10+ / Flutter stable (client) + `AspNet.Security.OAuth.LinkedIn` 8.x, `Microsoft.AspNetCore.Authentication.Cookies`, `Microsoft.AspNetCore.Authentication.JwtBearer`, EF Core 8 + Npgsql; Flutter: `dio`, `flutter_web_auth_2` (mobile only), `go_router`, `flutter_secure_storage`
 - 009-linkedin-bff-auth: Added [e.g., Dart 3.x, Flutter stable channel or NEEDS CLARIFICATION] + [e.g., flutter_bloc, freezed, dio, go_router or NEEDS CLARIFICATION]
-- 009-linkedin-bff-auth: Added C# 12 / .NET 8; Dart 3.10+ / Flutter stable
 
 
 <!-- MANUAL ADDITIONS START -->

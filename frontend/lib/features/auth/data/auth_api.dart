@@ -6,9 +6,7 @@ import '../domain/token_response.dart';
 /// Unauthenticated auth endpoints (OAuth exchange, refresh, BFF mobile complete).
 class AuthApi {
   AuthApi({required String baseUrl, Dio? dio, bool sendCredentials = false})
-    : _dio =
-          dio ??
-          _createDio(baseUrl, sendCredentials: sendCredentials);
+    : _dio = dio ?? _createDio(baseUrl, sendCredentials: sendCredentials);
 
   final Dio _dio;
 

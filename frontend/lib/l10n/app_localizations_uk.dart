@@ -36,6 +36,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get commonErrorTitle => 'Щось пішло не так';
 
   @override
+  String get connectivityActionUnavailable =>
+      'Дія недоступна. Немає інтернету.';
+
+  @override
   String get emptyStateTitle => 'Поки що порожньо';
 
   @override

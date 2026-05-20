@@ -12,6 +12,10 @@
   "commonRetry": "Retry",
   "commonCancel": "Cancel",
   "commonErrorTitle": "Something went wrong",
+  "connectivityActionUnavailable": "Action unavailable. No internet connection.",
+  "@connectivityActionUnavailable": {
+    "description": "Snack bar when an action fails due to no network or unreachable server"
+  },
   "emptyStateTitle": "Nothing here yet",
   "guestSignInPrompt": "Sign in to continue",
   "signInTitle": "Sign in",

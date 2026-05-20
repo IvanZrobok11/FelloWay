@@ -28,9 +28,7 @@ Future<LinkedInBffMobileResult> linkedInBffSignInMobile({
 
   final loginUri = Uri.parse(apiBaseUrl).replace(
     path: '/auth/linkedin/login',
-    queryParameters: {
-      'platform': 'mobile',
-    },
+    queryParameters: {'platform': 'mobile'},
   );
 
   try {

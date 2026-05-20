@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'Something went wrong'**
   String get commonErrorTitle;
 
+  /// Snack bar when an action fails due to no network or unreachable server
+  ///
+  /// In en, this message translates to:
+  /// **'Action unavailable. No internet connection.'**
+  String get connectivityActionUnavailable;
+
   /// No description provided for @emptyStateTitle.
   ///
   /// In en, this message translates to:

@@ -96,10 +96,7 @@ class AppConfig {
   static Uri linkedInBffLoginUri(String apiBaseUrl, {required String returnUrl}) {
     return Uri.parse(apiBaseUrl).replace(
       path: '/auth/linkedin/login',
-      queryParameters: {
-        'platform': 'web',
-        'returnUrl': returnUrl,
-      },
+      queryParameters: {'platform': 'web', 'returnUrl': returnUrl},
     );
   }
 
