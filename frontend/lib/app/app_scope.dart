@@ -6,6 +6,7 @@ import '../features/auth/data/auth_api.dart';
 import '../features/chats/application/chat_access_controller.dart';
 import '../features/chats/data/stream_chat_service.dart';
 import '../features/events/data/events_repository.dart';
+import '../features/onboarding/data/interests_repository.dart';
 import '../features/onboarding/data/onboarding_draft_store.dart';
 import '../features/onboarding/data/onboarding_preferences.dart';
 import '../features/profile/data/users_repository.dart';
@@ -21,6 +22,7 @@ class AppScope extends InheritedWidget {
     required this.authSession,
     required this.onboardingPreferences,
     required this.onboardingDraftStore,
+    required this.interestsRepository,
     required this.eventsRepository,
     required this.usersRepository,
     required this.streamChatService,
@@ -35,6 +37,7 @@ class AppScope extends InheritedWidget {
   final AuthSession authSession;
   final OnboardingPreferences onboardingPreferences;
   final OnboardingDraftStore onboardingDraftStore;
+  final InterestsRepository interestsRepository;
   final EventsRepository eventsRepository;
   final UsersRepository usersRepository;
   final StreamChatService streamChatService;
@@ -61,6 +64,9 @@ class AppScope extends InheritedWidget {
 
   static OnboardingDraftStore onboardingDraftStoreOf(BuildContext context) =>
       _of(context).onboardingDraftStore;
+
+  static InterestsRepository interestsOf(BuildContext context) =>
+      _of(context).interestsRepository;
 
   static EventsRepository eventsOf(BuildContext context) =>
       _of(context).eventsRepository;

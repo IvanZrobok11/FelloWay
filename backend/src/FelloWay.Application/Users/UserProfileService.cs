@@ -1,4 +1,5 @@
 using FelloWay.Application.Common.Interfaces;
+using FelloWay.Application.Reference.Models;
 using FelloWay.Application.Users.Models;
 using FelloWay.Domain.Common;
 using FelloWay.Domain.Entities;
@@ -44,12 +45,13 @@ public class UserProfileService(IApplicationDbContext db, IBlobStorageService bl
 
         if (request.InterestIds is not null)
         {
+            var requestedIds = request.InterestIds.Distinct().ToList();
             var validIds = await db.Interests
-                .Where(i => request.InterestIds.Contains(i.Id))
+                .Where(i => requestedIds.Contains(i.Id))
                 .Select(i => i.Id)
                 .ToListAsync(cancellationToken);
 
-            if (validIds.Count != request.InterestIds.Count)
+            if (validIds.Count != requestedIds.Count)
             {
                 throw new DomainException("One or more interests are invalid.");
             }
@@ -85,19 +87,29 @@ public class UserProfileService(IApplicationDbContext db, IBlobStorageService bl
         return await db.Users
             .Include(u => u.HomeCity)
             .Include(u => u.UserInterests)
+            .ThenInclude(ui => ui.Interest)
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken)
             ?? throw new DomainException("User not found.");
     }
 
-    private static UserProfileDto Map(User user) =>
-        new(
+    private static UserProfileDto Map(User user)
+    {
+        var resolved = user.UserInterests
+            .Select(ui => ui.Interest)
+            .OrderBy(i => i.SortOrder)
+            .Select(i => new InterestCatalogItemDto(i.Id, i.Name, i.SortOrder))
+            .ToList();
+
+        return new(
             user.Id,
             user.DisplayName,
             user.Bio,
             user.HomeCity?.Name,
             user.HomeCityId,
-            user.UserInterests.Select(x => x.InterestId).ToList(),
+            resolved.Select(i => i.Id).ToList(),
+            resolved,
             user.AvatarUrl,
             user.AggregateRating,
             user.IsProfileComplete);
+    }
 }

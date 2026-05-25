@@ -44,7 +44,7 @@ if ! command -v openapi-generator-cli >/dev/null 2>&1; then
   echo "      Install globally: npm install -g @openapitools/openapi-generator-cli"
 fi
 
-for domain in common auth users events; do
+for domain in common auth users events reference; do
   if [[ ! -f "${CONTRACTS_ROOT}/${domain}/openapi.yaml" ]]; then
     echo "ERROR: Missing ${CONTRACTS_ROOT}/${domain}/openapi.yaml" >&2
     exit 1
@@ -58,6 +58,7 @@ run_redocly join \
   auth/openapi.yaml \
   users/openapi.yaml \
   events/openapi.yaml \
+  reference/openapi.yaml \
   -o "${OUTPUT_JSON}" \
   --without-x-tag-groups
 

@@ -7,7 +7,8 @@ shared/api-contracts/
 ├── auth/       # OAuth, sessions, Stream chat tokens
 ├── users/      # Profile, avatar, preferences, blocks, reviews
 ├── common/     # Shared types, errors, pagination, versioning
-└── events/     # Events, attendance, trips, join requests
+├── events/     # Events, attendance, trips, join requests
+└── reference/  # Public catalogs (interests)
 ```
 
 ## Domain scope
@@ -18,6 +19,7 @@ shared/api-contracts/
 | [users/](users/) | `GET/PUT /users/me`, avatar upload, push preferences, `GET /users/{id}/reviews`, block |
 | [common/](common/) | Error envelope, list pagination, shared enums/DTOs |
 | [events/](events/) | `GET/POST /events`, attend, attendees, trips, join/approve, event reviews |
+| [reference/](reference/) | `GET /interests` — canonical professional interests catalog |
 
 ## OpenAPI files (v0.1.0 draft)
 
@@ -27,6 +29,7 @@ shared/api-contracts/
 | [auth/openapi.yaml](auth/openapi.yaml) | OAuth token exchange, refresh, Stream token |
 | [users/openapi.yaml](users/openapi.yaml) | Profile, avatar, push prefs, reviews, block |
 | [events/openapi.yaml](events/openapi.yaml) | Events, attendance, trips, join/approve, reviews |
+| [reference/openapi.yaml](reference/openapi.yaml) | `GET /interests`, `InterestCatalogItem` |
 
 Backend plan: [specs/002-backend-api/plan.md](../../specs/002-backend-api/plan.md).
 

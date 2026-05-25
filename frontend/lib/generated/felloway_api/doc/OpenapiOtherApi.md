@@ -9,9 +9,12 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**authLinkedinLoginGet**](OpenapiOtherApi.md#authlinkedinloginget) | **GET** /auth/linkedin/login | Start LinkedIn BFF sign-in (redirects to LinkedIn)
+[**authLinkedinMobileCompletePost**](OpenapiOtherApi.md#authlinkedinmobilecompletepost) | **POST** /auth/linkedin/mobile/complete | Exchange one-time mobile ticket for API JWT (after BFF callback)
 [**authLogoutPost**](OpenapiOtherApi.md#authlogoutpost) | **POST** /auth/logout | Revoke refresh token
-[**authOauthProviderTokenPost**](OpenapiOtherApi.md#authoauthprovidertokenpost) | **POST** /auth/oauth/{provider}/token | Exchange OAuth authorization code for API tokens
+[**authOauthProviderTokenPost**](OpenapiOtherApi.md#authoauthprovidertokenpost) | **POST** /auth/oauth/{provider}/token | Exchange OAuth authorization code for API tokens (dev/Facebook; LinkedIn uses BFF when configured)
 [**authRefreshPost**](OpenapiOtherApi.md#authrefreshpost) | **POST** /auth/refresh | Refresh access token
+[**authSessionGet**](OpenapiOtherApi.md#authsessionget) | **GET** /auth/session | Probe current session (cookie or bearer)
 [**chatStreamTokenGet**](OpenapiOtherApi.md#chatstreamtokenget) | **GET** /chat/stream-token | GetStream user token for mobile SDK
 [**eventsGet**](OpenapiOtherApi.md#eventsget) | **GET** /events | List events (paginated, filterable)
 [**eventsIdAttendDelete**](OpenapiOtherApi.md#eventsidattenddelete) | **DELETE** /events/{id}/attend | Leave event
@@ -21,6 +24,7 @@ Method | HTTP request | Description
 [**eventsIdGet**](OpenapiOtherApi.md#eventsidget) | **GET** /events/{id} | Event detail
 [**eventsIdTripsGet**](OpenapiOtherApi.md#eventsidtripsget) | **GET** /events/{id}/trips | List trip chats for event
 [**eventsIdTripsPost**](OpenapiOtherApi.md#eventsidtripspost) | **POST** /events/{id}/trips | Create trip chat
+[**interestsGet**](OpenapiOtherApi.md#interestsget) | **GET** /interests | List professional interests catalog
 [**tripsIdApproveUserIdPost**](OpenapiOtherApi.md#tripsidapproveuseridpost) | **POST** /trips/{id}/approve/{userId} | Approve join request
 [**tripsIdJoinDelete**](OpenapiOtherApi.md#tripsidjoindelete) | **DELETE** /trips/{id}/join | Cancel pending join request
 [**tripsIdJoinPost**](OpenapiOtherApi.md#tripsidjoinpost) | **POST** /trips/{id}/join | Request to join trip
@@ -32,6 +36,89 @@ Method | HTTP request | Description
 [**usersMePushPreferencesPut**](OpenapiOtherApi.md#usersmepushpreferencesput) | **PUT** /users/me/push-preferences | Update notification toggles
 [**usersMePut**](OpenapiOtherApi.md#usersmeput) | **PUT** /users/me | Update current user profile
 
+
+# **authLinkedinLoginGet**
+> authLinkedinLoginGet(returnUrl, platform)
+
+Start LinkedIn BFF sign-in (redirects to LinkedIn)
+
+### Example
+```dart
+import 'package:felloway_api/api.dart';
+
+final api = FellowayApi().getOpenapiOtherApi();
+final String returnUrl = returnUrl_example; // String | Frontend origin for web success redirect
+final String platform = platform_example; // String | 
+
+try {
+    api.authLinkedinLoginGet(returnUrl, platform);
+} catch on DioException (e) {
+    print('Exception when calling OpenapiOtherApi->authLinkedinLoginGet: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **returnUrl** | **String**| Frontend origin for web success redirect | [optional] 
+ **platform** | **String**|  | [optional] [default to 'web']
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **authLinkedinMobileCompletePost**
+> TokenResponse authLinkedinMobileCompletePost(authLinkedinMobileCompletePostRequest)
+
+Exchange one-time mobile ticket for API JWT (after BFF callback)
+
+### Example
+```dart
+import 'package:felloway_api/api.dart';
+
+final api = FellowayApi().getOpenapiOtherApi();
+final AuthLinkedinMobileCompletePostRequest authLinkedinMobileCompletePostRequest = ; // AuthLinkedinMobileCompletePostRequest | 
+
+try {
+    final response = api.authLinkedinMobileCompletePost(authLinkedinMobileCompletePostRequest);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling OpenapiOtherApi->authLinkedinMobileCompletePost: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **authLinkedinMobileCompletePostRequest** | [**AuthLinkedinMobileCompletePostRequest**](AuthLinkedinMobileCompletePostRequest.md)|  | 
+
+### Return type
+
+[**TokenResponse**](TokenResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **authLogoutPost**
 > authLogoutPost()
@@ -72,7 +159,7 @@ void (empty response body)
 # **authOauthProviderTokenPost**
 > TokenResponse authOauthProviderTokenPost(provider, authOauthProviderTokenPostRequest)
 
-Exchange OAuth authorization code for API tokens
+Exchange OAuth authorization code for API tokens (dev/Facebook; LinkedIn uses BFF when configured)
 
 ### Example
 ```dart
@@ -149,6 +236,47 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **authSessionGet**
+> AuthSessionGet200Response authSessionGet()
+
+Probe current session (cookie or bearer)
+
+### Example
+```dart
+import 'package:felloway_api/api.dart';
+// TODO Configure API key authorization: CookieAuth
+//defaultApiClient.getAuthentication<ApiKeyAuth>('CookieAuth').apiKey = 'YOUR_API_KEY';
+// uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+//defaultApiClient.getAuthentication<ApiKeyAuth>('CookieAuth').apiKeyPrefix = 'Bearer';
+
+final api = FellowayApi().getOpenapiOtherApi();
+
+try {
+    final response = api.authSessionGet();
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling OpenapiOtherApi->authSessionGet: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**AuthSessionGet200Response**](AuthSessionGet200Response.md)
+
+### Authorization
+
+[CookieAuth](../README.md#CookieAuth), [BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -525,6 +653,43 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **interestsGet**
+> InterestsGet200Response interestsGet()
+
+List professional interests catalog
+
+### Example
+```dart
+import 'package:felloway_api/api.dart';
+
+final api = FellowayApi().getOpenapiOtherApi();
+
+try {
+    final response = api.interestsGet();
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling OpenapiOtherApi->interestsGet: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**InterestsGet200Response**](InterestsGet200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

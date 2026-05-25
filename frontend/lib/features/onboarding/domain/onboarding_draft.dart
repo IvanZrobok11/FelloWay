@@ -11,6 +11,8 @@ class OnboardingDraft {
   }) : interests = interests ?? [];
 
   String displayName;
+
+  /// Catalog interest UUIDs from `GET /interests` (not display labels).
   List<String> interests;
   String hobbies;
   String homeCityLabel;

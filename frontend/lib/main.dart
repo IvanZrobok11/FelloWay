@@ -11,6 +11,7 @@ import 'features/auth/data/token_storage.dart';
 import 'features/chats/application/chat_access_controller.dart';
 import 'features/chats/data/stream_chat_service.dart';
 import 'features/events/data/events_repository.dart';
+import 'features/onboarding/data/interests_repository.dart';
 import 'features/onboarding/data/onboarding_draft_store.dart';
 import 'features/onboarding/data/onboarding_preferences.dart';
 import 'features/profile/data/users_repository.dart';
@@ -43,6 +44,7 @@ Future<void> main() async {
     await authSession.syncWebCookieSession(authApi);
   }
   final eventsRepository = EventsRepository(apiClient, config);
+  final interestsRepository = InterestsRepository(apiClient);
   final usersRepository = UsersRepository(apiClient, config);
   final tripsRepository = TripsRepository(apiClient, config);
   final streamChatService = StreamChatService(
@@ -58,6 +60,7 @@ Future<void> main() async {
       apiClient: apiClient,
       onboardingPreferences: onboardingPreferences,
       onboardingDraftStore: onboardingDraftStore,
+      interestsRepository: interestsRepository,
       eventsRepository: eventsRepository,
       usersRepository: usersRepository,
       tripsRepository: tripsRepository,

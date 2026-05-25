@@ -13,11 +13,10 @@ part 'event_list_page.g.dart';
 /// EventListPage
 ///
 /// Properties:
-/// * [items]
-/// * [nextCursor]
+/// * [items] 
+/// * [nextCursor] 
 @BuiltValue()
-abstract class EventListPage
-    implements Built<EventListPage, EventListPageBuilder> {
+abstract class EventListPage implements Built<EventListPage, EventListPageBuilder> {
   @BuiltValueField(wireName: r'items')
   BuiltList<Event>? get items;
 
@@ -26,15 +25,13 @@ abstract class EventListPage
 
   EventListPage._();
 
-  factory EventListPage([void updates(EventListPageBuilder b)]) =
-      _$EventListPage;
+  factory EventListPage([void updates(EventListPageBuilder b)]) = _$EventListPage;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(EventListPageBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<EventListPage> get serializer =>
-      _$EventListPageSerializer();
+  static Serializer<EventListPage> get serializer => _$EventListPageSerializer();
 }
 
 class _$EventListPageSerializer implements PrimitiveSerializer<EventListPage> {
@@ -71,9 +68,7 @@ class _$EventListPageSerializer implements PrimitiveSerializer<EventListPage> {
     EventListPage object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -131,3 +126,4 @@ class _$EventListPageSerializer implements PrimitiveSerializer<EventListPage> {
     return result.build();
   }
 }
+

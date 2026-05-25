@@ -15,7 +15,7 @@ class MockApiCatalog {
   static UserProfile get demoUserProfile => UserProfile(
     id: 'demo',
     displayName: 'Demo User',
-    interests: const ['IT'],
+    interests: const [],
     hobbies: 'Coffee',
     homeCityLabel: 'Kyiv',
     ratingAverage: 4.2,

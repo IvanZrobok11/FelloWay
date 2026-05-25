@@ -1,13 +1,15 @@
 import 'package:felloway_client/features/onboarding/domain/onboarding_completion.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+const _sampleInterestId = '11111111-1111-1111-1111-111111110001';
+
 void main() {
   group('OnboardingCompletion', () {
     test('is false when any mandatory field missing', () {
       expect(
         OnboardingCompletion.isSatisfied(
           displayName: '',
-          interests: ['IT'],
+          interests: [_sampleInterestId],
           homeCityLabel: 'Kyiv',
         ),
         isFalse,
@@ -23,7 +25,7 @@ void main() {
       expect(
         OnboardingCompletion.isSatisfied(
           displayName: 'Ann',
-          interests: ['IT'],
+          interests: [_sampleInterestId],
           homeCityLabel: '',
         ),
         isFalse,
@@ -34,7 +36,7 @@ void main() {
       expect(
         OnboardingCompletion.isSatisfied(
           displayName: 'Ann',
-          interests: ['IT'],
+          interests: [_sampleInterestId],
           homeCityLabel: 'Kyiv',
         ),
         isTrue,

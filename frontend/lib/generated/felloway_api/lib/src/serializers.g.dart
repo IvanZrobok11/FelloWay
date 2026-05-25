@@ -8,8 +8,10 @@ part of 'serializers.dart';
 
 Serializers _$serializers = (Serializers().toBuilder()
       ..add(Attendee.serializer)
+      ..add(AuthLinkedinMobileCompletePostRequest.serializer)
       ..add(AuthOauthProviderTokenPostRequest.serializer)
       ..add(AuthRefreshPostRequest.serializer)
+      ..add(AuthSessionGet200Response.serializer)
       ..add(ChatStreamTokenGet200Response.serializer)
       ..add(CursorPageMeta.serializer)
       ..add(ErrorResponse.serializer)
@@ -19,6 +21,8 @@ Serializers _$serializers = (Serializers().toBuilder()
       ..add(EventsIdAttendeesUserIdReviewPostRequest.serializer)
       ..add(EventsIdTripsGet200Response.serializer)
       ..add(FieldError.serializer)
+      ..add(InterestCatalogItem.serializer)
+      ..add(InterestsGet200Response.serializer)
       ..add(PushPreferences.serializer)
       ..add(Review.serializer)
       ..add(TokenResponse.serializer)
@@ -41,6 +45,10 @@ Serializers _$serializers = (Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(FieldError)]),
           () => ListBuilder<FieldError>())
       ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(InterestCatalogItem)]),
+          () => ListBuilder<InterestCatalogItem>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Review)]),
           () => ListBuilder<Review>())
       ..addBuilderFactory(
@@ -49,6 +57,10 @@ Serializers _$serializers = (Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(InterestCatalogItem)]),
+          () => ListBuilder<InterestCatalogItem>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Trip)]),
           () => ListBuilder<Trip>())

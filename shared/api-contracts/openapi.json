@@ -12,9 +12,129 @@
     }
   ],
   "paths": {
-    "/auth/oauth/{provider}/token": {
+    "/auth/linkedin/login": {
+      "servers": [],
+      "get": {
+        "summary": "Start LinkedIn BFF sign-in (redirects to LinkedIn)",
+        "parameters": [
+          {
+            "name": "returnUrl",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Frontend origin for web success redirect"
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "web",
+                "mobile"
+              ],
+              "default": "web"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to LinkedIn authorize URL"
+          },
+          "503": {
+            "description": "LinkedIn OAuth not configured"
+          }
+        },
+        "tags": [
+          "openapi_other"
+        ]
+      }
+    },
+    "/auth/linkedin/mobile/complete": {
+      "servers": [],
       "post": {
-        "summary": "Exchange OAuth authorization code for API tokens",
+        "summary": "Exchange one-time mobile ticket for API JWT (after BFF callback)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "ticket"
+                ],
+                "properties": {
+                  "ticket": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens issued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired ticket"
+          }
+        },
+        "tags": [
+          "openapi_other"
+        ]
+      }
+    },
+    "/auth/session": {
+      "servers": [],
+      "get": {
+        "summary": "Probe current session (cookie or bearer)",
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "CookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "tags": [
+          "openapi_other"
+        ]
+      }
+    },
+    "/auth/oauth/{provider}/token": {
+      "servers": [],
+      "post": {
+        "summary": "Exchange OAuth authorization code for API tokens (dev/Facebook; LinkedIn uses BFF when configured)",
         "parameters": [
           {
             "name": "provider",
@@ -74,6 +194,7 @@
       }
     },
     "/auth/refresh": {
+      "servers": [],
       "post": {
         "summary": "Refresh access token",
         "requestBody": {
@@ -112,6 +233,7 @@
       }
     },
     "/auth/logout": {
+      "servers": [],
       "post": {
         "summary": "Revoke refresh token",
         "security": [
@@ -130,6 +252,7 @@
       }
     },
     "/chat/stream-token": {
+      "servers": [],
       "get": {
         "summary": "GetStream user token for mobile SDK",
         "security": [
@@ -163,6 +286,7 @@
       }
     },
     "/users/me": {
+      "servers": [],
       "get": {
         "summary": "Current user profile",
         "security": [
@@ -219,6 +343,7 @@
       }
     },
     "/users/me/avatar": {
+      "servers": [],
       "post": {
         "summary": "Upload avatar (multipart)",
         "security": [
@@ -263,6 +388,7 @@
       }
     },
     "/users/me/push-preferences": {
+      "servers": [],
       "put": {
         "summary": "Update notification toggles",
         "security": [
@@ -290,6 +416,7 @@
       }
     },
     "/users/{id}/reviews": {
+      "servers": [],
       "get": {
         "summary": "List reviews for a user",
         "security": [
@@ -333,6 +460,7 @@
       }
     },
     "/users/{id}/block": {
+      "servers": [],
       "post": {
         "summary": "Block a user",
         "security": [
@@ -362,6 +490,7 @@
       }
     },
     "/events": {
+      "servers": [],
       "get": {
         "summary": "List events (paginated, filterable)",
         "parameters": [
@@ -419,6 +548,7 @@
       }
     },
     "/events/{id}": {
+      "servers": [],
       "get": {
         "summary": "Event detail",
         "parameters": [
@@ -449,6 +579,7 @@
       }
     },
     "/events/{id}/attend": {
+      "servers": [],
       "post": {
         "summary": "Join event",
         "security": [
@@ -493,6 +624,7 @@
       }
     },
     "/events/{id}/attendees": {
+      "servers": [],
       "get": {
         "summary": "List attendees (subscribers only)",
         "security": [
@@ -530,6 +662,7 @@
       }
     },
     "/events/{id}/trips": {
+      "servers": [],
       "get": {
         "summary": "List trip chats for event",
         "security": [
@@ -603,6 +736,7 @@
       }
     },
     "/trips/{id}/join": {
+      "servers": [],
       "post": {
         "summary": "Request to join trip",
         "security": [
@@ -647,6 +781,7 @@
       }
     },
     "/trips/{id}/join-requests": {
+      "servers": [],
       "get": {
         "summary": "Pending join requests (trip owner)",
         "security": [
@@ -684,6 +819,7 @@
       }
     },
     "/trips/{id}/approve/{userId}": {
+      "servers": [],
       "post": {
         "summary": "Approve join request",
         "security": [
@@ -716,6 +852,7 @@
       }
     },
     "/events/{id}/attendees/{userId}/review": {
+      "servers": [],
       "post": {
         "summary": "Post-event review",
         "security": [
@@ -762,6 +899,38 @@
         "responses": {
           "201": {
             "description": "Created"
+          }
+        },
+        "tags": [
+          "openapi_other"
+        ]
+      }
+    },
+    "/interests": {
+      "servers": [],
+      "get": {
+        "summary": "List professional interests catalog",
+        "responses": {
+          "200": {
+            "description": "Canonical interest options for onboarding and profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/InterestCatalogItem"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -848,6 +1017,26 @@
           }
         }
       },
+      "InterestCatalogItem": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "sortOrder"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer"
+          }
+        }
+      },
       "UserProfile": {
         "type": "object",
         "properties": {
@@ -869,6 +1058,13 @@
             "items": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          "interests": {
+            "type": "array",
+            "description": "Resolved catalog entries for interestIds, ordered by sortOrder",
+            "items": {
+              "$ref": "#/components/schemas/InterestCatalogItem"
             }
           },
           "avatarUrl": {
@@ -1113,6 +1309,11 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
+      },
+      "CookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "felloway.session"
       }
     },
     "parameters": {

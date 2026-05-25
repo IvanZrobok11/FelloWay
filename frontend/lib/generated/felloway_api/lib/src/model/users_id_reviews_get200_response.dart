@@ -13,36 +13,26 @@ part 'users_id_reviews_get200_response.g.dart';
 /// UsersIdReviewsGet200Response
 ///
 /// Properties:
-/// * [items]
+/// * [items] 
 @BuiltValue()
-abstract class UsersIdReviewsGet200Response
-    implements
-        Built<UsersIdReviewsGet200Response,
-            UsersIdReviewsGet200ResponseBuilder> {
+abstract class UsersIdReviewsGet200Response implements Built<UsersIdReviewsGet200Response, UsersIdReviewsGet200ResponseBuilder> {
   @BuiltValueField(wireName: r'items')
   BuiltList<Review>? get items;
 
   UsersIdReviewsGet200Response._();
 
-  factory UsersIdReviewsGet200Response(
-          [void updates(UsersIdReviewsGet200ResponseBuilder b)]) =
-      _$UsersIdReviewsGet200Response;
+  factory UsersIdReviewsGet200Response([void updates(UsersIdReviewsGet200ResponseBuilder b)]) = _$UsersIdReviewsGet200Response;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(UsersIdReviewsGet200ResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<UsersIdReviewsGet200Response> get serializer =>
-      _$UsersIdReviewsGet200ResponseSerializer();
+  static Serializer<UsersIdReviewsGet200Response> get serializer => _$UsersIdReviewsGet200ResponseSerializer();
 }
 
-class _$UsersIdReviewsGet200ResponseSerializer
-    implements PrimitiveSerializer<UsersIdReviewsGet200Response> {
+class _$UsersIdReviewsGet200ResponseSerializer implements PrimitiveSerializer<UsersIdReviewsGet200Response> {
   @override
-  final Iterable<Type> types = const [
-    UsersIdReviewsGet200Response,
-    _$UsersIdReviewsGet200Response
-  ];
+  final Iterable<Type> types = const [UsersIdReviewsGet200Response, _$UsersIdReviewsGet200Response];
 
   @override
   final String wireName = r'UsersIdReviewsGet200Response';
@@ -67,9 +57,7 @@ class _$UsersIdReviewsGet200ResponseSerializer
     UsersIdReviewsGet200Response object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -119,3 +107,4 @@ class _$UsersIdReviewsGet200ResponseSerializer
     return result.build();
   }
 }
+

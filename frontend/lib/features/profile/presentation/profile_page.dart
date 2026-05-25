@@ -201,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ListTile(
             title: Text(l10n.profileInterests),
-            subtitle: Text(p.interests.join(', ')),
+            subtitle: Text(p.interestLabels.join(', ')),
           ),
           ListTile(title: Text(l10n.profileHobbies), subtitle: Text(p.hobbies)),
         ],

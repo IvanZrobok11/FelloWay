@@ -48,11 +48,13 @@ import 'package:felloway_api/felloway_api.dart';
 
 
 final api = FellowayApi().getOpenapiOtherApi();
+final String returnUrl = returnUrl_example; // String | Frontend origin for web success redirect
+final String platform = platform_example; // String | 
 
 try {
-    api.authLogoutPost();
+    api.authLinkedinLoginGet(returnUrl, platform);
 } catch on DioException (e) {
-    print("Exception when calling OpenapiOtherApi->authLogoutPost: $e\n");
+    print("Exception when calling OpenapiOtherApi->authLinkedinLoginGet: $e\n");
 }
 
 ```
@@ -63,9 +65,12 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+[*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**authLinkedinLoginGet**](doc/OpenapiOtherApi.md#authlinkedinloginget) | **GET** /auth/linkedin/login | Start LinkedIn BFF sign-in (redirects to LinkedIn)
+[*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**authLinkedinMobileCompletePost**](doc/OpenapiOtherApi.md#authlinkedinmobilecompletepost) | **POST** /auth/linkedin/mobile/complete | Exchange one-time mobile ticket for API JWT (after BFF callback)
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**authLogoutPost**](doc/OpenapiOtherApi.md#authlogoutpost) | **POST** /auth/logout | Revoke refresh token
-[*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**authOauthProviderTokenPost**](doc/OpenapiOtherApi.md#authoauthprovidertokenpost) | **POST** /auth/oauth/{provider}/token | Exchange OAuth authorization code for API tokens
+[*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**authOauthProviderTokenPost**](doc/OpenapiOtherApi.md#authoauthprovidertokenpost) | **POST** /auth/oauth/{provider}/token | Exchange OAuth authorization code for API tokens (dev/Facebook; LinkedIn uses BFF when configured)
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**authRefreshPost**](doc/OpenapiOtherApi.md#authrefreshpost) | **POST** /auth/refresh | Refresh access token
+[*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**authSessionGet**](doc/OpenapiOtherApi.md#authsessionget) | **GET** /auth/session | Probe current session (cookie or bearer)
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**chatStreamTokenGet**](doc/OpenapiOtherApi.md#chatstreamtokenget) | **GET** /chat/stream-token | GetStream user token for mobile SDK
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**eventsGet**](doc/OpenapiOtherApi.md#eventsget) | **GET** /events | List events (paginated, filterable)
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**eventsIdAttendDelete**](doc/OpenapiOtherApi.md#eventsidattenddelete) | **DELETE** /events/{id}/attend | Leave event
@@ -75,6 +80,7 @@ Class | Method | HTTP request | Description
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**eventsIdGet**](doc/OpenapiOtherApi.md#eventsidget) | **GET** /events/{id} | Event detail
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**eventsIdTripsGet**](doc/OpenapiOtherApi.md#eventsidtripsget) | **GET** /events/{id}/trips | List trip chats for event
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**eventsIdTripsPost**](doc/OpenapiOtherApi.md#eventsidtripspost) | **POST** /events/{id}/trips | Create trip chat
+[*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**interestsGet**](doc/OpenapiOtherApi.md#interestsget) | **GET** /interests | List professional interests catalog
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**tripsIdApproveUserIdPost**](doc/OpenapiOtherApi.md#tripsidapproveuseridpost) | **POST** /trips/{id}/approve/{userId} | Approve join request
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**tripsIdJoinDelete**](doc/OpenapiOtherApi.md#tripsidjoindelete) | **DELETE** /trips/{id}/join | Cancel pending join request
 [*OpenapiOtherApi*](doc/OpenapiOtherApi.md) | [**tripsIdJoinPost**](doc/OpenapiOtherApi.md#tripsidjoinpost) | **POST** /trips/{id}/join | Request to join trip
@@ -90,8 +96,10 @@ Class | Method | HTTP request | Description
 ## Documentation For Models
 
  - [Attendee](doc/Attendee.md)
+ - [AuthLinkedinMobileCompletePostRequest](doc/AuthLinkedinMobileCompletePostRequest.md)
  - [AuthOauthProviderTokenPostRequest](doc/AuthOauthProviderTokenPostRequest.md)
  - [AuthRefreshPostRequest](doc/AuthRefreshPostRequest.md)
+ - [AuthSessionGet200Response](doc/AuthSessionGet200Response.md)
  - [ChatStreamTokenGet200Response](doc/ChatStreamTokenGet200Response.md)
  - [CursorPageMeta](doc/CursorPageMeta.md)
  - [ErrorResponse](doc/ErrorResponse.md)
@@ -101,6 +109,8 @@ Class | Method | HTTP request | Description
  - [EventsIdAttendeesUserIdReviewPostRequest](doc/EventsIdAttendeesUserIdReviewPostRequest.md)
  - [EventsIdTripsGet200Response](doc/EventsIdTripsGet200Response.md)
  - [FieldError](doc/FieldError.md)
+ - [InterestCatalogItem](doc/InterestCatalogItem.md)
+ - [InterestsGet200Response](doc/InterestsGet200Response.md)
  - [PushPreferences](doc/PushPreferences.md)
  - [Review](doc/Review.md)
  - [TokenResponse](doc/TokenResponse.md)
@@ -121,6 +131,12 @@ Authentication schemes defined for the API:
 ### BearerAuth
 
 - **Type**: HTTP Bearer Token authentication (JWT)
+
+### CookieAuth
+
+- **Type**: API key
+- **API key parameter name**: felloway.session
+- **Location**: 
 
 
 ## Author

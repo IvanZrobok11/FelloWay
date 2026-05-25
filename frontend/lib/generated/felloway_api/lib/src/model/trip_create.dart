@@ -11,10 +11,10 @@ part 'trip_create.g.dart';
 /// TripCreate
 ///
 /// Properties:
-/// * [routeLabel]
-/// * [departureAt]
-/// * [roleType]
-/// * [originCityId]
+/// * [routeLabel] 
+/// * [departureAt] 
+/// * [roleType] 
+/// * [originCityId] 
 @BuiltValue()
 abstract class TripCreate implements Built<TripCreate, TripCreateBuilder> {
   @BuiltValueField(wireName: r'routeLabel')
@@ -80,9 +80,7 @@ class _$TripCreateSerializer implements PrimitiveSerializer<TripCreate> {
     TripCreate object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -153,3 +151,4 @@ class _$TripCreateSerializer implements PrimitiveSerializer<TripCreate> {
     return result.build();
   }
 }
+

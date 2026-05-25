@@ -11,11 +11,10 @@ part 'cursor_page_meta.g.dart';
 /// CursorPageMeta
 ///
 /// Properties:
-/// * [nextCursor]
-/// * [hasMore]
+/// * [nextCursor] 
+/// * [hasMore] 
 @BuiltValue()
-abstract class CursorPageMeta
-    implements Built<CursorPageMeta, CursorPageMetaBuilder> {
+abstract class CursorPageMeta implements Built<CursorPageMeta, CursorPageMetaBuilder> {
   @BuiltValueField(wireName: r'nextCursor')
   String? get nextCursor;
 
@@ -24,19 +23,16 @@ abstract class CursorPageMeta
 
   CursorPageMeta._();
 
-  factory CursorPageMeta([void updates(CursorPageMetaBuilder b)]) =
-      _$CursorPageMeta;
+  factory CursorPageMeta([void updates(CursorPageMetaBuilder b)]) = _$CursorPageMeta;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(CursorPageMetaBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<CursorPageMeta> get serializer =>
-      _$CursorPageMetaSerializer();
+  static Serializer<CursorPageMeta> get serializer => _$CursorPageMetaSerializer();
 }
 
-class _$CursorPageMetaSerializer
-    implements PrimitiveSerializer<CursorPageMeta> {
+class _$CursorPageMetaSerializer implements PrimitiveSerializer<CursorPageMeta> {
   @override
   final Iterable<Type> types = const [CursorPageMeta, _$CursorPageMeta];
 
@@ -70,9 +66,7 @@ class _$CursorPageMetaSerializer
     CursorPageMeta object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -130,3 +124,4 @@ class _$CursorPageMetaSerializer
     return result.build();
   }
 }
+

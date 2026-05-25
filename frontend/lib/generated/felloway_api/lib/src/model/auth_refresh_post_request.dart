@@ -11,34 +11,26 @@ part 'auth_refresh_post_request.g.dart';
 /// AuthRefreshPostRequest
 ///
 /// Properties:
-/// * [refreshToken]
+/// * [refreshToken] 
 @BuiltValue()
-abstract class AuthRefreshPostRequest
-    implements Built<AuthRefreshPostRequest, AuthRefreshPostRequestBuilder> {
+abstract class AuthRefreshPostRequest implements Built<AuthRefreshPostRequest, AuthRefreshPostRequestBuilder> {
   @BuiltValueField(wireName: r'refreshToken')
   String get refreshToken;
 
   AuthRefreshPostRequest._();
 
-  factory AuthRefreshPostRequest(
-          [void updates(AuthRefreshPostRequestBuilder b)]) =
-      _$AuthRefreshPostRequest;
+  factory AuthRefreshPostRequest([void updates(AuthRefreshPostRequestBuilder b)]) = _$AuthRefreshPostRequest;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(AuthRefreshPostRequestBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<AuthRefreshPostRequest> get serializer =>
-      _$AuthRefreshPostRequestSerializer();
+  static Serializer<AuthRefreshPostRequest> get serializer => _$AuthRefreshPostRequestSerializer();
 }
 
-class _$AuthRefreshPostRequestSerializer
-    implements PrimitiveSerializer<AuthRefreshPostRequest> {
+class _$AuthRefreshPostRequestSerializer implements PrimitiveSerializer<AuthRefreshPostRequest> {
   @override
-  final Iterable<Type> types = const [
-    AuthRefreshPostRequest,
-    _$AuthRefreshPostRequest
-  ];
+  final Iterable<Type> types = const [AuthRefreshPostRequest, _$AuthRefreshPostRequest];
 
   @override
   final String wireName = r'AuthRefreshPostRequest';
@@ -61,9 +53,7 @@ class _$AuthRefreshPostRequestSerializer
     AuthRefreshPostRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -113,3 +103,4 @@ class _$AuthRefreshPostRequestSerializer
     return result.build();
   }
 }
+

@@ -13,36 +13,26 @@ part 'trips_id_join_requests_get200_response.g.dart';
 /// TripsIdJoinRequestsGet200Response
 ///
 /// Properties:
-/// * [items]
+/// * [items] 
 @BuiltValue()
-abstract class TripsIdJoinRequestsGet200Response
-    implements
-        Built<TripsIdJoinRequestsGet200Response,
-            TripsIdJoinRequestsGet200ResponseBuilder> {
+abstract class TripsIdJoinRequestsGet200Response implements Built<TripsIdJoinRequestsGet200Response, TripsIdJoinRequestsGet200ResponseBuilder> {
   @BuiltValueField(wireName: r'items')
   BuiltList<TripJoinRequest>? get items;
 
   TripsIdJoinRequestsGet200Response._();
 
-  factory TripsIdJoinRequestsGet200Response(
-          [void updates(TripsIdJoinRequestsGet200ResponseBuilder b)]) =
-      _$TripsIdJoinRequestsGet200Response;
+  factory TripsIdJoinRequestsGet200Response([void updates(TripsIdJoinRequestsGet200ResponseBuilder b)]) = _$TripsIdJoinRequestsGet200Response;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(TripsIdJoinRequestsGet200ResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<TripsIdJoinRequestsGet200Response> get serializer =>
-      _$TripsIdJoinRequestsGet200ResponseSerializer();
+  static Serializer<TripsIdJoinRequestsGet200Response> get serializer => _$TripsIdJoinRequestsGet200ResponseSerializer();
 }
 
-class _$TripsIdJoinRequestsGet200ResponseSerializer
-    implements PrimitiveSerializer<TripsIdJoinRequestsGet200Response> {
+class _$TripsIdJoinRequestsGet200ResponseSerializer implements PrimitiveSerializer<TripsIdJoinRequestsGet200Response> {
   @override
-  final Iterable<Type> types = const [
-    TripsIdJoinRequestsGet200Response,
-    _$TripsIdJoinRequestsGet200Response
-  ];
+  final Iterable<Type> types = const [TripsIdJoinRequestsGet200Response, _$TripsIdJoinRequestsGet200Response];
 
   @override
   final String wireName = r'TripsIdJoinRequestsGet200Response';
@@ -67,9 +57,7 @@ class _$TripsIdJoinRequestsGet200ResponseSerializer
     TripsIdJoinRequestsGet200Response object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -87,8 +75,7 @@ class _$TripsIdJoinRequestsGet200ResponseSerializer
         case r'items':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType:
-                const FullType(BuiltList, [FullType(TripJoinRequest)]),
+            specifiedType: const FullType(BuiltList, [FullType(TripJoinRequest)]),
           ) as BuiltList<TripJoinRequest>;
           result.items.replace(valueDes);
           break;
@@ -120,3 +107,4 @@ class _$TripsIdJoinRequestsGet200ResponseSerializer
     return result.build();
   }
 }
+

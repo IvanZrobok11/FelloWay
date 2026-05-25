@@ -17,6 +17,10 @@ public class DataSeeder(FelloWayDbContext db) : IDataSeeder
         {
             await SeedReferenceDataAsync(cancellationToken);
         }
+        else
+        {
+            await InterestCatalogSeed.ApplyAsync(db, cancellationToken);
+        }
 
         await SeedEventsAsync(cancellationToken);
     }
@@ -40,26 +44,18 @@ public class DataSeeder(FelloWayDbContext db) : IDataSeeder
         };
 
         db.Cities.AddRange(kyiv, lviv);
-
-        var interests = new[]
-        {
-            new Interest { Name = ".NET" },
-            new Interest { Name = "Flutter" },
-            new Interest { Name = "DevOps" },
-            new Interest { Name = "Product" },
-        };
-        db.Interests.AddRange(interests);
-
         await db.SaveChangesAsync(cancellationToken);
+
+        await InterestCatalogSeed.ApplyAsync(db, cancellationToken);
     }
 
     private async Task SeedEventsAsync(CancellationToken cancellationToken)
     {
         var kyiv = await db.Cities.FirstAsync(c => c.Name == "Kyiv", cancellationToken);
         var lviv = await db.Cities.FirstAsync(c => c.Name == "Lviv", cancellationToken);
-        var dotnet = await db.Interests.FirstAsync(i => i.Name == ".NET", cancellationToken);
-        var flutter = await db.Interests.FirstAsync(i => i.Name == "Flutter", cancellationToken);
-        var product = await db.Interests.FirstAsync(i => i.Name == "Product", cancellationToken);
+        var it = InterestCatalogSeed.BySortOrder(1);
+        var design = InterestCatalogSeed.BySortOrder(4);
+        var business = InterestCatalogSeed.BySortOrder(7);
 
         var now = DateTimeOffset.UtcNow;
         var event1 = new Event
@@ -92,9 +88,9 @@ public class DataSeeder(FelloWayDbContext db) : IDataSeeder
 
         db.Events.AddRange(event1, event2);
         db.EventInterests.AddRange(
-            new EventInterest { Event = event1, InterestId = flutter.Id },
-            new EventInterest { Event = event1, InterestId = dotnet.Id },
-            new EventInterest { Event = event2, InterestId = product.Id });
+            new EventInterest { Event = event1, InterestId = it.Id },
+            new EventInterest { Event = event1, InterestId = design.Id },
+            new EventInterest { Event = event2, InterestId = business.Id });
 
         var pending = new Event
         {

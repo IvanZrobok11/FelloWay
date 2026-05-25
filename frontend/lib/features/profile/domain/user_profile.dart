@@ -1,3 +1,5 @@
+import '../../onboarding/domain/interest_catalog_item.dart';
+
 class UserProfile {
   UserProfile({
     required this.id,
@@ -7,6 +9,7 @@ class UserProfile {
     this.linkedinUrl,
     this.facebookUrl,
     this.interests = const [],
+    this.interestItems = const [],
     this.hobbies = '',
     this.homeCityLabel = '',
     this.homeCityId,
@@ -20,20 +23,39 @@ class UserProfile {
   final String? linkedinUrl;
   final String? facebookUrl;
 
-  /// Interest tags (mock) or UUID strings from backend `interestIds`.
+  /// Catalog interest UUIDs for `PUT /users/me` (`interestIds`).
   final List<String> interests;
+
+  /// Resolved catalog rows from `GET /users/me` when available.
+  final List<InterestCatalogItem> interestItems;
   final String hobbies;
   final String homeCityLabel;
   final String? homeCityId;
   final double? ratingAverage;
 
+  List<String> get interestLabels => interestItems.isNotEmpty
+      ? interestItems.map((e) => e.name).toList()
+      : interests;
+
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     final interestIds = (json['interestIds'] as List<dynamic>?)
         ?.map((e) => e.toString())
         .toList();
-    final legacyInterests = (json['interests'] as List<dynamic>?)
-        ?.map((e) => e.toString())
+    final enriched = (json['interests'] as List<dynamic>?)
+        ?.whereType<Map<String, dynamic>>()
+        .map(InterestCatalogItem.fromJson)
         .toList();
+    final legacyInterests = (json['interests'] as List<dynamic>?)
+        ?.where((e) => e is! Map<String, dynamic>)
+        .map((e) => e.toString())
+        .toList();
+
+    final ids = interestIds ??
+        (enriched?.isNotEmpty == true
+            ? enriched!.map((e) => e.id).toList()
+            : legacyInterests) ??
+        const <String>[];
+
     return UserProfile(
       id: json['id']?.toString() ?? '',
       displayName:
@@ -42,7 +64,8 @@ class UserProfile {
       avatarUrl: json['avatarUrl'] as String? ?? json['avatar'] as String?,
       linkedinUrl: json['linkedinUrl'] as String?,
       facebookUrl: json['facebookUrl'] as String?,
-      interests: interestIds ?? legacyInterests ?? const [],
+      interests: ids,
+      interestItems: enriched ?? const [],
       hobbies: json['hobbies'] as String? ?? '',
       homeCityLabel:
           json['homeCity'] as String? ??

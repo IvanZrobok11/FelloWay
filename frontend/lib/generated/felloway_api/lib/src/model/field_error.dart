@@ -11,8 +11,8 @@ part 'field_error.g.dart';
 /// FieldError
 ///
 /// Properties:
-/// * [field]
-/// * [message]
+/// * [field] 
+/// * [message] 
 @BuiltValue()
 abstract class FieldError implements Built<FieldError, FieldErrorBuilder> {
   @BuiltValueField(wireName: r'field')
@@ -66,9 +66,7 @@ class _$FieldErrorSerializer implements PrimitiveSerializer<FieldError> {
     FieldError object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -125,3 +123,4 @@ class _$FieldErrorSerializer implements PrimitiveSerializer<FieldError> {
     return result.build();
   }
 }
+

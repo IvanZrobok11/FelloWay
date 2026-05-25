@@ -11,14 +11,14 @@ part 'event.g.dart';
 /// Event
 ///
 /// Properties:
-/// * [id]
-/// * [title]
-/// * [startsAt]
-/// * [endsAt]
-/// * [city]
-/// * [coverImageUrl]
-/// * [attendeeCount]
-/// * [isJoined]
+/// * [id] 
+/// * [title] 
+/// * [startsAt] 
+/// * [endsAt] 
+/// * [city] 
+/// * [coverImageUrl] 
+/// * [attendeeCount] 
+/// * [isJoined] 
 @BuiltValue()
 abstract class Event implements Built<Event, EventBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -132,9 +132,7 @@ class _$EventSerializer implements PrimitiveSerializer<Event> {
     Event object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -233,3 +231,4 @@ class _$EventSerializer implements PrimitiveSerializer<Event> {
     return result.build();
   }
 }
+

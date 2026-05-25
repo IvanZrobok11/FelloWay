@@ -13,36 +13,26 @@ part 'events_id_attendees_get200_response.g.dart';
 /// EventsIdAttendeesGet200Response
 ///
 /// Properties:
-/// * [items]
+/// * [items] 
 @BuiltValue()
-abstract class EventsIdAttendeesGet200Response
-    implements
-        Built<EventsIdAttendeesGet200Response,
-            EventsIdAttendeesGet200ResponseBuilder> {
+abstract class EventsIdAttendeesGet200Response implements Built<EventsIdAttendeesGet200Response, EventsIdAttendeesGet200ResponseBuilder> {
   @BuiltValueField(wireName: r'items')
   BuiltList<Attendee>? get items;
 
   EventsIdAttendeesGet200Response._();
 
-  factory EventsIdAttendeesGet200Response(
-          [void updates(EventsIdAttendeesGet200ResponseBuilder b)]) =
-      _$EventsIdAttendeesGet200Response;
+  factory EventsIdAttendeesGet200Response([void updates(EventsIdAttendeesGet200ResponseBuilder b)]) = _$EventsIdAttendeesGet200Response;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(EventsIdAttendeesGet200ResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<EventsIdAttendeesGet200Response> get serializer =>
-      _$EventsIdAttendeesGet200ResponseSerializer();
+  static Serializer<EventsIdAttendeesGet200Response> get serializer => _$EventsIdAttendeesGet200ResponseSerializer();
 }
 
-class _$EventsIdAttendeesGet200ResponseSerializer
-    implements PrimitiveSerializer<EventsIdAttendeesGet200Response> {
+class _$EventsIdAttendeesGet200ResponseSerializer implements PrimitiveSerializer<EventsIdAttendeesGet200Response> {
   @override
-  final Iterable<Type> types = const [
-    EventsIdAttendeesGet200Response,
-    _$EventsIdAttendeesGet200Response
-  ];
+  final Iterable<Type> types = const [EventsIdAttendeesGet200Response, _$EventsIdAttendeesGet200Response];
 
   @override
   final String wireName = r'EventsIdAttendeesGet200Response';
@@ -67,9 +57,7 @@ class _$EventsIdAttendeesGet200ResponseSerializer
     EventsIdAttendeesGet200Response object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -119,3 +107,4 @@ class _$EventsIdAttendeesGet200ResponseSerializer
     return result.build();
   }
 }
+

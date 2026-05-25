@@ -2,8 +2,10 @@
 README.md
 analysis_options.yaml
 doc/Attendee.md
+doc/AuthLinkedinMobileCompletePostRequest.md
 doc/AuthOauthProviderTokenPostRequest.md
 doc/AuthRefreshPostRequest.md
+doc/AuthSessionGet200Response.md
 doc/ChatStreamTokenGet200Response.md
 doc/CursorPageMeta.md
 doc/ErrorResponse.md
@@ -13,6 +15,8 @@ doc/EventsIdAttendeesGet200Response.md
 doc/EventsIdAttendeesUserIdReviewPostRequest.md
 doc/EventsIdTripsGet200Response.md
 doc/FieldError.md
+doc/InterestCatalogItem.md
+doc/InterestsGet200Response.md
 doc/OpenapiOtherApi.md
 doc/PushPreferences.md
 doc/Review.md
@@ -36,8 +40,10 @@ lib/src/auth/bearer_auth.dart
 lib/src/auth/oauth.dart
 lib/src/date_serializer.dart
 lib/src/model/attendee.dart
+lib/src/model/auth_linkedin_mobile_complete_post_request.dart
 lib/src/model/auth_oauth_provider_token_post_request.dart
 lib/src/model/auth_refresh_post_request.dart
+lib/src/model/auth_session_get200_response.dart
 lib/src/model/chat_stream_token_get200_response.dart
 lib/src/model/cursor_page_meta.dart
 lib/src/model/date.dart
@@ -48,6 +54,8 @@ lib/src/model/events_id_attendees_get200_response.dart
 lib/src/model/events_id_attendees_user_id_review_post_request.dart
 lib/src/model/events_id_trips_get200_response.dart
 lib/src/model/field_error.dart
+lib/src/model/interest_catalog_item.dart
+lib/src/model/interests_get200_response.dart
 lib/src/model/push_preferences.dart
 lib/src/model/review.dart
 lib/src/model/token_response.dart
@@ -61,4 +69,7 @@ lib/src/model/users_id_reviews_get200_response.dart
 lib/src/model/users_me_avatar_post200_response.dart
 lib/src/serializers.dart
 pubspec.yaml
-test/openapi_other_api_test.dart
+test/auth_linkedin_mobile_complete_post_request_test.dart
+test/auth_session_get200_response_test.dart
+test/interest_catalog_item_test.dart
+test/interests_get200_response_test.dart

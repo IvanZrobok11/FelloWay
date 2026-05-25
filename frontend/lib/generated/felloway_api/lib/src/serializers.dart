@@ -15,8 +15,10 @@ import 'package:felloway_api/src/date_serializer.dart';
 import 'package:felloway_api/src/model/date.dart';
 
 import 'package:felloway_api/src/model/attendee.dart';
+import 'package:felloway_api/src/model/auth_linkedin_mobile_complete_post_request.dart';
 import 'package:felloway_api/src/model/auth_oauth_provider_token_post_request.dart';
 import 'package:felloway_api/src/model/auth_refresh_post_request.dart';
+import 'package:felloway_api/src/model/auth_session_get200_response.dart';
 import 'package:felloway_api/src/model/chat_stream_token_get200_response.dart';
 import 'package:felloway_api/src/model/cursor_page_meta.dart';
 import 'package:felloway_api/src/model/error_response.dart';
@@ -26,6 +28,8 @@ import 'package:felloway_api/src/model/events_id_attendees_get200_response.dart'
 import 'package:felloway_api/src/model/events_id_attendees_user_id_review_post_request.dart';
 import 'package:felloway_api/src/model/events_id_trips_get200_response.dart';
 import 'package:felloway_api/src/model/field_error.dart';
+import 'package:felloway_api/src/model/interest_catalog_item.dart';
+import 'package:felloway_api/src/model/interests_get200_response.dart';
 import 'package:felloway_api/src/model/push_preferences.dart';
 import 'package:felloway_api/src/model/review.dart';
 import 'package:felloway_api/src/model/token_response.dart';
@@ -42,8 +46,10 @@ part 'serializers.g.dart';
 
 @SerializersFor([
   Attendee,
+  AuthLinkedinMobileCompletePostRequest,
   AuthOauthProviderTokenPostRequest,
   AuthRefreshPostRequest,
+  AuthSessionGet200Response,
   ChatStreamTokenGet200Response,
   CursorPageMeta,
   ErrorResponse,
@@ -53,6 +59,8 @@ part 'serializers.g.dart';
   EventsIdAttendeesUserIdReviewPostRequest,
   EventsIdTripsGet200Response,
   FieldError,
+  InterestCatalogItem,
+  InterestsGet200Response,
   PushPreferences,
   Review,
   TokenResponse,

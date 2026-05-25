@@ -18,6 +18,8 @@ class _$UserProfile extends UserProfile {
   @override
   final BuiltList<String>? interestIds;
   @override
+  final BuiltList<InterestCatalogItem>? interests;
+  @override
   final String? avatarUrl;
   @override
   final double? aggregateRating;
@@ -31,6 +33,7 @@ class _$UserProfile extends UserProfile {
       this.bio,
       this.homeCity,
       this.interestIds,
+      this.interests,
       this.avatarUrl,
       this.aggregateRating})
       : super._();
@@ -50,6 +53,7 @@ class _$UserProfile extends UserProfile {
         bio == other.bio &&
         homeCity == other.homeCity &&
         interestIds == other.interestIds &&
+        interests == other.interests &&
         avatarUrl == other.avatarUrl &&
         aggregateRating == other.aggregateRating;
   }
@@ -62,6 +66,7 @@ class _$UserProfile extends UserProfile {
     _$hash = $jc(_$hash, bio.hashCode);
     _$hash = $jc(_$hash, homeCity.hashCode);
     _$hash = $jc(_$hash, interestIds.hashCode);
+    _$hash = $jc(_$hash, interests.hashCode);
     _$hash = $jc(_$hash, avatarUrl.hashCode);
     _$hash = $jc(_$hash, aggregateRating.hashCode);
     _$hash = $jf(_$hash);
@@ -76,6 +81,7 @@ class _$UserProfile extends UserProfile {
           ..add('bio', bio)
           ..add('homeCity', homeCity)
           ..add('interestIds', interestIds)
+          ..add('interests', interests)
           ..add('avatarUrl', avatarUrl)
           ..add('aggregateRating', aggregateRating))
         .toString();
@@ -107,6 +113,12 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
   set interestIds(ListBuilder<String>? interestIds) =>
       _$this._interestIds = interestIds;
 
+  ListBuilder<InterestCatalogItem>? _interests;
+  ListBuilder<InterestCatalogItem> get interests =>
+      _$this._interests ??= ListBuilder<InterestCatalogItem>();
+  set interests(ListBuilder<InterestCatalogItem>? interests) =>
+      _$this._interests = interests;
+
   String? _avatarUrl;
   String? get avatarUrl => _$this._avatarUrl;
   set avatarUrl(String? avatarUrl) => _$this._avatarUrl = avatarUrl;
@@ -128,6 +140,7 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
       _bio = $v.bio;
       _homeCity = $v.homeCity;
       _interestIds = $v.interestIds?.toBuilder();
+      _interests = $v.interests?.toBuilder();
       _avatarUrl = $v.avatarUrl;
       _aggregateRating = $v.aggregateRating;
       _$v = null;
@@ -158,6 +171,7 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
             bio: bio,
             homeCity: homeCity,
             interestIds: _interestIds?.build(),
+            interests: _interests?.build(),
             avatarUrl: avatarUrl,
             aggregateRating: aggregateRating,
           );
@@ -166,6 +180,8 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
       try {
         _$failedField = 'interestIds';
         _interestIds?.build();
+        _$failedField = 'interests';
+        _interests?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
             r'UserProfile', _$failedField, e.toString());

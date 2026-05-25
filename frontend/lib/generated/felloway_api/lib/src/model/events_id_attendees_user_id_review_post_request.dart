@@ -11,13 +11,10 @@ part 'events_id_attendees_user_id_review_post_request.g.dart';
 /// EventsIdAttendeesUserIdReviewPostRequest
 ///
 /// Properties:
-/// * [rating]
-/// * [comment]
+/// * [rating] 
+/// * [comment] 
 @BuiltValue()
-abstract class EventsIdAttendeesUserIdReviewPostRequest
-    implements
-        Built<EventsIdAttendeesUserIdReviewPostRequest,
-            EventsIdAttendeesUserIdReviewPostRequestBuilder> {
+abstract class EventsIdAttendeesUserIdReviewPostRequest implements Built<EventsIdAttendeesUserIdReviewPostRequest, EventsIdAttendeesUserIdReviewPostRequestBuilder> {
   @BuiltValueField(wireName: r'rating')
   int get rating;
 
@@ -26,25 +23,18 @@ abstract class EventsIdAttendeesUserIdReviewPostRequest
 
   EventsIdAttendeesUserIdReviewPostRequest._();
 
-  factory EventsIdAttendeesUserIdReviewPostRequest(
-          [void updates(EventsIdAttendeesUserIdReviewPostRequestBuilder b)]) =
-      _$EventsIdAttendeesUserIdReviewPostRequest;
+  factory EventsIdAttendeesUserIdReviewPostRequest([void updates(EventsIdAttendeesUserIdReviewPostRequestBuilder b)]) = _$EventsIdAttendeesUserIdReviewPostRequest;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(EventsIdAttendeesUserIdReviewPostRequestBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<EventsIdAttendeesUserIdReviewPostRequest> get serializer =>
-      _$EventsIdAttendeesUserIdReviewPostRequestSerializer();
+  static Serializer<EventsIdAttendeesUserIdReviewPostRequest> get serializer => _$EventsIdAttendeesUserIdReviewPostRequestSerializer();
 }
 
-class _$EventsIdAttendeesUserIdReviewPostRequestSerializer
-    implements PrimitiveSerializer<EventsIdAttendeesUserIdReviewPostRequest> {
+class _$EventsIdAttendeesUserIdReviewPostRequestSerializer implements PrimitiveSerializer<EventsIdAttendeesUserIdReviewPostRequest> {
   @override
-  final Iterable<Type> types = const [
-    EventsIdAttendeesUserIdReviewPostRequest,
-    _$EventsIdAttendeesUserIdReviewPostRequest
-  ];
+  final Iterable<Type> types = const [EventsIdAttendeesUserIdReviewPostRequest, _$EventsIdAttendeesUserIdReviewPostRequest];
 
   @override
   final String wireName = r'EventsIdAttendeesUserIdReviewPostRequest';
@@ -74,9 +64,7 @@ class _$EventsIdAttendeesUserIdReviewPostRequestSerializer
     EventsIdAttendeesUserIdReviewPostRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -133,3 +121,4 @@ class _$EventsIdAttendeesUserIdReviewPostRequestSerializer
     return result.build();
   }
 }
+
