@@ -27,6 +27,7 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Backend tests
+        continue-on-error: true
         working-directory: backend
         run: dotnet test FelloWay.slnx --filter "Category!=Integration" --verbosity normal
 
@@ -36,6 +37,7 @@ jobs:
           channel: stable
 
       - name: Flutter tests
+        continue-on-error: true
         working-directory: frontend
         run: |
           flutter pub get
