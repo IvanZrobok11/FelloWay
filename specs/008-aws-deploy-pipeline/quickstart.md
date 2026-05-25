@@ -6,7 +6,8 @@
 ## Prerequisites
 
 - AWS account, IAM admin for bootstrap
-- Registered domain + Route 53 hosted zone (or delegation ready)
+- **Local AWS auth** before `terraform apply` (CLI profile or access keys): `aws sts get-caller-identity` must succeed. GitHub OIDC is only for deploy workflows after bootstrap.
+- **Either** technical URLs (`use_custom_domain = false`, no domain purchase) **or** Route 53 zone for `felloway.click` when `use_custom_domain = true`
 - GitHub repo admin (Environments, OIDC)
 - Tools: Terraform ≥ 1.5, AWS CLI, Docker, Flutter stable
 
@@ -14,8 +15,9 @@
 
 ```bash
 cd infra/terraform/bootstrap
+# Uses committed terraform.tfvars (non-secret); edit bucket name / github_repository if needed
 terraform init && terraform apply
-# Creates: state S3 bucket, DynamoDB lock table, GitHub OIDC provider
+# Creates: state S3 bucket, GitHub OIDC provider
 ```
 
 Note outputs: state bucket name, OIDC provider ARN.
@@ -34,7 +36,7 @@ Repeat for `test` and `prod` with **different** `vpc_cidr` and hostnames.
 
 ## 3. Configure GitHub
 
-1. Repository **Variables**: `AWS_ACCOUNT_ID`, `DOMAIN_NAME`, `AWS_REGION`
+1. Repository **Variables**: `AWS_ACCOUNT_ID`, `AWS_REGION`; after dev apply either `DEV_API_BASE_URL` + `DEV_WEB_BASE_URL` from `terraform output`, or `DOMAIN_NAME` for custom domain
 2. **Environments**: create `dev`, `test`, `prod` (add required reviewers on `prod`)
 3. Ensure workflows use OIDC roles created by Terraform
 
@@ -45,7 +47,13 @@ git push origin main
 ```
 
 - CI builds and deploys to **dev** only
-- Verify: `https://dev.api.<domain>/health` and `https://dev.app.<domain>`
+- Verify URLs from `terraform output` (technical) or `https://dev.api.<domain>/health`
+
+## Minimal cost (recommended to start)
+
+- Dev **`use_custom_domain = false`** — no domain fee; CloudFront default hostnames
+- Apply Terraform for **`dev` only** until you need test/prod
+- GitHub: `DEV_API_BASE_URL`, `DEV_WEB_BASE_URL`, `DEV_CLOUDFRONT_DISTRIBUTION_ID` from terraform outputs
 
 ## 5. Promote
 

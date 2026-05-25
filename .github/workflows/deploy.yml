@@ -41,10 +41,30 @@ jobs:
           flutter pub get
           flutter test
 
+      - name: Resolve deploy URLs
+        id: urls
+        run: |
+          if [ -n "${{ vars.DEV_API_BASE_URL }}" ]; then
+            echo "api_base=${{ vars.DEV_API_BASE_URL }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ vars.DOMAIN_NAME }}" ]; then
+            echo "api_base=https://dev.api.${{ vars.DOMAIN_NAME }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Set GitHub variable DEV_API_BASE_URL (from: terraform output -raw api_url)"
+            exit 1
+          fi
+          if [ -n "${{ vars.DEV_WEB_BASE_URL }}" ]; then
+            echo "web_base=${{ vars.DEV_WEB_BASE_URL }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ vars.DOMAIN_NAME }}" ]; then
+            echo "web_base=https://dev.app.${{ vars.DOMAIN_NAME }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Set GitHub variable DEV_WEB_BASE_URL (from: terraform output -raw web_url)"
+            exit 1
+          fi
+
       - name: Build web (dev)
         working-directory: frontend
         env:
-          API_BASE_URL: https://dev.api.${{ vars.DOMAIN_NAME }}
+          API_BASE_URL: ${{ steps.urls.outputs.api_base }}
         run: |
           flutter build web --release \
             --dart-define=API_MODE=live \
@@ -151,8 +171,28 @@ jobs:
             aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" --paths "/*"
           fi
 
+      - name: Resolve deploy URLs
+        id: urls
+        run: |
+          if [ -n "${{ vars.DEV_API_BASE_URL }}" ]; then
+            echo "api_base=${{ vars.DEV_API_BASE_URL }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ vars.DOMAIN_NAME }}" ]; then
+            echo "api_base=https://dev.api.${{ vars.DOMAIN_NAME }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Set GitHub variable DEV_API_BASE_URL"
+            exit 1
+          fi
+          if [ -n "${{ vars.DEV_WEB_BASE_URL }}" ]; then
+            echo "web_base=${{ vars.DEV_WEB_BASE_URL }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ vars.DOMAIN_NAME }}" ]; then
+            echo "web_base=https://dev.app.${{ vars.DOMAIN_NAME }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Set GitHub variable DEV_WEB_BASE_URL"
+            exit 1
+          fi
+
       - name: Smoke test API
-        run: curl -f "https://dev.api.${{ vars.DOMAIN_NAME }}/health"
+        run: curl -f "${{ steps.urls.outputs.api_base }}/health"
 
       - name: Smoke test web
-        run: curl -f "https://dev.app.${{ vars.DOMAIN_NAME }}/"
+        run: curl -f "${{ steps.urls.outputs.web_base }}/"

@@ -26,7 +26,7 @@
 
 **⚠️ CRITICAL**: No deploy or full env apply until this phase completes
 
-- [x] T004 Implement `infra/terraform/bootstrap/` (S3 state bucket, DynamoDB lock table, GitHub OIDC provider outputs)
+- [x] T004 Implement `infra/terraform/bootstrap/` (S3 state bucket, GitHub OIDC provider outputs)
 - [x] T005 [P] Implement `infra/terraform/modules/network/` (VPC, public/private subnets, NAT, security groups)
 - [x] T006 [P] Implement `infra/terraform/modules/alb/` (internet ALB, HTTPS listener, target group, `/health` check)
 - [x] T007 [P] Implement `infra/terraform/modules/rds/` (PostgreSQL 16, private subnets, Secrets Manager password)

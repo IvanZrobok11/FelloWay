@@ -20,7 +20,7 @@
 |----------|------|-------|
 | `environment` | string | Must be `dev`, `test`, or `prod` |
 | `aws_region` | string | Default `eu-central-1` |
-| `domain_name` | string | Apex domain (e.g. `felloway.com`) |
+| `domain_name` | string | Apex domain (e.g. `felloway.click`) |
 | `api_subdomain` | string | Full API FQDN (computed or set) |
 | `web_subdomain` | string | Full web FQDN |
 | `vpc_cidr` | string | Unique per env |

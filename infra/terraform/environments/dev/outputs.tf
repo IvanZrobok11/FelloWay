@@ -1,9 +1,15 @@
 output "api_url" {
-  value = "https://${var.api_host}"
+  value       = local.api_public_url
+  description = "Public API base URL (no trailing slash)."
 }
 
 output "web_url" {
-  value = "https://${var.web_host}"
+  value       = local.web_origin_url
+  description = "Public Flutter web URL."
+}
+
+output "use_custom_domain" {
+  value = var.use_custom_domain
 }
 
 output "ecr_repository_url" {
@@ -24,6 +30,11 @@ output "s3_web_bucket" {
 
 output "cloudfront_distribution_id" {
   value = module.web.cloudfront_distribution_id
+}
+
+output "api_cloudfront_distribution_id" {
+  value       = var.use_custom_domain ? null : module.api_cdn[0].distribution_id
+  description = "Set DEV_API_CLOUDFRONT_DISTRIBUTION_ID in GitHub if using technical URLs."
 }
 
 output "github_deploy_role_arn" {

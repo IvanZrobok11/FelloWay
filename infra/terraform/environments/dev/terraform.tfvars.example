@@ -1,9 +1,14 @@
-domain_name     = "felloway.example.com"
-api_host          = "dev.api.felloway.example.com"
-web_host          = "dev.app.felloway.example.com"
+# Technical URLs (no domain registration). After apply: terraform output api_url web_url
+use_custom_domain = false
+
 vpc_cidr          = "10.10.0.0/16"
 db_instance_class = "db.t4g.micro"
 jwt_signing_key   = "change-me-min-32-characters-for-jwt-signing!!"
+
+# Custom domain (set use_custom_domain = true and fill these):
+# domain_name       = "felloway.click"
+# api_host          = "dev.api.felloway.click"
+# web_host          = "dev.app.felloway.click"
 
 # After bootstrap, configure backend.tf with:
 # bucket = "your-state-bucket"

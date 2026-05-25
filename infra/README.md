@@ -6,7 +6,7 @@ Terraform for **three environments only**: `dev`, `test`, `prod`.
 
 ```text
 infra/terraform/
-├── bootstrap/          # State bucket, lock table, GitHub OIDC (run once)
+├── bootstrap/          # State bucket, GitHub OIDC (run once)
 ├── modules/            # Shared modules
 └── environments/
     ├── dev/
@@ -14,13 +14,33 @@ infra/terraform/
     └── prod/
 ```
 
+## Domain
+
+**Default for dev (no registration):** `use_custom_domain = false` in `environments/dev/terraform.tfvars` — uses CloudFront URLs (`*.cloudfront.net`). After `terraform apply`, run `terraform output api_url web_url` and set GitHub variables `DEV_API_BASE_URL` / `DEV_WEB_BASE_URL`.
+
+**Custom domain later:** set `use_custom_domain = true` and `felloway.click` (or any zone) in tfvars; use `DOMAIN_NAME` in GitHub instead of `DEV_*_BASE_URL`.
+
+## Prerequisites
+
+- Terraform ≥ 1.5, AWS CLI
+- **AWS credentials** for the target account (bootstrap and env applies run locally, not via GitHub OIDC):
+  - IAM user access keys: `aws configure` (or env `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`)
+  - or SSO: `aws sso login --profile <name>` then `export AWS_PROFILE=<name>` (PowerShell: `$env:AWS_PROFILE = "<name>"`)
+- Verify before any `terraform apply`:
+
+  ```bash
+  aws sts get-caller-identity
+  ```
+
+  You need permission to create S3, IAM (OIDC provider, roles, policies). GitHub deploy roles are created by bootstrap; CI uses those later.
+
 ## First-time apply order
 
 1. **Bootstrap** (once per AWS account/region):
 
    ```bash
    cd infra/terraform/bootstrap
-   cp terraform.tfvars.example terraform.tfvars   # set github_repository
+   # terraform.tfvars is committed (non-secret); edit github_repository / state_bucket_name if needed
    terraform init && terraform apply
    ```
 
@@ -46,7 +66,7 @@ Uses **GitHub OIDC** — no long-lived `AWS_ACCESS_KEY_ID` in secrets.
 
 ## GitHub setup
 
-1. Repository variables: `AWS_ACCOUNT_ID`, `AWS_REGION` (e.g. `eu-central-1`), `DOMAIN_NAME`
+1. Repository variables: `AWS_ACCOUNT_ID`, `AWS_REGION` (e.g. `eu-central-1`); either `DEV_API_BASE_URL` + `DEV_WEB_BASE_URL` (technical) or `DOMAIN_NAME` (custom domain)
 2. Environments: `dev`, `test`, `prod`
 3. Ensure OIDC roles from Terraform match workflow `environment:` values
 

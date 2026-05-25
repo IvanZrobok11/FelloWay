@@ -13,17 +13,28 @@ variable "environment" {
   default = "dev"
 }
 
+variable "use_custom_domain" {
+  type        = bool
+  default     = false
+  description = "false = CloudFront default URLs (no Route 53 / domain registration)."
+}
+
 variable "domain_name" {
   type        = string
-  description = "Route 53 hosted zone apex (e.g. felloway.com)"
+  default     = ""
+  description = "Route 53 hosted zone apex; required when use_custom_domain is true."
 }
 
 variable "api_host" {
-  type = string
+  type        = string
+  default     = ""
+  description = "API hostname; required when use_custom_domain is true."
 }
 
 variable "web_host" {
-  type = string
+  type        = string
+  default     = ""
+  description = "Web hostname; required when use_custom_domain is true."
 }
 
 variable "vpc_cidr" {

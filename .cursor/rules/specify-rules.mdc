@@ -21,7 +21,7 @@ Auto-generated from all feature plans. Last updated: 2026-05-20
 - C# 12 / .NET 8 + ASP.NET Core built-in CORS middleware (`AddCors` / `UseCors`) (007-api-cors-policy)
 - Configuration `Cors:AllowedOrigins`; Development localhost predicate (007-api-cors-policy)
 - Terraform ≥ 1.5; .NET 8; Dart 3.10+ / Flutter stable; GitHub Actions + AWS provider, ECS Fargate, ECR, RDS PostgreSQL 16, ALB, S3, CloudFront, ACM, Route 53, Secrets Manager; `configure-aws-credentials` OIDC (008-aws-deploy-pipeline)
-- RDS per env; S3 web buckets; Terraform remote state S3 + DynamoDB lock (008-aws-deploy-pipeline)
+- RDS per env; S3 web buckets; Terraform remote state S3 (008-aws-deploy-pipeline)
 - C# 12 / .NET 8; Dart 3.10+ / Flutter stable + `flutter_appauth`, `dio`; ASP.NET Core, EF Core 8, `HttpClient`, Polly (LinkedIn HTTP), existing `AuthService` / JWT (main)
 - PostgreSQL (`users`, `oauth_identities`, `refresh_tokens`); optional new `users.email` column (main)
 - C# 12 / .NET 8 + `AspNet.Security.OAuth.LinkedIn`, Cookie + JwtBearer auth, `IMemoryCache` mobile tickets; credentialed CORS for web (009-linkedin-bff-auth)

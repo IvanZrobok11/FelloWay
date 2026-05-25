@@ -12,7 +12,7 @@ Provision **three isolated AWS stacks** (`dev`, `test`, `prod`) via **Terraform*
 
 **Language/Version**: Terraform ≥ 1.5; .NET 8; Dart 3.10+ / Flutter stable; GitHub Actions  
 **Primary Dependencies**: AWS provider, ECS Fargate, ECR, RDS PostgreSQL 16, ALB, S3, CloudFront, ACM, Route 53, Secrets Manager; `configure-aws-credentials` OIDC  
-**Storage**: RDS per env; S3 web buckets; Terraform remote state S3 + DynamoDB lock  
+**Storage**: RDS per env; S3 web buckets; Terraform remote state S3  
 **Testing**: `dotnet test` (fast filter), `flutter test`; post-deploy `curl /health`; `terraform validate` on PR  
 **Target Platform**: AWS single region (`eu-central-1` default); CloudFront ACM in `us-east-1`  
 **Project Type**: Monorepo — `infra/terraform/`, `backend/`, `frontend/`, `.github/workflows/`  
@@ -77,7 +77,7 @@ frontend/
 
 ### Phase 1 — Bootstrap & Terraform foundation (P1)
 
-1. `infra/terraform/bootstrap` — state bucket, lock table, GitHub OIDC provider.
+1. `infra/terraform/bootstrap` — state bucket, GitHub OIDC provider.
 2. `modules/network` — VPC, public/private subnets, NAT, security groups.
 3. `modules/alb`, `modules/ecs`, `modules/rds`, `modules/web`, `modules/dns`.
 4. `environments/dev` — first full stack apply; document tfvars.

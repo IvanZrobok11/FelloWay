@@ -7,7 +7,7 @@
 
 ```text
 infra/terraform/
-├── bootstrap/           # S3 state bucket, DynamoDB lock, OIDC provider (once)
+├── bootstrap/           # S3 state bucket, OIDC provider (once)
 ├── modules/
 │   ├── network/         # VPC, subnets, NAT, SGs
 │   ├── alb/             # ALB, listeners, target group, ACM (regional)

@@ -10,5 +10,6 @@ override.tf.json
 *_override.tf.json
 *.tfvars
 !*.tfvars.example
+!terraform/bootstrap/terraform.tfvars
 .terraformrc
 terraform.rc
