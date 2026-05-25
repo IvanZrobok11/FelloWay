@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -8,11 +9,13 @@ import '../features/auth/data/auth_api.dart';
 import '../features/chats/application/chat_access_controller.dart';
 import '../features/chats/data/stream_chat_service.dart';
 import '../features/events/data/events_repository.dart';
+import '../features/onboarding/data/interests_repository.dart';
 import '../features/onboarding/data/onboarding_draft_store.dart';
 import '../features/onboarding/data/onboarding_preferences.dart';
 import '../features/profile/data/users_repository.dart';
 import '../features/trips/data/trips_repository.dart';
 import '../shared/network/api_client.dart';
+import '../shared/widgets/connectivity_snack_bar.dart';
 import 'app_scope.dart';
 import 'auth/auth_session.dart';
 import 'config/app_config.dart';
@@ -30,6 +33,7 @@ class FellowayApp extends StatefulWidget {
     required this.apiClient,
     required this.onboardingPreferences,
     required this.onboardingDraftStore,
+    required this.interestsRepository,
     required this.eventsRepository,
     required this.usersRepository,
     required this.streamChatService,
@@ -43,6 +47,7 @@ class FellowayApp extends StatefulWidget {
   final ApiClient apiClient;
   final OnboardingPreferences onboardingPreferences;
   final OnboardingDraftStore onboardingDraftStore;
+  final InterestsRepository interestsRepository;
   final EventsRepository eventsRepository;
   final UsersRepository usersRepository;
   final StreamChatService streamChatService;
@@ -60,22 +65,38 @@ class _FellowayAppState extends State<FellowayApp> {
   void initState() {
     super.initState();
     widget.authSession.addListener(_onAuthChanged);
+    widget.authSession.addListener(_onConnectivityNotice);
     widget.streamChatService.addListener(_onStreamChanged);
     _router = createAppRouter(
       authSession: widget.authSession,
       onboardingPreferences: widget.onboardingPreferences,
+      webSessionAuthApi: widget.authApi,
+      syncWebCookieSession: kIsWeb && !widget.config.useMockApi,
       navigatorKey: PushHandler.rootNavigatorKey,
     );
     PushHandler.attach(_router!);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await PushHandler.registerMessagingBridge();
       await _syncChat();
+      _showConnectivityNoticeIfNeeded();
+    });
+  }
+
+  void _onConnectivityNotice() {
+    _showConnectivityNoticeIfNeeded();
+  }
+
+  void _showConnectivityNoticeIfNeeded() {
+    if (!widget.authSession.consumeConnectivityNotice()) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ConnectivitySnackBar.showGlobal();
     });
   }
 
   @override
   void dispose() {
     widget.authSession.removeListener(_onAuthChanged);
+    widget.authSession.removeListener(_onConnectivityNotice);
     widget.streamChatService.removeListener(_onStreamChanged);
     PushHandler.detach();
     _router?.dispose();
@@ -111,6 +132,7 @@ class _FellowayAppState extends State<FellowayApp> {
       authSession: widget.authSession,
       onboardingPreferences: widget.onboardingPreferences,
       onboardingDraftStore: widget.onboardingDraftStore,
+      interestsRepository: widget.interestsRepository,
       eventsRepository: widget.eventsRepository,
       usersRepository: widget.usersRepository,
       streamChatService: widget.streamChatService,

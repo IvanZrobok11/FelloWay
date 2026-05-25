@@ -50,6 +50,62 @@ public class UsersMeEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
     }
 
     [Fact]
+    public async Task UpdateMe_WithInvalidInterestIds_ReturnsBadRequest()
+    {
+        var token = await LoginAsync("dev-invalid-interests");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<FelloWayDbContext>();
+        var cityId = await db.Cities.Select(c => c.Id).FirstAsync();
+
+        var response = await _client.PutAsJsonAsync(
+            "/users/me",
+            new
+            {
+                displayName = "Test User",
+                homeCityId = cityId,
+                interestIds = new[] { Guid.NewGuid(), Guid.NewGuid() },
+            });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateMe_WithValidInterestIds_PersistsOnGetMe()
+    {
+        var token = await LoginAsync("dev-valid-interests");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<FelloWayDbContext>();
+        var cityId = await db.Cities.Select(c => c.Id).FirstAsync();
+        var interestIds = await db.Interests.OrderBy(i => i.SortOrder).Take(2).Select(i => i.Id).ToListAsync();
+
+        var updateResponse = await _client.PutAsJsonAsync(
+            "/users/me",
+            new
+            {
+                displayName = "Interest Tester",
+                homeCityId = cityId,
+                interestIds,
+            });
+        Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
+
+        var profile = await _client.GetFromJsonAsync<JsonElement>("/users/me");
+        var returnedIds = profile.GetProperty("interestIds").EnumerateArray()
+            .Select(e => Guid.Parse(e.GetString()!))
+            .ToList();
+        Assert.Equal(interestIds.OrderBy(x => x), returnedIds.OrderBy(x => x));
+
+        var names = profile.GetProperty("interests").EnumerateArray()
+            .Select(e => e.GetProperty("name").GetString())
+            .ToList();
+        Assert.Equal(2, names.Count);
+        Assert.All(names, n => Assert.False(string.IsNullOrWhiteSpace(n)));
+    }
+
+    [Fact]
     public async Task GetMe_WithoutToken_ReturnsUnauthorized()
     {
         var client = _factory.CreateClient();

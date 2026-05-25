@@ -20,11 +20,15 @@ public class DevOAuthTokenExchanger : IOAuthTokenExchanger
             throw new DomainException("Unsupported OAuth provider.");
         }
 
+        if (!OAuthDevCode.IsDevCode(code))
+        {
+            throw new DomainException("Invalid authorization code for development OAuth.");
+        }
+
         var subject = code switch
         {
             "test-code" => "test-user-subject",
-            _ when code.StartsWith("dev-", StringComparison.Ordinal) => code["dev-".Length..],
-            _ => throw new DomainException("Invalid authorization code for development OAuth."),
+            _ => code["dev-".Length..],
         };
 
         return Task.FromResult(new OAuthUserInfo(subject, $"Dev User {subject}", null));

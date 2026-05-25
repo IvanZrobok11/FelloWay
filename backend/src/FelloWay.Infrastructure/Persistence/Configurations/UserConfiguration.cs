@@ -11,6 +11,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable("users");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.DisplayName).HasMaxLength(120);
+        builder.Property(x => x.Email).HasMaxLength(320);
         builder.Property(x => x.Bio);
         builder.Property(x => x.AvatarUrl).HasMaxLength(512);
         builder.Property(x => x.AggregateRating).HasPrecision(3, 2);

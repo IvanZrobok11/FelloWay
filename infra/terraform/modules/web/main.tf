@@ -23,7 +23,7 @@ resource "aws_cloudfront_distribution" "web" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  aliases             = [var.web_domain]
+  aliases             = var.use_custom_domain ? [var.web_domain] : []
 
   origin {
     domain_name              = aws_s3_bucket.web.bucket_regional_domain_name
@@ -58,10 +58,20 @@ resource "aws_cloudfront_distribution" "web" {
     }
   }
 
-  viewer_certificate {
-    acm_certificate_arn      = var.acm_certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+  dynamic "viewer_certificate" {
+    for_each = var.use_custom_domain ? [1] : []
+    content {
+      acm_certificate_arn      = var.acm_certificate_arn
+      ssl_support_method       = "sni-only"
+      minimum_protocol_version = "TLSv1.2_2021"
+    }
+  }
+
+  dynamic "viewer_certificate" {
+    for_each = var.use_custom_domain ? [] : [1]
+    content {
+      cloudfront_default_certificate = true
+    }
   }
 
   tags = {

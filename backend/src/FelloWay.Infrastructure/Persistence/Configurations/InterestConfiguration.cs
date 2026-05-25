@@ -11,5 +11,7 @@ public class InterestConfiguration : IEntityTypeConfiguration<Interest>
         builder.ToTable("interests");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Name).HasMaxLength(80).IsRequired();
+        builder.Property(x => x.SortOrder).IsRequired();
+        builder.HasIndex(x => x.SortOrder);
     }
 }

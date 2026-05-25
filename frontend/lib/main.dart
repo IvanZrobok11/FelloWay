@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'app/configure_url_strategy.dart';
 import 'app/app.dart';
 import 'app/auth/auth_session.dart';
 import 'app/config/app_config.dart';
@@ -9,6 +11,7 @@ import 'features/auth/data/token_storage.dart';
 import 'features/chats/application/chat_access_controller.dart';
 import 'features/chats/data/stream_chat_service.dart';
 import 'features/events/data/events_repository.dart';
+import 'features/onboarding/data/interests_repository.dart';
 import 'features/onboarding/data/onboarding_draft_store.dart';
 import 'features/onboarding/data/onboarding_preferences.dart';
 import 'features/profile/data/users_repository.dart';
@@ -17,6 +20,7 @@ import 'shared/network/api_client.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  configureWebUrlStrategy();
   final config = AppConfig.fromEnvironment();
   final tokenStorage = TokenStorage();
   final authSession = AuthSession(tokenStorage: tokenStorage);
@@ -24,14 +28,23 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final onboardingPreferences = OnboardingPreferences(prefs);
   final onboardingDraftStore = OnboardingDraftStore(prefs);
-  final authApi = AuthApi(baseUrl: config.apiBaseUrl);
+  final useWebCookies = kIsWeb && !config.useMockApi;
+  final authApi = AuthApi(
+    baseUrl: config.apiBaseUrl,
+    sendCredentials: useWebCookies,
+  );
   final apiClient = ApiClient(
     config: config,
     tokenStorage: tokenStorage,
     authApi: authApi,
     onUnauthorized: authSession.signOut,
+    useCookieAuthOnWeb: useWebCookies,
   );
+  if (useWebCookies) {
+    await authSession.syncWebCookieSession(authApi);
+  }
   final eventsRepository = EventsRepository(apiClient, config);
+  final interestsRepository = InterestsRepository(apiClient);
   final usersRepository = UsersRepository(apiClient, config);
   final tripsRepository = TripsRepository(apiClient, config);
   final streamChatService = StreamChatService(
@@ -47,6 +60,7 @@ Future<void> main() async {
       apiClient: apiClient,
       onboardingPreferences: onboardingPreferences,
       onboardingDraftStore: onboardingDraftStore,
+      interestsRepository: interestsRepository,
       eventsRepository: eventsRepository,
       usersRepository: usersRepository,
       tripsRepository: tripsRepository,

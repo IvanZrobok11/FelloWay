@@ -197,10 +197,15 @@ namespace FelloWay.Infrastructure.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
 
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SortOrder");
 
                     b.ToTable("interests", (string)null);
                 });
@@ -526,6 +531,10 @@ namespace FelloWay.Infrastructure.Migrations
                     b.Property<string>("DisplayName")
                         .HasMaxLength(120)
                         .HasColumnType("character varying(120)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)");
 
                     b.Property<Guid?>("HomeCityId")
                         .HasColumnType("uuid");

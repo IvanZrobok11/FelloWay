@@ -11,14 +11,11 @@ part 'auth_oauth_provider_token_post_request.g.dart';
 /// AuthOauthProviderTokenPostRequest
 ///
 /// Properties:
-/// * [code]
-/// * [redirectUri]
+/// * [code] 
+/// * [redirectUri] 
 /// * [codeVerifier] - PKCE verifier from mobile client
 @BuiltValue()
-abstract class AuthOauthProviderTokenPostRequest
-    implements
-        Built<AuthOauthProviderTokenPostRequest,
-            AuthOauthProviderTokenPostRequestBuilder> {
+abstract class AuthOauthProviderTokenPostRequest implements Built<AuthOauthProviderTokenPostRequest, AuthOauthProviderTokenPostRequestBuilder> {
   @BuiltValueField(wireName: r'code')
   String get code;
 
@@ -31,25 +28,18 @@ abstract class AuthOauthProviderTokenPostRequest
 
   AuthOauthProviderTokenPostRequest._();
 
-  factory AuthOauthProviderTokenPostRequest(
-          [void updates(AuthOauthProviderTokenPostRequestBuilder b)]) =
-      _$AuthOauthProviderTokenPostRequest;
+  factory AuthOauthProviderTokenPostRequest([void updates(AuthOauthProviderTokenPostRequestBuilder b)]) = _$AuthOauthProviderTokenPostRequest;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(AuthOauthProviderTokenPostRequestBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<AuthOauthProviderTokenPostRequest> get serializer =>
-      _$AuthOauthProviderTokenPostRequestSerializer();
+  static Serializer<AuthOauthProviderTokenPostRequest> get serializer => _$AuthOauthProviderTokenPostRequestSerializer();
 }
 
-class _$AuthOauthProviderTokenPostRequestSerializer
-    implements PrimitiveSerializer<AuthOauthProviderTokenPostRequest> {
+class _$AuthOauthProviderTokenPostRequestSerializer implements PrimitiveSerializer<AuthOauthProviderTokenPostRequest> {
   @override
-  final Iterable<Type> types = const [
-    AuthOauthProviderTokenPostRequest,
-    _$AuthOauthProviderTokenPostRequest
-  ];
+  final Iterable<Type> types = const [AuthOauthProviderTokenPostRequest, _$AuthOauthProviderTokenPostRequest];
 
   @override
   final String wireName = r'AuthOauthProviderTokenPostRequest';
@@ -82,9 +72,7 @@ class _$AuthOauthProviderTokenPostRequestSerializer
     AuthOauthProviderTokenPostRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -148,3 +136,4 @@ class _$AuthOauthProviderTokenPostRequestSerializer
     return result.build();
   }
 }
+

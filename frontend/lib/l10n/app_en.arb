@@ -12,6 +12,10 @@
   "commonRetry": "Retry",
   "commonCancel": "Cancel",
   "commonErrorTitle": "Something went wrong",
+  "connectivityActionUnavailable": "Action unavailable. No internet connection.",
+  "@connectivityActionUnavailable": {
+    "description": "Snack bar when an action fails due to no network or unreachable server"
+  },
   "emptyStateTitle": "Nothing here yet",
   "guestSignInPrompt": "Sign in to continue",
   "signInTitle": "Sign in",
@@ -19,7 +23,7 @@
   "oauthLinkedIn": "Continue with LinkedIn",
   "oauthFacebook": "Continue with Facebook",
   "demoSignIn": "Demo sign-in (debug)",
-  "oauthNotConfigured": "OAuth is not configured. Set OAUTH_* dart-define values.",
+  "oauthNotConfigured": "OAuth is not configured. Set OAUTH_CLIENT_ID dart-define (LinkedIn). Discovery URL is not required on web.",
   "oauthMissingTokens": "No access token returned.",
   "oauthFailed": "Sign-in failed: {message}",
   "@oauthFailed": {
@@ -27,6 +31,7 @@
       "message": {}
     }
   },
+  "oauthSessionExpired": "Your session expired. Please sign in again.",
   "onboardingWelcomeTitle": "Welcome",
   "onboardingWelcomeBody": "FelloWay helps you network before IT conferences and coordinate rides.",
   "onboardingWelcomeGetStarted": "Get started",

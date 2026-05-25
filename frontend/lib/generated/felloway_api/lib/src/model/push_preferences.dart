@@ -11,13 +11,12 @@ part 'push_preferences.g.dart';
 /// PushPreferences
 ///
 /// Properties:
-/// * [globalEnabled]
-/// * [eventMessages]
-/// * [tripMessages]
-/// * [directMessages]
+/// * [globalEnabled] 
+/// * [eventMessages] 
+/// * [tripMessages] 
+/// * [directMessages] 
 @BuiltValue()
-abstract class PushPreferences
-    implements Built<PushPreferences, PushPreferencesBuilder> {
+abstract class PushPreferences implements Built<PushPreferences, PushPreferencesBuilder> {
   @BuiltValueField(wireName: r'globalEnabled')
   bool? get globalEnabled;
 
@@ -32,19 +31,16 @@ abstract class PushPreferences
 
   PushPreferences._();
 
-  factory PushPreferences([void updates(PushPreferencesBuilder b)]) =
-      _$PushPreferences;
+  factory PushPreferences([void updates(PushPreferencesBuilder b)]) = _$PushPreferences;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(PushPreferencesBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<PushPreferences> get serializer =>
-      _$PushPreferencesSerializer();
+  static Serializer<PushPreferences> get serializer => _$PushPreferencesSerializer();
 }
 
-class _$PushPreferencesSerializer
-    implements PrimitiveSerializer<PushPreferences> {
+class _$PushPreferencesSerializer implements PrimitiveSerializer<PushPreferences> {
   @override
   final Iterable<Type> types = const [PushPreferences, _$PushPreferences];
 
@@ -92,9 +88,7 @@ class _$PushPreferencesSerializer
     PushPreferences object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -165,3 +159,4 @@ class _$PushPreferencesSerializer
     return result.build();
   }
 }
+

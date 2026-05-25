@@ -36,6 +36,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonErrorTitle => 'Something went wrong';
 
   @override
+  String get connectivityActionUnavailable =>
+      'Action unavailable. No internet connection.';
+
+  @override
   String get emptyStateTitle => 'Nothing here yet';
 
   @override
@@ -58,7 +62,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get oauthNotConfigured =>
-      'OAuth is not configured. Set OAUTH_* dart-define values.';
+      'OAuth is not configured. Set OAUTH_CLIENT_ID dart-define (LinkedIn). Discovery URL is not required on web.';
 
   @override
   String get oauthMissingTokens => 'No access token returned.';
@@ -67,6 +71,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String oauthFailed(Object message) {
     return 'Sign-in failed: $message';
   }
+
+  @override
+  String get oauthSessionExpired =>
+      'Your session expired. Please sign in again.';
 
   @override
   String get onboardingWelcomeTitle => 'Welcome';

@@ -9,6 +9,7 @@
   "commonRetry": "Повторити",
   "commonCancel": "Скасувати",
   "commonErrorTitle": "Щось пішло не так",
+  "connectivityActionUnavailable": "Дія недоступна. Немає інтернету.",
   "emptyStateTitle": "Поки що порожньо",
   "guestSignInPrompt": "Увійдіть, щоб продовжити",
   "signInTitle": "Увійти",
@@ -16,7 +17,7 @@
   "oauthLinkedIn": "Продовжити з LinkedIn",
   "oauthFacebook": "Продовжити з Facebook",
   "demoSignIn": "Демо-вхід (debug)",
-  "oauthNotConfigured": "OAuth не налаштовано. Задайте OAUTH_* у dart-define.",
+  "oauthNotConfigured": "OAuth не налаштовано. Задайте OAUTH_CLIENT_ID у dart-define (LinkedIn). На вебі discovery не потрібен.",
   "oauthMissingTokens": "Токен доступу не отримано.",
   "oauthFailed": "Помилка входу: {message}",
   "@oauthFailed": {
@@ -24,6 +25,7 @@
       "message": {}
     }
   },
+  "oauthSessionExpired": "Сесію завершено. Увійдіть знову.",
   "onboardingWelcomeTitle": "Ласкаво просимо",
   "onboardingWelcomeBody": "FelloWay допомагає нетворкитися перед IT-конференціями та домовлятися про спільні поїздки.",
   "onboardingWelcomeGetStarted": "Почати",

@@ -1,4 +1,5 @@
 using FelloWay.Api.Extensions;
+using FelloWay.Api.Options;
 using FelloWay.Api.Middleware;
 using FelloWay.Api.Services;
 using FelloWay.Application;
@@ -10,6 +11,7 @@ using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<FrontendOptions>(builder.Configuration.GetSection(FrontendOptions.SectionName));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFelloWaySwagger();
@@ -18,7 +20,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddFelloWayAuthentication(builder.Configuration, builder.Environment);
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddFelloWayHealthChecks();

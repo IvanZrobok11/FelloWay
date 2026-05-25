@@ -4,9 +4,73 @@ info:
   version: 0.1.0
 
 paths:
+  /auth/linkedin/login:
+    get:
+      summary: Start LinkedIn BFF sign-in (redirects to LinkedIn)
+      parameters:
+        - name: returnUrl
+          in: query
+          schema:
+            type: string
+          description: Frontend origin for web success redirect
+        - name: platform
+          in: query
+          schema:
+            type: string
+            enum: [web, mobile]
+            default: web
+      responses:
+        '302':
+          description: Redirect to LinkedIn authorize URL
+        '503':
+          description: LinkedIn OAuth not configured
+
+  /auth/linkedin/mobile/complete:
+    post:
+      summary: Exchange one-time mobile ticket for API JWT (after BFF callback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ticket]
+              properties:
+                ticket:
+                  type: string
+      responses:
+        '200':
+          description: Tokens issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Invalid or expired ticket
+
+  /auth/session:
+    get:
+      summary: Probe current session (cookie or bearer)
+      security:
+        - BearerAuth: []
+        - CookieAuth: []
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    format: uuid
+        '401':
+          description: Not authenticated
+
   /auth/oauth/{provider}/token:
     post:
-      summary: Exchange OAuth authorization code for API tokens
+      summary: Exchange OAuth authorization code for API tokens (dev/Facebook; LinkedIn uses BFF when configured)
       parameters:
         - name: provider
           in: path
@@ -90,6 +154,10 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: felloway.session
   schemas:
     TokenResponse:
       type: object

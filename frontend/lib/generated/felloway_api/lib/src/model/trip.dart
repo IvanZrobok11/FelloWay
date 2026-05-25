@@ -11,11 +11,11 @@ part 'trip.g.dart';
 /// Trip
 ///
 /// Properties:
-/// * [id]
-/// * [routeLabel]
-/// * [departureAt]
-/// * [roleType]
-/// * [memberCount]
+/// * [id] 
+/// * [routeLabel] 
+/// * [departureAt] 
+/// * [roleType] 
+/// * [memberCount] 
 @BuiltValue()
 abstract class Trip implements Built<Trip, TripBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -99,9 +99,7 @@ class _$TripSerializer implements PrimitiveSerializer<Trip> {
     Trip object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -179,3 +177,4 @@ class _$TripSerializer implements PrimitiveSerializer<Trip> {
     return result.build();
   }
 }
+

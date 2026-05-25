@@ -11,36 +11,26 @@ part 'chat_stream_token_get200_response.g.dart';
 /// ChatStreamTokenGet200Response
 ///
 /// Properties:
-/// * [token]
+/// * [token] 
 @BuiltValue()
-abstract class ChatStreamTokenGet200Response
-    implements
-        Built<ChatStreamTokenGet200Response,
-            ChatStreamTokenGet200ResponseBuilder> {
+abstract class ChatStreamTokenGet200Response implements Built<ChatStreamTokenGet200Response, ChatStreamTokenGet200ResponseBuilder> {
   @BuiltValueField(wireName: r'token')
   String get token;
 
   ChatStreamTokenGet200Response._();
 
-  factory ChatStreamTokenGet200Response(
-          [void updates(ChatStreamTokenGet200ResponseBuilder b)]) =
-      _$ChatStreamTokenGet200Response;
+  factory ChatStreamTokenGet200Response([void updates(ChatStreamTokenGet200ResponseBuilder b)]) = _$ChatStreamTokenGet200Response;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ChatStreamTokenGet200ResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ChatStreamTokenGet200Response> get serializer =>
-      _$ChatStreamTokenGet200ResponseSerializer();
+  static Serializer<ChatStreamTokenGet200Response> get serializer => _$ChatStreamTokenGet200ResponseSerializer();
 }
 
-class _$ChatStreamTokenGet200ResponseSerializer
-    implements PrimitiveSerializer<ChatStreamTokenGet200Response> {
+class _$ChatStreamTokenGet200ResponseSerializer implements PrimitiveSerializer<ChatStreamTokenGet200Response> {
   @override
-  final Iterable<Type> types = const [
-    ChatStreamTokenGet200Response,
-    _$ChatStreamTokenGet200Response
-  ];
+  final Iterable<Type> types = const [ChatStreamTokenGet200Response, _$ChatStreamTokenGet200Response];
 
   @override
   final String wireName = r'ChatStreamTokenGet200Response';
@@ -63,9 +53,7 @@ class _$ChatStreamTokenGet200ResponseSerializer
     ChatStreamTokenGet200Response object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -115,3 +103,4 @@ class _$ChatStreamTokenGet200ResponseSerializer
     return result.build();
   }
 }
+

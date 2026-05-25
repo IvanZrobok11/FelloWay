@@ -15,7 +15,7 @@ variable "environment" {
 
 variable "domain_name" {
   type        = string
-  description = "Route 53 hosted zone apex (e.g. felloway.com)"
+  description = "Route 53 hosted zone apex (e.g. felloway.click)"
 }
 
 variable "api_host" {

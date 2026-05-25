@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
 import '../../../app/config/app_config.dart';
+import '../mobile/linkedin_bff_auth.dart';
+import '../web/linkedin_bff_web_auth.dart';
 import '../../onboarding/domain/onboarding_draft.dart';
 import '../../profile/domain/user_profile.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
@@ -19,60 +22,116 @@ class OAuthSignInPage extends StatefulWidget {
 
 class _OAuthSignInPageState extends State<OAuthSignInPage> {
   bool _finishing = false;
+  bool _shownSessionExpired = false;
 
-  bool _oauthConfigured(AppConfig config) {
-    final clientId = config.oauthClientId;
-    final discovery = config.oauthDiscoveryUrl;
-    return clientId != null &&
-        clientId.isNotEmpty &&
-        discovery != null &&
-        discovery.isNotEmpty;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_shownSessionExpired) return;
+    String? reason;
+    String? error;
+    try {
+      final state = GoRouterState.of(context);
+      reason = state.uri.queryParameters['reason'];
+      error = state.uri.queryParameters['error'];
+    } on Object {
+      return;
+    }
+    if (reason == 'session_expired' || (error != null && error.isNotEmpty)) {
+      _shownSessionExpired = true;
+      final l10n = AppLocalizations.of(context)!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final message = reason == 'session_expired'
+            ? l10n.oauthSessionExpired
+            : l10n.oauthFailed(error ?? reason ?? '');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      });
+    }
   }
 
-  Future<void> _exchangeOAuth() async {
+  bool _liveApi(AppConfig config) => !config.useMockApi;
+
+  Future<void> _signInWithLinkedIn() async {
     final l10n = AppLocalizations.of(context)!;
     final config = AppScope.configOf(context);
     final session = AppScope.authSessionOf(context);
+    final authApi = AppScope.authApiOf(context);
     final messenger = ScaffoldMessenger.of(context);
 
-    final clientId = config.oauthClientId;
-    final discovery = config.oauthDiscoveryUrl;
-    final redirect =
-        config.oauthRedirectUrl ?? 'com.felloway.app:/oauthredirect';
-
-    if (clientId == null || discovery == null) {
+    if (!_liveApi(config)) {
       messenger.showSnackBar(SnackBar(content: Text(l10n.oauthNotConfigured)));
       return;
     }
 
+    setState(() => _finishing = true);
     try {
-      const appAuth = FlutterAppAuth();
-      final result = await appAuth.authorizeAndExchangeCode(
-        AuthorizationTokenRequest(
-          clientId,
-          redirect,
-          discoveryUrl: discovery,
-          scopes: const ['openid', 'profile', 'email'],
-        ),
+      if (kIsWeb) {
+        linkedInBffSignInWeb(
+          apiBaseUrl: config.apiBaseUrl,
+          returnOrigin: Uri.base.origin,
+        );
+        return;
+      }
+
+      final result = await linkedInBffSignInMobile(apiBaseUrl: config.apiBaseUrl);
+      switch (result) {
+        case LinkedInBffMobileCancelled():
+          return;
+        case LinkedInBffMobileError(:final message):
+          messenger.showSnackBar(
+            SnackBar(content: Text(l10n.oauthFailed(message))),
+          );
+          return;
+        case LinkedInBffMobileTicket(:final ticket):
+          final tokens = await authApi.completeLinkedInMobile(ticket: ticket);
+          if (tokens.accessToken.isEmpty) {
+            messenger.showSnackBar(
+              SnackBar(content: Text(l10n.oauthMissingTokens)),
+            );
+            return;
+          }
+          await session.setAuthenticated(
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+          );
+          if (!mounted) return;
+          await _afterAuthenticated();
+      }
+    } catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.oauthFailed(e.toString()))),
       );
-      final access = result.accessToken;
-      final refresh = result.refreshToken ?? '';
-      if (access == null || access.isEmpty) {
+    } finally {
+      if (mounted) setState(() => _finishing = false);
+    }
+  }
+
+  Future<void> _signInWithFacebookDev() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final session = AppScope.authSessionOf(context);
+    final authApi = AppScope.authApiOf(context);
+    try {
+      final tokens = await authApi.exchangeFacebook(code: 'dev-smoke-user');
+      if (tokens.accessToken.isEmpty) {
         messenger.showSnackBar(
-          SnackBar(content: Text(l10n.oauthMissingTokens)),
+          const SnackBar(content: Text('Backend returned no access token')),
         );
         return;
       }
       await session.setAuthenticated(
-        accessToken: access,
-        refreshToken: refresh,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
       );
       if (!mounted) return;
       await _afterAuthenticated();
     } catch (e) {
       if (!mounted) return;
       messenger.showSnackBar(
-        SnackBar(content: Text(l10n.oauthFailed(e.toString()))),
+        SnackBar(content: Text('Facebook sign-in failed: $e')),
       );
     }
   }
@@ -113,8 +172,6 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
     await _afterAuthenticated();
   }
 
-  /// Pushes locally collected registration to the server when appropriate, then
-  /// navigates to `/events` or welcome.
   Future<void> _afterAuthenticated() async {
     setState(() => _finishing = true);
     try {
@@ -192,7 +249,8 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
     final l10n = AppLocalizations.of(context)!;
     final config = AppScope.configOf(context);
     final useMock = config.useMockApi;
-    final oauthReady = _oauthConfigured(config);
+    final liveApi = _liveApi(config);
+    final error = Uri.base.queryParameters['error'];
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.signInTitle)),
@@ -207,21 +265,37 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
                   l10n.signInSubtitle,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
+                if (error != null && error.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.oauthFailed(error),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 24),
-                if (oauthReady) ...[
+                if (kIsWeb && liveApi) ...[
+                  Text(
+                    'LinkedIn BFF login: ${config.apiBaseUrl}/auth/linkedin/login',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                ],
+                if (liveApi) ...[
                   FilledButton.icon(
-                    onPressed: _finishing ? null : _exchangeOAuth,
+                    onPressed: _finishing ? null : _signInWithLinkedIn,
                     icon: const Icon(Icons.business_center_outlined),
                     label: Text(l10n.oauthLinkedIn),
                   ),
                   const SizedBox(height: 12),
                   FilledButton.tonalIcon(
-                    onPressed: _finishing ? null : _exchangeOAuth,
+                    onPressed: _finishing ? null : _signInWithFacebookDev,
                     icon: const Icon(Icons.facebook_outlined),
                     label: Text(l10n.oauthFacebook),
                   ),
                 ],
-                if (!useMock && !oauthReady) ...[
+                if (!useMock) ...[
                   FilledButton.icon(
                     onPressed: _finishing ? null : _devBackendSignIn,
                     icon: const Icon(Icons.developer_mode_outlined),
@@ -245,6 +319,101 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
             ),
         ],
       ),
+    );
+  }
+}
+
+/// Web route after API redirects to `/auth/success` with session cookie.
+class OAuthBffSuccessPage extends StatefulWidget {
+  const OAuthBffSuccessPage({super.key});
+
+  @override
+  State<OAuthBffSuccessPage> createState() => _OAuthBffSuccessPageState();
+}
+
+class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_complete());
+    });
+  }
+
+  Future<void> _complete() async {
+    final l10n = AppLocalizations.of(context)!;
+    final session = AppScope.authSessionOf(context);
+    final users = AppScope.usersOf(context);
+    final onboarding = AppScope.onboardingOf(context);
+    final store = AppScope.onboardingDraftStoreOf(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      final me = await users.getMe();
+      if (!mounted) return;
+      switch (me) {
+        case Success():
+          session.setAuthenticatedFromCookie();
+        case Failure(:final error):
+          messenger.showSnackBar(
+            SnackBar(content: Text(l10n.oauthFailed(error.message))),
+          );
+          context.go('/sign-in');
+          return;
+      }
+
+      final pending = store.loadPending();
+      if (pending != null) {
+        var pushDraft = true;
+        final meAgain = await users.getMe();
+        if (!mounted) return;
+        if (meAgain case Success(:final value)) {
+          pushDraft =
+              value.displayName.trim().isEmpty ||
+              value.homeCityLabel.trim().isEmpty;
+        }
+        if (pushDraft) {
+          final profile = UserProfile(
+            id: '',
+            displayName: pending.displayName,
+            interests: pending.interests,
+            hobbies: pending.hobbies,
+            homeCityLabel: pending.homeCityLabel,
+            homeCityId: _OAuthSignInPageState._devHomeCityIdFromDefine(),
+          );
+          final up = await users.updateMe(profile);
+          if (!mounted) return;
+          if (up case Failure(:final error)) {
+            messenger.showSnackBar(
+              SnackBar(content: Text(l10n.onboardingSaveFailed(error.message))),
+            );
+            context.go('/onboarding/welcome', extra: OnboardingDraft());
+            return;
+          }
+          await store.clearPending();
+          await onboarding.setComplete(true);
+        }
+      }
+
+      if (!mounted) return;
+      if (onboarding.isComplete) {
+        context.go('/events');
+      } else {
+        context.go('/onboarding/welcome', extra: OnboardingDraft());
+      }
+    } catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.oauthFailed(e.toString()))),
+      );
+      context.go('/sign-in');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
     );
   }
 }

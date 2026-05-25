@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    # Configure after bootstrap: bucket, key, region, dynamodb_table
-    key            = "felloway/dev"
-    encrypt        = true
-    dynamodb_table = "felloway-terraform-lock"
+    bucket  = "felloway-terraform-state-bucket"
+    key     = "felloway/dev"
+    region  = "eu-central-1"
+    encrypt = true
   }
 }

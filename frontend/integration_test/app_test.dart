@@ -6,6 +6,7 @@ import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
 import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
 import 'package:felloway_client/features/events/data/events_repository.dart';
+import 'package:felloway_client/features/onboarding/data/interests_repository.dart';
 import 'package:felloway_client/features/onboarding/data/onboarding_draft_store.dart';
 import 'package:felloway_client/features/onboarding/data/onboarding_preferences.dart';
 import 'package:felloway_client/features/profile/data/users_repository.dart';
@@ -37,6 +38,7 @@ void main() {
       onUnauthorized: authSession.signOut,
     );
     final eventsRepository = EventsRepository(apiClient, config);
+    final interestsRepository = InterestsRepository(apiClient);
     final usersRepository = UsersRepository(apiClient, config);
     final tripsRepository = TripsRepository(apiClient, config);
     final streamChatService = StreamChatService(
@@ -53,6 +55,7 @@ void main() {
         apiClient: apiClient,
         onboardingPreferences: onboarding,
         onboardingDraftStore: draftStore,
+        interestsRepository: interestsRepository,
         eventsRepository: eventsRepository,
         usersRepository: usersRepository,
         tripsRepository: tripsRepository,

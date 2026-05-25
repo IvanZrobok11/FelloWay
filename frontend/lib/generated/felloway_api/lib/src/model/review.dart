@@ -11,11 +11,11 @@ part 'review.g.dart';
 /// Review
 ///
 /// Properties:
-/// * [id]
-/// * [authorId]
-/// * [rating]
-/// * [comment]
-/// * [createdAt]
+/// * [id] 
+/// * [authorId] 
+/// * [rating] 
+/// * [comment] 
+/// * [createdAt] 
 @BuiltValue()
 abstract class Review implements Built<Review, ReviewBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -99,9 +99,7 @@ class _$ReviewSerializer implements PrimitiveSerializer<Review> {
     Review object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -179,3 +177,4 @@ class _$ReviewSerializer implements PrimitiveSerializer<Review> {
     return result.build();
   }
 }
+

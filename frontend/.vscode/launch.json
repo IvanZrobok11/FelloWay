@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "felloway (Chrome, BFF HTTPS)",
+      "cwd": "${workspaceFolder}",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "toolArgs": [
+        "--web-port=7357",
+        "--dart-define=API_MODE=live",
+        "--dart-define=API_BASE_URL=https://localhost:7086"
+      ]
+    },
+    {
+      "name": "felloway (Chrome, dev backend only)",
+      "cwd": "${workspaceFolder}",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "toolArgs": [
+        "--web-port=7357",
+        "--dart-define=API_MODE=live",
+        "--dart-define=API_BASE_URL=https://localhost:7086"
+      ]
+    }
+  ]
+}

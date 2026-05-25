@@ -12,13 +12,12 @@ part 'user_profile_update.g.dart';
 /// UserProfileUpdate
 ///
 /// Properties:
-/// * [displayName]
-/// * [bio]
-/// * [homeCityId]
-/// * [interestIds]
+/// * [displayName] 
+/// * [bio] 
+/// * [homeCityId] 
+/// * [interestIds] 
 @BuiltValue()
-abstract class UserProfileUpdate
-    implements Built<UserProfileUpdate, UserProfileUpdateBuilder> {
+abstract class UserProfileUpdate implements Built<UserProfileUpdate, UserProfileUpdateBuilder> {
   @BuiltValueField(wireName: r'displayName')
   String? get displayName;
 
@@ -33,19 +32,16 @@ abstract class UserProfileUpdate
 
   UserProfileUpdate._();
 
-  factory UserProfileUpdate([void updates(UserProfileUpdateBuilder b)]) =
-      _$UserProfileUpdate;
+  factory UserProfileUpdate([void updates(UserProfileUpdateBuilder b)]) = _$UserProfileUpdate;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(UserProfileUpdateBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<UserProfileUpdate> get serializer =>
-      _$UserProfileUpdateSerializer();
+  static Serializer<UserProfileUpdate> get serializer => _$UserProfileUpdateSerializer();
 }
 
-class _$UserProfileUpdateSerializer
-    implements PrimitiveSerializer<UserProfileUpdate> {
+class _$UserProfileUpdateSerializer implements PrimitiveSerializer<UserProfileUpdate> {
   @override
   final Iterable<Type> types = const [UserProfileUpdate, _$UserProfileUpdate];
 
@@ -93,9 +89,7 @@ class _$UserProfileUpdateSerializer
     UserProfileUpdate object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -166,3 +160,4 @@ class _$UserProfileUpdateSerializer
     return result.build();
   }
 }
+

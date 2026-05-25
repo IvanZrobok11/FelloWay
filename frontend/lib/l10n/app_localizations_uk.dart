@@ -36,6 +36,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get commonErrorTitle => 'Щось пішло не так';
 
   @override
+  String get connectivityActionUnavailable =>
+      'Дія недоступна. Немає інтернету.';
+
+  @override
   String get emptyStateTitle => 'Поки що порожньо';
 
   @override
@@ -58,7 +62,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get oauthNotConfigured =>
-      'OAuth не налаштовано. Задайте OAUTH_* у dart-define.';
+      'OAuth не налаштовано. Задайте OAUTH_CLIENT_ID у dart-define (LinkedIn). На вебі discovery не потрібен.';
 
   @override
   String get oauthMissingTokens => 'Токен доступу не отримано.';
@@ -67,6 +71,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String oauthFailed(Object message) {
     return 'Помилка входу: $message';
   }
+
+  @override
+  String get oauthSessionExpired => 'Сесію завершено. Увійдіть знову.';
 
   @override
   String get onboardingWelcomeTitle => 'Ласкаво просимо';

@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'Something went wrong'**
   String get commonErrorTitle;
 
+  /// Snack bar when an action fails due to no network or unreachable server
+  ///
+  /// In en, this message translates to:
+  /// **'Action unavailable. No internet connection.'**
+  String get connectivityActionUnavailable;
+
   /// No description provided for @emptyStateTitle.
   ///
   /// In en, this message translates to:
@@ -197,7 +203,7 @@ abstract class AppLocalizations {
   /// No description provided for @oauthNotConfigured.
   ///
   /// In en, this message translates to:
-  /// **'OAuth is not configured. Set OAUTH_* dart-define values.'**
+  /// **'OAuth is not configured. Set OAUTH_CLIENT_ID dart-define (LinkedIn). Discovery URL is not required on web.'**
   String get oauthNotConfigured;
 
   /// No description provided for @oauthMissingTokens.
@@ -211,6 +217,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign-in failed: {message}'**
   String oauthFailed(Object message);
+
+  /// No description provided for @oauthSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session expired. Please sign in again.'**
+  String get oauthSessionExpired;
 
   /// No description provided for @onboardingWelcomeTitle.
   ///

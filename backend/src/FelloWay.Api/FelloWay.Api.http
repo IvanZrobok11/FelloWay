@@ -1,6 +1,27 @@
-@FelloWay.Api_HostAddress = http://localhost:5161
+@FelloWay.Api_HostAddress = https://localhost:7086
 
-GET {{FelloWay.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### LinkedIn BFF — start sign-in (browser/mobile opens this URL; AddLinkedIn Challenge)
+GET {{FelloWay.Api_HostAddress}}/auth/linkedin/login?returnUrl=https://localhost:7357&platform=web
 
-###
+### LinkedIn BFF — mobile ticket exchange (after com.felloway.app://auth/callback?ticket=...)
+POST {{FelloWay.Api_HostAddress}}/auth/linkedin/mobile/complete
+Content-Type: application/json
+
+{
+  "ticket": "replace-with-ticket-from-redirect"
+}
+
+### Session probe (cookie or bearer)
+GET {{FelloWay.Api_HostAddress}}/auth/session
+
+### Dev LinkedIn token exchange (when OAuth:LinkedIn secrets empty)
+POST {{FelloWay.Api_HostAddress}}/auth/oauth/linkedin/token
+Content-Type: application/json
+
+{
+  "code": "dev-smoke-user",
+  "redirectUri": "com.felloway.app:/oauthredirect",
+  "codeVerifier": "dev"
+}
+
+### Run API: dotnet run --project backend/src/FelloWay.Api --launch-profile https

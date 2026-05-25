@@ -5,6 +5,7 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../shared/errors/connectivity_failure.dart';
 import '../../../shared/errors/result.dart';
 import '../../../shared/widgets/error_display.dart';
 import '../domain/event.dart';
@@ -93,6 +94,9 @@ class _EventsListPageState extends State<EventsListPage> {
           _error = null;
         });
       case Failure(:final error):
+        if (isConnectivityFailure(error)) {
+          showActionFailureSnackBar(context, error);
+        }
         setState(() {
           _error = error.message;
         });

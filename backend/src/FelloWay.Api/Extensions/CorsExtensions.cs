@@ -35,7 +35,7 @@ public static class CorsExtensions
                 policy
                     .WithMethods(AllowedMethods)
                     .WithHeaders(AllowedHeaders)
-                    .DisallowCredentials();
+                    .AllowCredentials();
 
                 if (environment.IsDevelopment())
                 {

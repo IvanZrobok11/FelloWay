@@ -1,6 +1,7 @@
 using FelloWay.Application.Admin;
 using FelloWay.Application.Auth;
 using FelloWay.Application.Events;
+using FelloWay.Application.Reference;
 using FelloWay.Application.Trips;
 using FelloWay.Application.Users;
 using FelloWay.Application.Validators;
@@ -16,6 +17,7 @@ public static class DependencyInjection
         services.AddValidatorsFromAssemblyContaining<OAuthTokenRequestValidator>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserProfileService, UserProfileService>();
+        services.AddScoped<IInterestCatalogService, InterestCatalogService>();
         services.AddScoped<IEventService, EventService>();
         services.AddScoped<ITripService, TripService>();
         services.AddScoped<IUserTrustService, UserTrustService>();

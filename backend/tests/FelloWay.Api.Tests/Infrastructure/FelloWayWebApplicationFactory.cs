@@ -20,6 +20,7 @@ public class FelloWayWebApplicationFactory : WebApplicationFactory<Program>
         // UseSetting applies before Program.cs reads configuration (AddInfrastructure).
         builder.UseSetting("Database:SkipInitialization", "true");
         builder.UseSetting("Database:DisableHangfire", "true");
+        builder.UseSetting("Frontend:BaseUrl", "https://localhost:7357");
 
         builder.ConfigureServices(services =>
         {

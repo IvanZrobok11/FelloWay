@@ -12,12 +12,11 @@ part 'trip_join_request.g.dart';
 /// TripJoinRequest
 ///
 /// Properties:
-/// * [id]
-/// * [requesterId]
-/// * [status]
+/// * [id] 
+/// * [requesterId] 
+/// * [status] 
 @BuiltValue()
-abstract class TripJoinRequest
-    implements Built<TripJoinRequest, TripJoinRequestBuilder> {
+abstract class TripJoinRequest implements Built<TripJoinRequest, TripJoinRequestBuilder> {
   @BuiltValueField(wireName: r'id')
   String? get id;
 
@@ -30,19 +29,16 @@ abstract class TripJoinRequest
 
   TripJoinRequest._();
 
-  factory TripJoinRequest([void updates(TripJoinRequestBuilder b)]) =
-      _$TripJoinRequest;
+  factory TripJoinRequest([void updates(TripJoinRequestBuilder b)]) = _$TripJoinRequest;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(TripJoinRequestBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<TripJoinRequest> get serializer =>
-      _$TripJoinRequestSerializer();
+  static Serializer<TripJoinRequest> get serializer => _$TripJoinRequestSerializer();
 }
 
-class _$TripJoinRequestSerializer
-    implements PrimitiveSerializer<TripJoinRequest> {
+class _$TripJoinRequestSerializer implements PrimitiveSerializer<TripJoinRequest> {
   @override
   final Iterable<Type> types = const [TripJoinRequest, _$TripJoinRequest];
 
@@ -83,9 +79,7 @@ class _$TripJoinRequestSerializer
     TripJoinRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -151,26 +145,21 @@ class _$TripJoinRequestSerializer
 }
 
 class TripJoinRequestStatusEnum extends EnumClass {
+
   @BuiltValueEnumConst(wireName: r'pending')
-  static const TripJoinRequestStatusEnum pending =
-      _$tripJoinRequestStatusEnum_pending;
+  static const TripJoinRequestStatusEnum pending = _$tripJoinRequestStatusEnum_pending;
   @BuiltValueEnumConst(wireName: r'approved')
-  static const TripJoinRequestStatusEnum approved =
-      _$tripJoinRequestStatusEnum_approved;
+  static const TripJoinRequestStatusEnum approved = _$tripJoinRequestStatusEnum_approved;
   @BuiltValueEnumConst(wireName: r'rejected')
-  static const TripJoinRequestStatusEnum rejected =
-      _$tripJoinRequestStatusEnum_rejected;
+  static const TripJoinRequestStatusEnum rejected = _$tripJoinRequestStatusEnum_rejected;
   @BuiltValueEnumConst(wireName: r'cancelled')
-  static const TripJoinRequestStatusEnum cancelled =
-      _$tripJoinRequestStatusEnum_cancelled;
+  static const TripJoinRequestStatusEnum cancelled = _$tripJoinRequestStatusEnum_cancelled;
 
-  static Serializer<TripJoinRequestStatusEnum> get serializer =>
-      _$tripJoinRequestStatusEnumSerializer;
+  static Serializer<TripJoinRequestStatusEnum> get serializer => _$tripJoinRequestStatusEnumSerializer;
 
-  const TripJoinRequestStatusEnum._(String name) : super(name);
+  const TripJoinRequestStatusEnum._(String name): super(name);
 
-  static BuiltSet<TripJoinRequestStatusEnum> get values =>
-      _$tripJoinRequestStatusEnumValues;
-  static TripJoinRequestStatusEnum valueOf(String name) =>
-      _$tripJoinRequestStatusEnumValueOf(name);
+  static BuiltSet<TripJoinRequestStatusEnum> get values => _$tripJoinRequestStatusEnumValues;
+  static TripJoinRequestStatusEnum valueOf(String name) => _$tripJoinRequestStatusEnumValueOf(name);
 }
+

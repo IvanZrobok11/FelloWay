@@ -11,9 +11,9 @@ part 'attendee.g.dart';
 /// Attendee
 ///
 /// Properties:
-/// * [id]
-/// * [displayName]
-/// * [homeCity]
+/// * [id] 
+/// * [displayName] 
+/// * [homeCity] 
 @BuiltValue()
 abstract class Attendee implements Built<Attendee, AttendeeBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -77,9 +77,7 @@ class _$AttendeeSerializer implements PrimitiveSerializer<Attendee> {
     Attendee object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -143,3 +141,4 @@ class _$AttendeeSerializer implements PrimitiveSerializer<Attendee> {
     return result.build();
   }
 }
+

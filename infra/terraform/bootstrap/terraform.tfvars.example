@@ -1,4 +1,0 @@
-aws_region          = "eu-central-1"
-project_name        = "felloway"
-github_repository   = "your-org/felloway_client"
-state_bucket_name   = "felloway-terraform-state-UNIQUE_SUFFIX"

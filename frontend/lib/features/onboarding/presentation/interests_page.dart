@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:felloway_client/l10n/app_localizations.dart';
+import '../../../app/app_scope.dart';
+import '../../../shared/errors/result.dart';
+import '../domain/interest_catalog_item.dart';
 import '../domain/onboarding_draft.dart';
-
-const _interestOptions = ['IT', 'Marketing', 'HR', 'Design'];
 
 class InterestsPage extends StatefulWidget {
   const InterestsPage({super.key});
@@ -15,6 +16,9 @@ class InterestsPage extends StatefulWidget {
 
 class _InterestsPageState extends State<InterestsPage> {
   OnboardingDraft? _draft;
+  List<InterestCatalogItem> _catalog = const [];
+  bool _loading = true;
+  String? _errorMessage;
 
   @override
   void didChangeDependencies() {
@@ -22,6 +26,31 @@ class _InterestsPageState extends State<InterestsPage> {
     _draft ??=
         GoRouterState.of(context).extra as OnboardingDraft? ??
         OnboardingDraft();
+    if (_loading && _catalog.isEmpty) {
+      _loadCatalog();
+    }
+  }
+
+  Future<void> _loadCatalog({bool forceRefresh = false}) async {
+    setState(() {
+      _loading = true;
+      _errorMessage = null;
+    });
+    final repo = AppScope.interestsOf(context);
+    final res = await repo.fetchCatalog(forceRefresh: forceRefresh);
+    if (!mounted) return;
+    switch (res) {
+      case Success(:final value):
+        setState(() {
+          _catalog = value;
+          _loading = false;
+        });
+      case Failure(:final error):
+        setState(() {
+          _loading = false;
+          _errorMessage = error.message;
+        });
+    }
   }
 
   @override
@@ -44,38 +73,50 @@ class _InterestsPageState extends State<InterestsPage> {
               style: Theme.of(context).textTheme.titleSmall,
             ),
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: _interestOptions.map((label) {
-                final selected = draft.interests.contains(label);
-                return FilterChip(
-                  label: Text(label),
-                  selected: selected,
-                  onSelected: (v) {
-                    setState(() {
-                      if (v) {
-                        draft.interests = {
-                          ...draft.interests.toSet(),
-                          label,
-                        }.toList();
-                      } else {
-                        draft.interests = draft.interests
-                            .where((e) => e != label)
-                            .toList();
-                      }
-                    });
-                  },
-                );
-              }).toList(),
-            ),
+            if (_loading)
+              const Center(child: CircularProgressIndicator())
+            else if (_errorMessage != null) ...[
+              Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              const SizedBox(height: 12),
+              OutlinedButton(
+                onPressed: () => _loadCatalog(forceRefresh: true),
+                child: Text(l10n.commonRetry),
+              ),
+            ] else
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _catalog.map((item) {
+                  final selected = draft.interests.contains(item.id);
+                  return FilterChip(
+                    label: Text(item.name),
+                    selected: selected,
+                    onSelected: (v) {
+                      setState(() {
+                        if (v) {
+                          draft.interests = {
+                            ...draft.interests.toSet(),
+                            item.id,
+                          }.toList();
+                        } else {
+                          draft.interests = draft.interests
+                              .where((e) => e != item.id)
+                              .toList();
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
             const SizedBox(height: 24),
             FilledButton(
-              onPressed: () {
-                draft.hobbies = '';
-                if (draft.interests.isEmpty) return;
-                context.go('/onboarding/city', extra: draft);
-              },
+              onPressed: _loading || _errorMessage != null
+                  ? null
+                  : () {
+                      draft.hobbies = '';
+                      if (draft.interests.isEmpty) return;
+                      context.go('/onboarding/city', extra: draft);
+                    },
               child: Text(l10n.onboardingContinue),
             ),
           ],

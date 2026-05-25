@@ -3,7 +3,9 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../shared/errors/connectivity_failure.dart';
 import '../../../shared/errors/result.dart';
+import '../../onboarding/domain/interest_catalog_item.dart';
 import '../domain/user_profile.dart';
 
 class ProfileEditPage extends StatefulWidget {
@@ -18,7 +20,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   final _bio = TextEditingController();
   final _city = TextEditingController();
   final _hobbies = TextEditingController();
-  final _interests = TextEditingController();
   final _linkedin = TextEditingController();
   final _facebook = TextEditingController();
 
@@ -26,6 +27,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   String? _avatarUrl;
   bool _loading = true;
   bool _saving = false;
+  List<InterestCatalogItem> _catalog = const [];
+  Set<String> _selectedInterestIds = {};
+  String? _catalogError;
 
   @override
   void initState() {
@@ -39,7 +43,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     _bio.dispose();
     _city.dispose();
     _hobbies.dispose();
-    _interests.dispose();
     _linkedin.dispose();
     _facebook.dispose();
     super.dispose();
@@ -47,9 +50,18 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   Future<void> _load() async {
     final users = AppScope.usersOf(context);
-    final res = await users.getMe();
+    final interestsRepo = AppScope.interestsOf(context);
+    final catalogRes = await interestsRepo.fetchCatalog();
+    final profileRes = await users.getMe();
     if (!mounted) return;
-    switch (res) {
+    switch (catalogRes) {
+      case Success(:final value):
+        _catalog = value;
+        _catalogError = null;
+      case Failure(:final error):
+        _catalogError = error.message;
+    }
+    switch (profileRes) {
       case Success(:final value):
         _applyProfile(value);
         setState(() => _loading = false);
@@ -65,7 +77,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     _bio.text = p.bio ?? '';
     _city.text = p.homeCityLabel;
     _hobbies.text = p.hobbies;
-    _interests.text = p.interests.join(', ');
+    _selectedInterestIds = p.interests.toSet();
     _linkedin.text = p.linkedinUrl ?? '';
     _facebook.text = p.facebookUrl ?? '';
   }
@@ -94,9 +106,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           context,
         ).showSnackBar(SnackBar(content: Text(l10n.profileEditAvatarDone)));
       case Failure(:final error):
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error.message)));
+        showActionFailureSnackBar(context, error);
     }
   }
 
@@ -104,11 +114,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     final orig = _original;
     final l10n = AppLocalizations.of(context)!;
     if (orig == null) return;
-    final interestList = _interests.text
-        .split(',')
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty)
-        .toList();
     final draft = UserProfile(
       id: orig.id,
       displayName: _name.text.trim(),
@@ -116,7 +121,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       avatarUrl: _avatarUrl,
       linkedinUrl: _linkedin.text.trim().isEmpty ? null : _linkedin.text.trim(),
       facebookUrl: _facebook.text.trim().isEmpty ? null : _facebook.text.trim(),
-      interests: interestList,
+      interests: _selectedInterestIds.toList(),
       hobbies: _hobbies.text.trim(),
       homeCityLabel: _city.text.trim(),
       ratingAverage: orig.ratingAverage,
@@ -133,9 +138,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ).showSnackBar(SnackBar(content: Text(l10n.profileEditSaved)));
         Navigator.of(context).pop();
       case Failure(:final error):
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error.message)));
+        showActionFailureSnackBar(context, error);
     }
   }
 
@@ -210,13 +213,44 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             ),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: _interests,
-            decoration: InputDecoration(
-              labelText: l10n.profileEditInterestsHint,
-              border: const OutlineInputBorder(),
-            ),
+          Text(
+            l10n.profileEditInterestsHint,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
+          const SizedBox(height: 8),
+          if (_catalogError != null) ...[
+            Text(
+              _catalogError!,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: _saving ? null : _load,
+              child: Text(l10n.commonRetry),
+            ),
+          ] else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: _catalog.map((item) {
+                final selected = _selectedInterestIds.contains(item.id);
+                return FilterChip(
+                  label: Text(item.name),
+                  selected: selected,
+                  onSelected: _saving
+                      ? null
+                      : (v) {
+                          setState(() {
+                            if (v) {
+                              _selectedInterestIds.add(item.id);
+                            } else {
+                              _selectedInterestIds.remove(item.id);
+                            }
+                          });
+                        },
+                );
+              }).toList(),
+            ),
           const SizedBox(height: 12),
           TextField(
             controller: _hobbies,

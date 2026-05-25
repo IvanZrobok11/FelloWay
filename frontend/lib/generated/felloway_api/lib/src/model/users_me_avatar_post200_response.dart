@@ -11,36 +11,26 @@ part 'users_me_avatar_post200_response.g.dart';
 /// UsersMeAvatarPost200Response
 ///
 /// Properties:
-/// * [avatarUrl]
+/// * [avatarUrl] 
 @BuiltValue()
-abstract class UsersMeAvatarPost200Response
-    implements
-        Built<UsersMeAvatarPost200Response,
-            UsersMeAvatarPost200ResponseBuilder> {
+abstract class UsersMeAvatarPost200Response implements Built<UsersMeAvatarPost200Response, UsersMeAvatarPost200ResponseBuilder> {
   @BuiltValueField(wireName: r'avatarUrl')
   String? get avatarUrl;
 
   UsersMeAvatarPost200Response._();
 
-  factory UsersMeAvatarPost200Response(
-          [void updates(UsersMeAvatarPost200ResponseBuilder b)]) =
-      _$UsersMeAvatarPost200Response;
+  factory UsersMeAvatarPost200Response([void updates(UsersMeAvatarPost200ResponseBuilder b)]) = _$UsersMeAvatarPost200Response;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(UsersMeAvatarPost200ResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<UsersMeAvatarPost200Response> get serializer =>
-      _$UsersMeAvatarPost200ResponseSerializer();
+  static Serializer<UsersMeAvatarPost200Response> get serializer => _$UsersMeAvatarPost200ResponseSerializer();
 }
 
-class _$UsersMeAvatarPost200ResponseSerializer
-    implements PrimitiveSerializer<UsersMeAvatarPost200Response> {
+class _$UsersMeAvatarPost200ResponseSerializer implements PrimitiveSerializer<UsersMeAvatarPost200Response> {
   @override
-  final Iterable<Type> types = const [
-    UsersMeAvatarPost200Response,
-    _$UsersMeAvatarPost200Response
-  ];
+  final Iterable<Type> types = const [UsersMeAvatarPost200Response, _$UsersMeAvatarPost200Response];
 
   @override
   final String wireName = r'UsersMeAvatarPost200Response';
@@ -65,9 +55,7 @@ class _$UsersMeAvatarPost200ResponseSerializer
     UsersMeAvatarPost200Response object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -117,3 +105,4 @@ class _$UsersMeAvatarPost200ResponseSerializer
     return result.build();
   }
 }
+

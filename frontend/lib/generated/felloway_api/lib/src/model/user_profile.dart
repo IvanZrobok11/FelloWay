@@ -4,6 +4,7 @@
 
 // ignore_for_file: unused_element
 import 'package:built_collection/built_collection.dart';
+import 'package:felloway_api/src/model/interest_catalog_item.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -12,13 +13,14 @@ part 'user_profile.g.dart';
 /// UserProfile
 ///
 /// Properties:
-/// * [id]
-/// * [displayName]
-/// * [bio]
-/// * [homeCity]
-/// * [interestIds]
-/// * [avatarUrl]
-/// * [aggregateRating]
+/// * [id] 
+/// * [displayName] 
+/// * [bio] 
+/// * [homeCity] 
+/// * [interestIds] 
+/// * [interests] - Resolved catalog entries for interestIds, ordered by sortOrder
+/// * [avatarUrl] 
+/// * [aggregateRating] 
 @BuiltValue()
 abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -35,6 +37,10 @@ abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
 
   @BuiltValueField(wireName: r'interestIds')
   BuiltList<String>? get interestIds;
+
+  /// Resolved catalog entries for interestIds, ordered by sortOrder
+  @BuiltValueField(wireName: r'interests')
+  BuiltList<InterestCatalogItem>? get interests;
 
   @BuiltValueField(wireName: r'avatarUrl')
   String? get avatarUrl;
@@ -100,6 +106,13 @@ class _$UserProfileSerializer implements PrimitiveSerializer<UserProfile> {
         specifiedType: const FullType(BuiltList, [FullType(String)]),
       );
     }
+    if (object.interests != null) {
+      yield r'interests';
+      yield serializers.serialize(
+        object.interests,
+        specifiedType: const FullType(BuiltList, [FullType(InterestCatalogItem)]),
+      );
+    }
     if (object.avatarUrl != null) {
       yield r'avatarUrl';
       yield serializers.serialize(
@@ -122,9 +135,7 @@ class _$UserProfileSerializer implements PrimitiveSerializer<UserProfile> {
     UserProfile object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -174,6 +185,13 @@ class _$UserProfileSerializer implements PrimitiveSerializer<UserProfile> {
           ) as BuiltList<String>;
           result.interestIds.replace(valueDes);
           break;
+        case r'interests':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(BuiltList, [FullType(InterestCatalogItem)]),
+          ) as BuiltList<InterestCatalogItem>;
+          result.interests.replace(valueDes);
+          break;
         case r'avatarUrl':
           final valueDes = serializers.deserialize(
             value,
@@ -216,3 +234,4 @@ class _$UserProfileSerializer implements PrimitiveSerializer<UserProfile> {
     return result.build();
   }
 }
+

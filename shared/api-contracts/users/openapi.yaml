@@ -111,6 +111,17 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    InterestCatalogItem:
+      type: object
+      required: [id, name, sortOrder]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        sortOrder:
+          type: integer
     UserProfile:
       type: object
       properties:
@@ -128,6 +139,11 @@ components:
           items:
             type: string
             format: uuid
+        interests:
+          type: array
+          description: Resolved catalog entries for interestIds, ordered by sortOrder
+          items:
+            $ref: '#/components/schemas/InterestCatalogItem'
         avatarUrl:
           type: string
         aggregateRating:
