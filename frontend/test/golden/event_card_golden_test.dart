@@ -2,12 +2,25 @@ import 'package:felloway_client/features/events/domain/event.dart';
 import 'package:felloway_client/features/onboarding/presentation/welcome_page.dart';
 import 'package:felloway_client/features/events/presentation/event_card.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  setUp(() {
+    debugDisableShadows = true;
+  });
+
+  Future<void> pumpGoldenSurface(WidgetTester tester, Widget child) async {
+    tester.view.physicalSize = const Size(400, 720);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(child);
+    await tester.pumpAndSettle();
+  }
+
   testWidgets('EventCard matches golden', (tester) async {
     final summary = EventSummary(
       id: '1',
@@ -20,7 +33,8 @@ void main() {
       tags: const ['Flutter', 'Dart'],
     );
 
-    await tester.pumpWidget(
+    await pumpGoldenSurface(
+      tester,
       MaterialApp(
         locale: const Locale('en'),
         localizationsDelegates: const [
@@ -41,7 +55,6 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
 
     await expectLater(
       find.byType(EventCard),
@@ -57,7 +70,8 @@ void main() {
       ],
     );
 
-    await tester.pumpWidget(
+    await pumpGoldenSurface(
+      tester,
       MaterialApp.router(
         locale: const Locale('en'),
         localizationsDelegates: const [
@@ -71,7 +85,6 @@ void main() {
         routerConfig: router,
       ),
     );
-    await tester.pumpAndSettle();
 
     await expectLater(
       find.byType(WelcomePage),
