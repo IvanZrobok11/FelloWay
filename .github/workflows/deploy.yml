@@ -151,14 +151,18 @@ jobs:
           docker tag felloway-api:$IMAGE_TAG $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:latest
           docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:latest
 
-      - name: Deploy ECS service
+      - name: Deploy ECS service (new task definition with API image)
         env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
         run: |
-          aws ecs update-service \
-            --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }} \
-            --service ${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }} \
-            --force-new-deployment
+          chmod +x .github/scripts/ecs-deploy-api-image.sh
+          IMAGE_URI="$ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:$IMAGE_TAG"
+          .github/scripts/ecs-deploy-api-image.sh \
+            "${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}" \
+            "${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}" \
+            "${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}" \
+            "$IMAGE_URI"
 
       - name: Sync web to S3
         env:

@@ -74,11 +74,17 @@ jobs:
           docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-prod:$IMAGE_TAG
 
       - name: Deploy ECS prod
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
         run: |
-          aws ecs update-service \
-            --cluster ${{ env.PROJECT_NAME }}-prod \
-            --service ${{ env.PROJECT_NAME }}-api-prod \
-            --force-new-deployment
+          chmod +x .github/scripts/ecs-deploy-api-image.sh
+          IMAGE_URI="$ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-prod:$IMAGE_TAG"
+          .github/scripts/ecs-deploy-api-image.sh \
+            "${{ env.PROJECT_NAME }}-prod" \
+            "${{ env.PROJECT_NAME }}-api-prod" \
+            "${{ env.PROJECT_NAME }}-api-prod" \
+            "$IMAGE_URI"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
