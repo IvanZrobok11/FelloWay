@@ -38,11 +38,11 @@ resource "aws_db_instance" "main" {
 resource "aws_secretsmanager_secret_version" "db" {
   secret_id = aws_secretsmanager_secret.db.id
   secret_string = jsonencode({
-    username       = var.db_username
-    password       = random_password.db.result
-    host           = aws_db_instance.main.address
-    port           = aws_db_instance.main.port
-    dbname         = var.db_name
+    username          = var.db_username
+    password          = random_password.db.result
+    host              = aws_db_instance.main.address
+    port              = aws_db_instance.main.port
+    dbname            = var.db_name
     connection_string = "Host=${aws_db_instance.main.address};Port=${aws_db_instance.main.port};Database=${var.db_name};Username=${var.db_username};Password=${random_password.db.result}"
   })
 }

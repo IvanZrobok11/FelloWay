@@ -77,22 +77,22 @@ resource "aws_acm_certificate_validation" "web" {
 }
 
 module "alb" {
-  source             = "../../modules/alb"
-  project_name       = var.project_name
-  environment        = var.environment
-  vpc_id             = module.network.vpc_id
-  public_subnet_ids  = module.network.public_subnet_ids
-  security_group_id  = module.network.alb_security_group_id
-  enable_https       = var.use_custom_domain
-  certificate_arn    = var.use_custom_domain ? aws_acm_certificate_validation.api[0].certificate_arn : null
+  source            = "../../modules/alb"
+  project_name      = var.project_name
+  environment       = var.environment
+  vpc_id            = module.network.vpc_id
+  public_subnet_ids = module.network.public_subnet_ids
+  security_group_id = module.network.alb_security_group_id
+  enable_https      = var.use_custom_domain
+  certificate_arn   = var.use_custom_domain ? aws_acm_certificate_validation.api[0].certificate_arn : null
 }
 
 module "api_cdn" {
-  count          = var.use_custom_domain ? 0 : 1
-  source         = "../../modules/api_cdn"
-  project_name   = var.project_name
-  environment    = var.environment
-  alb_dns_name   = module.alb.alb_dns_name
+  count        = var.use_custom_domain ? 0 : 1
+  source       = "../../modules/api_cdn"
+  project_name = var.project_name
+  environment  = var.environment
+  alb_dns_name = module.alb.alb_dns_name
 }
 
 module "rds" {
@@ -146,13 +146,13 @@ module "ecs" {
 }
 
 module "dns" {
-  count                    = var.use_custom_domain ? 1 : 0
-  source                   = "../../modules/dns"
-  zone_id                  = data.aws_route53_zone.main[0].zone_id
-  api_domain               = var.api_host
-  web_domain               = var.web_host
-  alb_dns_name             = module.alb.alb_dns_name
-  alb_zone_id              = module.alb.alb_zone_id
-  cloudfront_domain_name   = module.web.cloudfront_domain_name
-  cloudfront_zone_id       = module.web.cloudfront_hosted_zone_id
+  count                  = var.use_custom_domain ? 1 : 0
+  source                 = "../../modules/dns"
+  zone_id                = data.aws_route53_zone.main[0].zone_id
+  api_domain             = var.api_host
+  web_domain             = var.web_host
+  alb_dns_name           = module.alb.alb_dns_name
+  alb_zone_id            = module.alb.alb_zone_id
+  cloudfront_domain_name = module.web.cloudfront_domain_name
+  cloudfront_zone_id     = module.web.cloudfront_hosted_zone_id
 }

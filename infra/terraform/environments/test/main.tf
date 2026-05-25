@@ -36,7 +36,7 @@ resource "aws_route53_record" "api_cert" {
 
 resource "aws_acm_certificate_validation" "api" {
   certificate_arn         = aws_acm_certificate.api.arn
-  validation_record_fqdns  = [for r in aws_route53_record.api_cert : r.fqdn]
+  validation_record_fqdns = [for r in aws_route53_record.api_cert : r.fqdn]
 }
 
 resource "aws_acm_certificate" "web" {
@@ -66,17 +66,17 @@ resource "aws_route53_record" "web_cert" {
 resource "aws_acm_certificate_validation" "web" {
   provider                = aws.us_east_1
   certificate_arn         = aws_acm_certificate.web.arn
-  validation_record_fqdns  = [for r in aws_route53_record.web_cert : r.fqdn]
+  validation_record_fqdns = [for r in aws_route53_record.web_cert : r.fqdn]
 }
 
 module "alb" {
-  source             = "../../modules/alb"
-  project_name       = var.project_name
-  environment        = var.environment
-  vpc_id             = module.network.vpc_id
-  public_subnet_ids  = module.network.public_subnet_ids
-  security_group_id  = module.network.alb_security_group_id
-  certificate_arn    = aws_acm_certificate_validation.api.certificate_arn
+  source            = "../../modules/alb"
+  project_name      = var.project_name
+  environment       = var.environment
+  vpc_id            = module.network.vpc_id
+  public_subnet_ids = module.network.public_subnet_ids
+  security_group_id = module.network.alb_security_group_id
+  certificate_arn   = aws_acm_certificate_validation.api.certificate_arn
 }
 
 module "rds" {
@@ -128,12 +128,12 @@ module "web" {
 }
 
 module "dns" {
-  source                   = "../../modules/dns"
-  zone_id                  = data.aws_route53_zone.main.zone_id
-  api_domain               = var.api_host
-  web_domain               = var.web_host
-  alb_dns_name             = module.alb.alb_dns_name
-  alb_zone_id              = module.alb.alb_zone_id
-  cloudfront_domain_name   = module.web.cloudfront_domain_name
-  cloudfront_zone_id       = module.web.cloudfront_hosted_zone_id
+  source                 = "../../modules/dns"
+  zone_id                = data.aws_route53_zone.main.zone_id
+  api_domain             = var.api_host
+  web_domain             = var.web_host
+  alb_dns_name           = module.alb.alb_dns_name
+  alb_zone_id            = module.alb.alb_zone_id
+  cloudfront_domain_name = module.web.cloudfront_domain_name
+  cloudfront_zone_id     = module.web.cloudfront_hosted_zone_id
 }
