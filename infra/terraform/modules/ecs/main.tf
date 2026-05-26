@@ -73,7 +73,7 @@ resource "aws_ecs_task_definition" "api" {
       protocol      = "tcp"
     }]
     environment = [
-      { name = "ASPNETCORE_ENVIRONMENT", value = "Production" },
+      { name = "ASPNETCORE_ENVIRONMENT", value = var.environment },
       { name = "ASPNETCORE_URLS", value = "http://+:8080" },
       { name = "Cors__AllowedOrigins__0", value = var.web_origin_url },
     ]

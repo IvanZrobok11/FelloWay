@@ -27,7 +27,7 @@ public static class DatabaseExtensions
 
         await db.Database.EnsureCreatedAsync();
 
-        if (!app.Environment.IsProduction())
+        if (!app.Environment.IsProdLike())
         {
             var seeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
             await seeder.SeedAsync();

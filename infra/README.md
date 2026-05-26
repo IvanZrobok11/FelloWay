@@ -58,7 +58,7 @@ Remote state keys: `felloway/dev`, `felloway/test`, `felloway/prod`.
 
 ## CI/CD
 
-- Push to `main` → auto deploy **dev** (see `.github/workflows/deploy.yml`); CI registers a new ECS task definition with the ECR API image (Terraform only seeds a placeholder image on first apply)
+- Push to `main` → auto deploy **dev** (see `.github/workflows/deploy.yml`); CI registers a new ECS task definition with the ECR API image. `ASPNETCORE_ENVIRONMENT` matches the env name: `dev`, `test`, or `prod`.
 - Manual **Promote to test** → `.github/workflows/promote-test.yml`
 - Manual **Promote to prod** → `.github/workflows/promote-prod.yml` (requires the image tag to exist in **test** ECR; configure GitHub Environment `prod` with required reviewers)
 

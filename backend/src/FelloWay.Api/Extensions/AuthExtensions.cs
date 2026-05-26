@@ -48,7 +48,7 @@ public static class AuthExtensions
         {
             options.Cookie.Name = "felloway.session";
             options.Cookie.HttpOnly = true;
-            var relaxCookiePolicy = environment.IsDevelopment() || environment.IsEnvironment("Testing");
+            var relaxCookiePolicy = environment.IsDevLike() || environment.IsEnvironment("Testing");
             options.Cookie.SecurePolicy = relaxCookiePolicy
                 ? CookieSecurePolicy.SameAsRequest
                 : CookieSecurePolicy.Always;

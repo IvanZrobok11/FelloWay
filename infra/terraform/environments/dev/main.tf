@@ -142,7 +142,7 @@ module "ecs" {
   web_origin_url     = local.web_origin_url
   cpu                = var.ecs_cpu
   memory             = var.ecs_memory
-  desired_count      = var.ecs_desired_count
+  desired_count = var.ecs_desired_count
 }
 
 module "dns" {

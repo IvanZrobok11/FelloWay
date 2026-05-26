@@ -38,7 +38,7 @@ app.UseCors(CorsExtensions.PolicyName);
 
 var hangfireEnabled = !app.Configuration.GetValue("Database:DisableHangfire", false);
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevLike())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -55,7 +55,7 @@ app.UseAuthorization();
 app.MapFelloWayHealthChecks();
 app.MapControllers();
 
-if (app.Environment.IsDevelopment() && hangfireEnabled)
+if (app.Environment.IsDevLike() && hangfireEnabled)
 {
     RecurringJob.AddOrUpdate<PostEventReviewReminderJob>(
         "post-event-review-reminder",

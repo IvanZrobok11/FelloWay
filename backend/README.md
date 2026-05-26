@@ -12,7 +12,7 @@ dotnet restore FelloWay.slnx
 dotnet run --project src/FelloWay.Api
 ```
 
-Swagger (Development): `https://localhost:7xxx/swagger`
+Swagger (Development / `ASPNETCORE_ENVIRONMENT=dev`): `https://localhost:7xxx/swagger`
 
 ## Solution layout
 
