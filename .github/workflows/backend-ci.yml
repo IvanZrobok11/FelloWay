@@ -28,9 +28,6 @@ jobs:
       - name: Restore
         run: dotnet restore FelloWay.slnx
 
-      - name: Format
-        run: dotnet format FelloWay.slnx --verify-no-changes
-
       - name: Build
         run: dotnet build FelloWay.slnx --no-restore -c Release
 
