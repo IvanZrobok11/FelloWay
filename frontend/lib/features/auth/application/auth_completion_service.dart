@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
+
 import '../../../app/auth/auth_session.dart';
 import '../data/auth_api.dart';
 import '../domain/token_response.dart';
 import '../domain/web_auth_mode.dart';
+import '../web/bff_ticket_from_browser.dart';
 
 /// Result of a post-login completion attempt (BFF ticket or cookie probe).
 enum AuthCompletionResult {
@@ -63,6 +66,9 @@ class AuthCompletionService {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
     );
+    if (kIsWeb) {
+      clearBffTicketFromBrowserUrl();
+    }
     return AuthCompletionResult.success;
   }
 }

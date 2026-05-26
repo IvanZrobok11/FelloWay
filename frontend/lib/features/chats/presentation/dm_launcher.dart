@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_chat/stream_chat.dart' as sm;
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import '../../../app/app_scope.dart';
 
 /// Opens the server-provisioned event-wide channel (`event_{eventId}`).
 Future<void> openEventChannel(
   BuildContext context, {
   required String eventId,
 }) async {
-  final client = StreamChat.of(context).client;
+  final client = AppScope.streamChatOf(context).client;
+  if (client == null) return;
   final channelId = 'event_$eventId';
   final channel = client.channel(
     'messaging',

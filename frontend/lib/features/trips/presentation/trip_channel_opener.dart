@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import '../../../app/app_scope.dart';
 
 /// Opens Stream channel `trip_{tripId}` scoped to [eventId].
 Future<void> openTripChannel(
@@ -8,7 +8,8 @@ Future<void> openTripChannel(
   required String tripId,
   required String eventId,
 }) async {
-  final client = StreamChat.of(context).client;
+  final client = AppScope.streamChatOf(context).client;
+  if (client == null) return;
   final channelId = 'trip_$tripId';
   final channel = client.channel(
     'messaging',

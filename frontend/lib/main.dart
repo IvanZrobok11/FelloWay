@@ -25,10 +25,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureWebUrlStrategy();
   final config = await loadAppConfig();
-  final tokenStorage = TokenStorage();
+  final prefs = await SharedPreferences.getInstance();
+  final tokenStorage = TokenStorage(webPreferences: prefs);
   final authSession = AuthSession(tokenStorage: tokenStorage);
   await authSession.restore();
-  final prefs = await SharedPreferences.getInstance();
   final onboardingPreferences = OnboardingPreferences(prefs);
   final onboardingDraftStore = OnboardingDraftStore(prefs);
 

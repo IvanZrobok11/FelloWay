@@ -25,3 +25,18 @@ bool isCrossOriginApi(String apiBaseUrl) {
   }
   return apiHost != Uri.parse(web.window.location.href).host;
 }
+
+/// Removes `ticket` from the URL so refresh does not re-redeem a consumed ticket.
+void clearBffTicketFromBrowserUrl() {
+  final loc = web.window.location;
+  final uri = Uri.parse(loc.href);
+  if (!uri.queryParameters.containsKey('ticket')) {
+    return;
+  }
+  final params = Map<String, String>.from(uri.queryParameters)
+    ..remove('ticket');
+  final cleaned = uri.replace(
+    queryParameters: params.isEmpty ? null : params,
+  );
+  web.window.history.replaceState(null, '', cleaned.toString());
+}

@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/data/auth_api.dart';
 import '../../features/auth/web/bff_ticket_from_browser.dart';
+import '../../features/chats/presentation/stream_chat_scope.dart';
 import '../auth/auth_session.dart';
+import 'resolve_initial_location.dart';
 import '../notifications/push_handler.dart';
 import '../../features/onboarding/data/onboarding_preferences.dart';
 import '../shell/main_shell.dart';
@@ -36,9 +38,10 @@ GoRouter createAppRouter({
 }) {
   return GoRouter(
     navigatorKey: navigatorKey ?? PushHandler.rootNavigatorKey,
-    initialLocation: onboardingPreferences.isComplete
-        ? '/events'
-        : '/onboarding/welcome',
+    initialLocation: resolveInitialLocation(
+      isWeb: kIsWeb,
+      onboardingPreferences: onboardingPreferences,
+    ),
     refreshListenable: authSession,
     redirect: (context, state) async {
       final path = state.uri.path;
@@ -82,6 +85,13 @@ GoRouter createAppRouter({
       if (authSession.isAuthenticated &&
           onboardingPreferences.isComplete &&
           onOnboarding) {
+        return '/events';
+      }
+
+      if (authSession.isAuthenticated &&
+          onAuthSuccess &&
+          onboardingPreferences.isComplete &&
+          !hasBffTicket) {
         return '/events';
       }
 
@@ -168,9 +178,11 @@ GoRouter createAppRouter({
           if (id.isEmpty) {
             return const Scaffold(body: Center(child: Text('Invalid channel')));
           }
-          return ChannelPage(
-            channelType: type,
-            channelId: Uri.decodeComponent(id),
+          return FellowayStreamChatScope(
+            child: ChannelPage(
+              channelType: type,
+              channelId: Uri.decodeComponent(id),
+            ),
           );
         },
       ),
@@ -203,8 +215,9 @@ GoRouter createAppRouter({
               GoRoute(
                 path: '/chats',
                 name: 'chats',
-                pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: ChatsListPage()),
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: FellowayStreamChatScope(child: ChatsListPage()),
+                ),
               ),
             ],
           ),

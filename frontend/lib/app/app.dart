@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-
 import '../features/auth/application/auth_completion_service.dart';
 import '../features/auth/data/auth_api.dart';
 import '../features/auth/domain/web_auth_mode.dart';
@@ -175,11 +173,6 @@ class _FellowayAppState extends State<FellowayApp> {
         routerConfig: router,
       ),
     );
-
-    final client = widget.streamChatService.client;
-    if (client != null) {
-      child = StreamChat(client: client, child: child);
-    }
 
     return child;
   }

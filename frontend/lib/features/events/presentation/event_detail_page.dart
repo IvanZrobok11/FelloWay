@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart' show StreamChat;
 
 import '../../../app/app_scope.dart';
 import '../../../shared/errors/result.dart';
@@ -282,7 +281,8 @@ class _AttendeeList extends StatelessWidget {
                   icon: const Icon(Icons.chat_bubble_outline),
                   tooltip: l10n.chatMessageUser,
                   onPressed: () {
-                    final client = StreamChat.of(context).client;
+                    final client = AppScope.streamChatOf(context).client;
+                    if (client == null) return;
                     openOrCreateEventDm(
                       context,
                       client: client,

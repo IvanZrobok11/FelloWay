@@ -22,3 +22,6 @@ bool isCrossOriginApi(String apiBaseUrl) {
   }
   return apiHost != Uri.base.host;
 }
+
+/// No-op off web.
+void clearBffTicketFromBrowserUrl() {}

@@ -10,6 +10,7 @@ import '../application/auth_completion_service.dart';
 import '../mobile/linkedin_bff_auth.dart';
 import '../web/bff_ticket_from_browser.dart';
 import '../web/linkedin_bff_web_auth.dart';
+import '../../onboarding/data/onboarding_preferences.dart';
 import '../../onboarding/domain/onboarding_draft.dart';
 import '../../profile/domain/user_profile.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
@@ -415,11 +416,7 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
       }
 
       if (!mounted) return;
-      if (onboarding.isComplete) {
-        context.go('/events');
-      } else {
-        context.go('/onboarding/welcome', extra: OnboardingDraft());
-      }
+      _navigateAfterAuth(context, onboarding);
     } catch (e) {
       if (!mounted) return;
       messenger.showSnackBar(
@@ -429,8 +426,29 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
     }
   }
 
+  void _navigateAfterAuth(
+    BuildContext context,
+    OnboardingPreferences onboarding,
+  ) {
+    if (onboarding.isComplete) {
+      context.go('/events');
+    } else {
+      context.go('/onboarding/welcome', extra: OnboardingDraft());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final session = AppScope.authSessionOf(context);
+    final onboarding = AppScope.onboardingOf(context);
+    if (session.isAuthenticated &&
+        onboarding.isComplete &&
+        readBffTicket(uri: GoRouterState.of(context).uri) == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _navigateAfterAuth(context, onboarding);
+      });
+    }
     return const Scaffold(
       body: Center(child: CircularProgressIndicator()),
     );
