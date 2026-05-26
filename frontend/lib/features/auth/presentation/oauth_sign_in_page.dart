@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -330,6 +331,23 @@ class OAuthBffSuccessPage extends StatefulWidget {
 }
 
 class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
+  String _oauthFailureMessage(AppLocalizations l10n, Object error) {
+    if (error is DioException) {
+      final msg = AppScope.apiClientOf(context).mapDioError(error).message;
+      if (msg.contains('Unauthorized') || msg.contains('401')) {
+        return l10n.oauthSessionExpired;
+      }
+      return l10n.oauthFailed(msg);
+    }
+    final text = error.toString();
+    if (text.contains('401') ||
+        text.toLowerCase().contains('unauthorized') ||
+        text.contains('validateStatus')) {
+      return l10n.oauthSessionExpired;
+    }
+    return l10n.oauthFailed(text);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -347,38 +365,45 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
     final messenger = ScaffoldMessenger.of(context);
 
     try {
+      final config = AppScope.configOf(context);
+      final splitHostWeb =
+          kIsWeb && !config.useMockApi && isCrossOriginApi(config.apiBaseUrl);
       final ticket = readBffTicket(uri: GoRouterState.of(context).uri);
       final authCompletion = AppScope.authCompletionOf(context);
-      if (!session.isAuthenticated) {
-        if (ticket != null && ticket.isNotEmpty) {
-          final result = await authCompletion.completeFromTicket(ticket);
-          if (!mounted) return;
-          if (result != AuthCompletionResult.success) {
-            messenger.showSnackBar(
-              SnackBar(content: Text(l10n.oauthMissingTokens)),
-            );
-            context.go('/sign-in');
-            return;
-          }
-        } else if (!authCompletion.shouldProbeCookieSession) {
+
+      // Always redeem ticket when present (split-host JWT handoff).
+      if (ticket != null && ticket.isNotEmpty) {
+        final result = await authCompletion.completeFromTicket(ticket);
+        if (!mounted) return;
+        if (result != AuthCompletionResult.success) {
           messenger.showSnackBar(
             SnackBar(content: Text(l10n.oauthMissingTokens)),
           );
           context.go('/sign-in');
           return;
-        } else {
-          final me = await users.getMe();
-          if (!mounted) return;
-          switch (me) {
-            case Success():
-              session.setAuthenticatedFromCookie();
-            case Failure(:final error):
-              messenger.showSnackBar(
-                SnackBar(content: Text(l10n.oauthFailed(error.message))),
-              );
-              context.go('/sign-in');
-              return;
-          }
+        }
+      } else if (!session.isAuthenticated) {
+        // Cross-origin web cannot use API session cookies (blocked in incognito).
+        if (splitHostWeb || !authCompletion.shouldProbeCookieSession) {
+          messenger.showSnackBar(
+            SnackBar(content: Text(l10n.oauthMissingTokens)),
+          );
+          context.go('/sign-in');
+          return;
+        }
+        final me = await users.getMe();
+        if (!mounted) return;
+        switch (me) {
+          case Success():
+            session.setAuthenticatedFromCookie();
+          case Failure(:final error):
+            final message = error.message.contains('Unauthorized') ||
+                    error.message.contains('401')
+                ? l10n.oauthSessionExpired
+                : l10n.oauthFailed(error.message);
+            messenger.showSnackBar(SnackBar(content: Text(message)));
+            context.go('/sign-in');
+            return;
         }
       }
 
@@ -420,7 +445,7 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
     } catch (e) {
       if (!mounted) return;
       messenger.showSnackBar(
-        SnackBar(content: Text(l10n.oauthFailed(e.toString()))),
+        SnackBar(content: Text(_oauthFailureMessage(l10n, e))),
       );
       context.go('/sign-in');
     }
