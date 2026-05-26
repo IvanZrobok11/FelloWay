@@ -221,7 +221,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatsStreamKeyHint =>
-      'Set STREAM_API_KEY to enable GetStream chat.';
+      'Chat is not enabled on this deploy. Set the GitHub STREAM_API_KEY variable for this environment and redeploy the web app (CI build-time config only).';
 
   @override
   String get chatsConnecting => 'Connecting to chat…';

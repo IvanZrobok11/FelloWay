@@ -485,7 +485,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatsStreamKeyHint.
   ///
   /// In en, this message translates to:
-  /// **'Set STREAM_API_KEY to enable GetStream chat.'**
+  /// **'Chat is not enabled on this deploy. Set the GitHub STREAM_API_KEY variable for this environment and redeploy the web app (CI build-time config only).'**
   String get chatsStreamKeyHint;
 
   /// No description provided for @chatsConnecting.

@@ -2,15 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
+import '../app_scope.dart';
+
 class MainShell extends StatelessWidget {
   const MainShell({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
-  void _onTap(int index) {
+  static const _chatsBranchIndex = 2;
+
+  void _onTap(BuildContext context, int index) {
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,
+    );
+    if (index != _chatsBranchIndex) return;
+    final auth = AppScope.authSessionOf(context);
+    if (!auth.isAuthenticated) return;
+    AppScope.streamChatOf(context).syncWithSession(
+      isAuthenticated: true,
+      usersRepository: AppScope.usersOf(context),
     );
   }
 
@@ -23,7 +34,7 @@ class MainShell extends StatelessWidget {
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: _onTap,
+        onDestinationSelected: (index) => _onTap(context, index),
         destinations: [
           NavigationDestination(
             icon: Tooltip(

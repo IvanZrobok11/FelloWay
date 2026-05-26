@@ -1,11 +1,11 @@
-import 'package:felloway_client/app/app.dart';
+import 'package:felloway_client/app/app_scope.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/auth_api.dart';
-import '../helpers/auth_test_helpers.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
 import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
+import 'package:felloway_client/features/chats/presentation/chats_list_page.dart';
 import 'package:felloway_client/features/events/data/events_repository.dart';
 import 'package:felloway_client/features/onboarding/data/interests_repository.dart';
 import 'package:felloway_client/features/onboarding/data/onboarding_draft_store.dart';
@@ -16,8 +16,11 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:felloway_client/shared/network/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../helpers/auth_test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -49,73 +52,81 @@ void main() {
         .setMockMethodCallHandler(secureStorageChannel, null);
   });
 
-  testWidgets('ChatsListPage shows guest message when not signed in', (
-    tester,
-  ) async {
+  Future<void> pumpChatsPage(
+    WidgetTester tester, {
+    required AuthSession authSession,
+    required AppConfig config,
+    required StreamChatService streamChatService,
+  }) async {
     SharedPreferences.setMockInitialValues({'onboarding_complete_v1': true});
     final prefs = await SharedPreferences.getInstance();
-    final onboarding = OnboardingPreferences(prefs);
-    final draftStore = OnboardingDraftStore(prefs);
     final tokenStorage = TokenStorage();
-    final authSession = AuthSession(tokenStorage: tokenStorage);
-    await authSession.restore();
-    const config = AppConfig(
-      apiBaseUrl: 'https://test.local',
-      streamApiKey: '',
-    );
+    final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
     final authApi = AuthApi(baseUrl: config.apiBaseUrl);
     final authCompletion = testAuthCompletion(
       authApi: authApi,
       authSession: authSession,
     );
-    final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
-    final eventsRepository = EventsRepository(apiClient, config);
-    final interestsRepository = InterestsRepository(apiClient);
-    final usersRepository = UsersRepository(apiClient, config);
-    final tripsRepository = TripsRepository(apiClient, config);
-    final streamChatService = StreamChatService(
-      config: config,
-      apiClient: apiClient,
-    );
-    final chatAccessController = ChatAccessController();
 
     await tester.pumpWidget(
-      FellowayApp(
-        config: config,
-        authSession: authSession,
-        authApi: authApi,
-        authCompletion: authCompletion,
-        apiClient: apiClient,
-        onboardingPreferences: onboarding,
-        onboardingDraftStore: draftStore,
-        interestsRepository: interestsRepository,
-        eventsRepository: eventsRepository,
-        usersRepository: usersRepository,
-        tripsRepository: tripsRepository,
-        streamChatService: streamChatService,
-        chatAccessController: chatAccessController,
+      MaterialApp(
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: AppScope(
+          config: config,
+          authSession: authSession,
+          authApi: authApi,
+          authCompletion: authCompletion,
+          apiClient: apiClient,
+          onboardingPreferences: OnboardingPreferences(prefs),
+          onboardingDraftStore: OnboardingDraftStore(prefs),
+          interestsRepository: InterestsRepository(apiClient),
+          eventsRepository: EventsRepository(apiClient, config),
+          usersRepository: UsersRepository(apiClient, config),
+          tripsRepository: TripsRepository(apiClient, config),
+          streamChatService: streamChatService,
+          chatAccessController: ChatAccessController(),
+          child: const ChatsListPage(),
+        ),
       ),
     );
     await tester.pumpAndSettle();
+  }
 
-    final l10n = AppLocalizations.of(
-      tester.element(find.byType(NavigationBar)),
-    )!;
-    await tester.tap(find.text(l10n.tabChats));
-    await tester.pumpAndSettle();
+  testWidgets('ChatsListPage shows guest message when not signed in', (
+    tester,
+  ) async {
+    final authSession = AuthSession(tokenStorage: TokenStorage());
+    await authSession.restore();
+    const config = AppConfig(
+      apiBaseUrl: 'https://test.local',
+      streamApiKey: '',
+    );
+    final streamChatService = StreamChatService(
+      config: config,
+      apiClient: ApiClient(config: config, tokenStorage: TokenStorage()),
+    );
 
+    await pumpChatsPage(
+      tester,
+      authSession: authSession,
+      config: config,
+      streamChatService: streamChatService,
+    );
+
+    final l10n = lookupAppLocalizations(const Locale('en'));
     expect(find.text(l10n.chatsGuestMessage), findsOneWidget);
   });
 
   testWidgets(
     'ChatsListPage shows stream key hint when signed in without key',
     (tester) async {
-      SharedPreferences.setMockInitialValues({'onboarding_complete_v1': true});
-      final prefs = await SharedPreferences.getInstance();
-      final onboarding = OnboardingPreferences(prefs);
-      final draftStore = OnboardingDraftStore(prefs);
-      final tokenStorage = TokenStorage();
-      final authSession = AuthSession(tokenStorage: tokenStorage);
+      final authSession = AuthSession(tokenStorage: TokenStorage());
       await authSession.setAuthenticated(
         accessToken: 'test-access',
         refreshToken: 'test-refresh',
@@ -124,47 +135,25 @@ void main() {
         apiBaseUrl: 'https://test.local',
         streamApiKey: '',
       );
-      final authApi = AuthApi(baseUrl: config.apiBaseUrl);
-      final authCompletion = testAuthCompletion(
-        authApi: authApi,
-        authSession: authSession,
-      );
-      final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
-      final eventsRepository = EventsRepository(apiClient, config);
-      final interestsRepository = InterestsRepository(apiClient);
+      final apiClient = ApiClient(config: config, tokenStorage: TokenStorage());
       final usersRepository = UsersRepository(apiClient, config);
-      final tripsRepository = TripsRepository(apiClient, config);
       final streamChatService = StreamChatService(
         config: config,
         apiClient: apiClient,
       );
-      final chatAccessController = ChatAccessController();
-
-      await tester.pumpWidget(
-        FellowayApp(
-          config: config,
-          authSession: authSession,
-          authApi: authApi,
-          authCompletion: authCompletion,
-          apiClient: apiClient,
-          onboardingPreferences: onboarding,
-          onboardingDraftStore: draftStore,
-          interestsRepository: interestsRepository,
-          eventsRepository: eventsRepository,
-          usersRepository: usersRepository,
-          tripsRepository: tripsRepository,
-          streamChatService: streamChatService,
-          chatAccessController: chatAccessController,
-        ),
+      await streamChatService.syncWithSession(
+        isAuthenticated: true,
+        usersRepository: usersRepository,
       );
-      await tester.pumpAndSettle();
 
-      final l10n = AppLocalizations.of(
-        tester.element(find.byType(NavigationBar)),
-      )!;
-      await tester.tap(find.text(l10n.tabChats));
-      await tester.pumpAndSettle();
+      await pumpChatsPage(
+        tester,
+        authSession: authSession,
+        config: config,
+        streamChatService: streamChatService,
+      );
 
+      final l10n = lookupAppLocalizations(const Locale('en'));
       expect(find.text(l10n.chatsStreamKeyHint), findsOneWidget);
     },
   );

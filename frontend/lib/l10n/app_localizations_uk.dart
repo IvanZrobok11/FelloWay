@@ -220,7 +220,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get chatsStreamKeyHint =>
-      'Щоб увімкнути GetStream, задайте STREAM_API_KEY.';
+      'Чат не увімкнено на цьому деплої. Задайте змінну GitHub STREAM_API_KEY для середовища та перезберіть веб (лише конфіг під час збірки в CI).';
 
   @override
   String get chatsConnecting => 'Підключення до чату…';

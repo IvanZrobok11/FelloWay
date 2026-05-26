@@ -106,7 +106,7 @@
   "profileInterests": "Interests",
   "profileHobbies": "Hobbies",
   "chatsGuestMessage": "Sign in to see your chats.",
-  "chatsStreamKeyHint": "Set STREAM_API_KEY to enable GetStream chat.",
+  "chatsStreamKeyHint": "Chat is not enabled on this deploy. Set the GitHub STREAM_API_KEY variable for this environment and redeploy the web app (CI build-time config only).",
   "chatsConnecting": "Connecting to chat…",
   "chatsDemoHint": "Demo API: chat uses GetStream only with a real backend token.",
   "chatsLoadError": "Could not load chats: {message}",

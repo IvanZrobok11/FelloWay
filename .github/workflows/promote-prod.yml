@@ -91,6 +91,7 @@ jobs:
         with:
           channel: stable
 
+      # Stream public key: compile-time only (--dart-define). Do not write env.json to S3.
       - name: Build web (prod)
         working-directory: frontend
         env:
@@ -100,6 +101,10 @@ jobs:
           flutter pub get
           if [ -z "$STREAM_API_KEY" ]; then
             echo "::error::Set GitHub variable PROD_STREAM_API_KEY"
+            exit 1
+          fi
+          if [ "${#STREAM_API_KEY}" -lt 8 ]; then
+            echo "::error::PROD_STREAM_API_KEY looks too short (${#STREAM_API_KEY} chars)"
             exit 1
           fi
           printf '%s\n' "window.__FELLOWAY_DEPLOY_ENV__ = 'prod';" > web/deploy_env.js

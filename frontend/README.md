@@ -27,7 +27,7 @@ Script loads from jsDelivr CDN at runtime (dev/test only; not in the repo).
 2. From this directory (`frontend/`):
    - `flutter pub get`
    - Set GetStream public key: `$env:STREAM_API_KEY = 'your_key'` (PowerShell) or `export STREAM_API_KEY=your_key` (bash)
-   - `flutter run` with `--dart-define=STREAM_API_KEY=...` (required unless Flutter Web loads `web/env.json` or `/env.json`)
+   - `flutter run` with `--dart-define=STREAM_API_KEY=...` (required at startup)
 
 You can pass runtime config with `--dart-define`. **`STREAM_API_KEY` is required** for `flutter run` and `flutter build` (app exits at startup if missing).
 
@@ -52,8 +52,7 @@ Main defines:
 - `API_BASE_URL` (default: `https://api.example.com`)
 - `API_MODE` (`auto`, `mock`, `live`)
 - `STREAM_API_KEY` (**required**) — GetStream public API key; `--dart-define` on every `flutter run` / `flutter build`
-- **Flutter Web (local only):** optional `web/env.json` with `{"STREAM_API_KEY":"..."}` if you omit `--dart-define` during `flutter run`
-- **CI:** `DEV_STREAM_API_KEY` → `--dart-define=STREAM_API_KEY=...` at `flutter build web` (no separate `env.json` on S3)
+- **Deployed web (dev / test / prod):** GitHub variables `DEV_STREAM_API_KEY`, `TEST_STREAM_API_KEY`, `PROD_STREAM_API_KEY` are passed as `--dart-define=STREAM_API_KEY=...` at `flutter build web` only. **Do not** upload `env.json` to S3. See [specs/013-clarify-env-json/quickstart.md](../specs/013-clarify-env-json/quickstart.md).
 - `OAUTH_ISSUER`
 - `OAUTH_CLIENT_ID`
 - `OAUTH_REDIRECT_URL` (legacy; **not used for LinkedIn BFF** — callback is `{API_BASE_URL}/auth/linkedin/callback` on the server)

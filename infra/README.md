@@ -84,7 +84,7 @@ stream_api_key    = "..."   # public key (Dashboard)
 stream_api_secret = "..."   # secret (server only)
 ```
 
-GitHub variable **`DEV_STREAM_API_KEY`** is **required** for deploy (matches `stream_api_key` in Terraform). CI passes it as `--dart-define=STREAM_API_KEY=...` when building Flutter web.
+GitHub variables **`DEV_STREAM_API_KEY`**, **`TEST_STREAM_API_KEY`**, **`PROD_STREAM_API_KEY`** are required for web deploy. CI passes the value as `--dart-define=STREAM_API_KEY=...` at `flutter build web` only — **do not** upload `env.json` to the web S3 bucket. See [specs/013-clarify-env-json/quickstart.md](../specs/013-clarify-env-json/quickstart.md).
 
 After `terraform apply`, redeploy ECS (API) and re-run deploy workflow (web).
 

@@ -100,7 +100,7 @@
   "profileInterests": "Інтереси",
   "profileHobbies": "Хобі",
   "chatsGuestMessage": "Увійдіть, щоб побачити чати.",
-  "chatsStreamKeyHint": "Щоб увімкнути GetStream, задайте STREAM_API_KEY.",
+  "chatsStreamKeyHint": "Чат не увімкнено на цьому деплої. Задайте змінну GitHub STREAM_API_KEY для середовища та перезберіть веб (лише конфіг під час збірки в CI).",
   "chatsConnecting": "Підключення до чату…",
   "chatsDemoHint": "Демо API: чат працює лише з реальним токеном бекенду.",
   "chatsLoadError": "Не вдалося завантажити чати: {message}",
