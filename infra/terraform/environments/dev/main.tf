@@ -111,7 +111,9 @@ resource "aws_secretsmanager_secret" "app" {
 resource "aws_secretsmanager_secret_version" "app" {
   secret_id = aws_secretsmanager_secret.app.id
   secret_string = jsonencode({
-    Jwt__SigningKey = var.jwt_signing_key
+    Jwt__SigningKey               = var.jwt_signing_key
+    OAuth__LinkedIn__ClientId     = var.linkedin_client_id
+    OAuth__LinkedIn__ClientSecret = var.linkedin_client_secret
   })
 }
 
@@ -142,7 +144,7 @@ module "ecs" {
   web_origin_url     = local.web_origin_url
   cpu                = var.ecs_cpu
   memory             = var.ecs_memory
-  desired_count = var.ecs_desired_count
+  desired_count      = var.ecs_desired_count
 }
 
 module "dns" {

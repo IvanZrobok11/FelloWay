@@ -3,7 +3,10 @@ use_custom_domain = false
 
 vpc_cidr          = "10.10.0.0/16"
 db_instance_class = "db.t4g.micro"
-jwt_signing_key   = "change-me-min-32-characters-for-jwt-signing!!"
+jwt_signing_key        = "change-me-min-32-characters-for-jwt-signing!!"
+linkedin_client_id     = "your-linkedin-client-id"
+linkedin_client_secret = "your-linkedin-client-secret"
+# LinkedIn redirect URL (after apply): https://<terraform output api_url>/auth/linkedin/callback
 
 # Custom domain (set use_custom_domain = true and fill these):
 # domain_name       = "felloway.click"

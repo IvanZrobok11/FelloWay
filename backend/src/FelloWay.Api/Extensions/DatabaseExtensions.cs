@@ -25,7 +25,7 @@ public static class DatabaseExtensions
         await using var scope = app.Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<FelloWayDbContext>();
 
-        await db.Database.EnsureDeletedAsync();
+        // await db.Database.EnsureDeletedAsync();
         await db.Database.EnsureCreatedAsync();
 
         // Seed for all envs

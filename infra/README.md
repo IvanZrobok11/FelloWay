@@ -64,6 +64,29 @@ Remote state keys: `felloway/dev`, `felloway/test`, `felloway/prod`.
 
 Uses **GitHub OIDC** — no long-lived `AWS_ACCESS_KEY_ID` in secrets.
 
+## LinkedIn OAuth (Secrets Manager)
+
+Put credentials in **local** `terraform.tfvars` per environment (never commit real values):
+
+```hcl
+linkedin_client_id     = "..."
+linkedin_client_secret = "..."
+```
+
+`terraform apply` writes them to `felloway/{env}/app` in Secrets Manager. ECS injects `OAuth__LinkedIn__ClientId`, `OAuth__LinkedIn__ClientSecret`, and `Frontend__BaseUrl` (same URL as web/CORS origin).
+
+In the [LinkedIn Developer Portal](https://www.linkedin.com/developers/), set **Authorized redirect URL** to:
+
+`https://<api-public-host>/auth/linkedin/callback`
+
+(e.g. dev technical: `terraform output -raw api_url` + `/auth/linkedin/callback`)
+
+After changing secrets or the ECS task definition, force a new deployment so tasks pick up values:
+
+```bash
+aws ecs update-service --cluster felloway-dev --service felloway-api-dev --force-new-deployment
+```
+
 ## GitHub setup
 
 1. Repository variables: `AWS_ACCOUNT_ID`, `AWS_REGION` (e.g. `eu-central-1`); either `DEV_API_BASE_URL` + `DEV_WEB_BASE_URL` (technical) or `DOMAIN_NAME` (custom domain)

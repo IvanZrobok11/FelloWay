@@ -76,6 +76,7 @@ resource "aws_ecs_task_definition" "api" {
       { name = "ASPNETCORE_ENVIRONMENT", value = var.environment },
       { name = "ASPNETCORE_URLS", value = "http://+:8080" },
       { name = "Cors__AllowedOrigins__0", value = var.web_origin_url },
+      { name = "Frontend__BaseUrl", value = var.web_origin_url },
     ]
     secrets = [
       {
@@ -85,6 +86,14 @@ resource "aws_ecs_task_definition" "api" {
       {
         name      = "Jwt__SigningKey"
         valueFrom = "${var.app_secret_arn}:Jwt__SigningKey::"
+      },
+      {
+        name      = "OAuth__LinkedIn__ClientId"
+        valueFrom = "${var.app_secret_arn}:OAuth__LinkedIn__ClientId::"
+      },
+      {
+        name      = "OAuth__LinkedIn__ClientSecret"
+        valueFrom = "${var.app_secret_arn}:OAuth__LinkedIn__ClientSecret::"
       },
     ]
     logConfiguration = {

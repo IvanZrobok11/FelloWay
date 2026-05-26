@@ -76,9 +76,9 @@ data "aws_iam_policy_document" "github_deploy" {
   }
 
   statement {
-    sid    = "EcsPassRole"
-    effect = "Allow"
-    actions = ["iam:PassRole"]
+    sid       = "EcsPassRole"
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
     resources = ["*"]
     condition {
       test     = "StringEquals"

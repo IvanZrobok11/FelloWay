@@ -3,4 +3,7 @@ api_host          = "api.felloway.click"
 web_host          = "app.felloway.click"
 vpc_cidr          = "10.30.0.0/16"
 db_instance_class = "db.t4g.micro"
-jwt_signing_key   = "change-me-min-32-characters-for-jwt-signing!!"
+jwt_signing_key        = "change-me-min-32-characters-for-jwt-signing!!"
+linkedin_client_id     = "your-linkedin-client-id"
+linkedin_client_secret = "your-linkedin-client-secret"
+# LinkedIn redirect: https://api.felloway.click/auth/linkedin/callback

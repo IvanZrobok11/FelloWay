@@ -55,3 +55,15 @@ variable "jwt_signing_key" {
   type      = string
   sensitive = true
 }
+
+variable "linkedin_client_id" {
+  type        = string
+  sensitive   = true
+  description = "LinkedIn OAuth app client ID (stored in Secrets Manager felloway/{env}/app)."
+}
+
+variable "linkedin_client_secret" {
+  type        = string
+  sensitive   = true
+  description = "LinkedIn OAuth app client secret."
+}
