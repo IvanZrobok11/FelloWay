@@ -6,6 +6,8 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../app/theme/felloway_text_colors.dart';
+import '../../../app/theme/felloway_typography.dart';
 import '../../../shared/errors/result.dart';
 import '../domain/user_profile.dart';
 
@@ -71,15 +73,19 @@ class _ProfilePageState extends State<ProfilePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final auth = AppScope.authSessionOf(context);
-    if (!auth.isAuthenticated && kIsWeb && !AppScope.configOf(context).useMockApi) {
-      unawaited(_ensureWebSession().then((_) {
-        if (!mounted) return;
-        if (AppScope.authSessionOf(context).isAuthenticated &&
-            _profile == null &&
-            !_loading) {
-          _load();
-        }
-      }));
+    if (!auth.isAuthenticated &&
+        kIsWeb &&
+        !AppScope.configOf(context).useMockApi) {
+      unawaited(
+        _ensureWebSession().then((_) {
+          if (!mounted) return;
+          if (AppScope.authSessionOf(context).isAuthenticated &&
+              _profile == null &&
+              !_loading) {
+            _load();
+          }
+        }),
+      );
       return;
     }
     if (auth.isAuthenticated && _profile == null && !_loading) {
@@ -87,10 +93,14 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  TextStyle _sectionTitle(BuildContext context) =>
+      context.fellowayTypography.sectionLabel;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final auth = AppScope.authSessionOf(context).isAuthenticated;
+    final typo = context.fellowayTypography;
 
     if (!auth) {
       return Scaffold(
@@ -101,7 +111,11 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(l10n.profileGuestMessage, textAlign: TextAlign.center),
+                Text(
+                  l10n.profileGuestMessage,
+                  textAlign: TextAlign.center,
+                  style: typo.menuRow,
+                ),
                 const SizedBox(height: 16),
                 FilledButton(
                   onPressed: () => context.push('/sign-in'),
@@ -126,7 +140,11 @@ class _ProfilePageState extends State<ProfilePage> {
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Text(_error!, textAlign: TextAlign.center),
+            child: Text(
+              _error!,
+              textAlign: TextAlign.center,
+              style: typo.bodySupporting,
+            ),
           ),
         ),
       );
@@ -134,7 +152,9 @@ class _ProfilePageState extends State<ProfilePage> {
     if (_profile == null) {
       return Scaffold(
         appBar: AppBar(title: Text(l10n.profileScreenTitle)),
-        body: Center(child: Text(l10n.emptyStateTitle)),
+        body: Center(
+          child: Text(l10n.emptyStateTitle, style: typo.bodySupporting),
+        ),
       );
     }
 
@@ -154,21 +174,28 @@ class _ProfilePageState extends State<ProfilePage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: p.avatarUrl != null
-                  ? NetworkImage(p.avatarUrl!)
-                  : null,
-              child: p.avatarUrl == null
-                  ? Text(
-                      p.displayName.isNotEmpty
-                          ? p.displayName[0].toUpperCase()
-                          : '?',
-                    )
-                  : null,
+          // Localized scrim improves contrast on busy gradient (spec US3).
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
             ),
-            title: Text(p.displayName),
-            subtitle: Text(p.homeCityLabel),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundImage: p.avatarUrl != null
+                    ? NetworkImage(p.avatarUrl!)
+                    : null,
+                child: p.avatarUrl == null
+                    ? Text(
+                        p.displayName.isNotEmpty
+                            ? p.displayName[0].toUpperCase()
+                            : '?',
+                      )
+                    : null,
+              ),
+              title: Text(p.displayName),
+              subtitle: Text(p.homeCityLabel),
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.edit_outlined),
@@ -177,7 +204,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           ListTile(
             leading: const Icon(Icons.notifications_outlined),
-            title: Text(l10n.profileMenuNotifications),
+            title: Text(
+              l10n.profileMenuNotifications,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
             onTap: () => context.push('/profile/notifications'),
           ),
           ListTile(
@@ -189,23 +220,29 @@ class _ProfilePageState extends State<ProfilePage> {
             ListTile(
               title: Text(
                 l10n.profileRating(p.ratingAverage!.toStringAsFixed(1)),
+                style: typo.menuRow.copyWith(
+                  color: context.fellowayTextColors.accent,
+                ),
               ),
             ),
           if (p.linkedinUrl != null)
             ListTile(
-              title: Text(l10n.profileLinkedIn),
+              title: Text(l10n.profileLinkedIn, style: _sectionTitle(context)),
               subtitle: Text(p.linkedinUrl!),
             ),
           if (p.facebookUrl != null)
             ListTile(
-              title: Text(l10n.profileFacebook),
+              title: Text(l10n.profileFacebook, style: _sectionTitle(context)),
               subtitle: Text(p.facebookUrl!),
             ),
           ListTile(
-            title: Text(l10n.profileInterests),
+            title: Text(l10n.profileInterests, style: _sectionTitle(context)),
             subtitle: Text(p.interestLabels.join(', ')),
           ),
-          ListTile(title: Text(l10n.profileHobbies), subtitle: Text(p.hobbies)),
+          ListTile(
+            title: Text(l10n.profileHobbies, style: _sectionTitle(context)),
+            subtitle: Text(p.hobbies),
+          ),
         ],
       ),
     );

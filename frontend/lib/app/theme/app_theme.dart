@@ -1,27 +1,35 @@
 import 'package:flutter/material.dart';
 
 import 'felloway_colors.dart';
+import 'felloway_text_colors.dart';
+import 'felloway_typography.dart';
 
 abstract final class AppTheme {
+  static const _textOnGradient = FellowayTextColors.onGradient;
+
   static ThemeData light() {
     final scheme = FellowayColors.lightScheme;
+    final typography = FellowayTypography.create(colors: _textOnGradient);
+    final textTheme = FellowayTypography.buildOnestTextTheme(
+      scheme: scheme,
+      colors: _textOnGradient,
+    );
 
     return ThemeData(
       colorScheme: scheme,
       useMaterial3: true,
+      fontFamily: FellowayTypography.fontFamily,
       scaffoldBackgroundColor: Colors.transparent,
+      extensions: [_textOnGradient, typography],
+      textTheme: textTheme,
       appBarTheme: AppBarTheme(
         centerTitle: true,
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: FellowayColors.brandDark.withValues(alpha: 0.55),
-        foregroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.white),
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
+        foregroundColor: _textOnGradient.primary,
+        iconTheme: IconThemeData(color: _textOnGradient.primary),
+        titleTextStyle: typography.appBarTitleStyle(),
       ),
       navigationBarTheme: NavigationBarThemeData(
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
@@ -30,16 +38,21 @@ abstract final class AppTheme {
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: selected ? FellowayColors.brandYellow : Colors.white70,
+            color: selected
+                ? _textOnGradient.accent
+                : _textOnGradient.secondary,
           );
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
-          return TextStyle(
-            color: selected ? FellowayColors.brandYellow : Colors.white70,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-          );
+          return selected ? typography.tabLabelSelected : typography.tabLabel;
         }),
+      ),
+      listTileTheme: ListTileThemeData(
+        iconColor: _textOnGradient.primary,
+        titleTextStyle: typography.menuRow,
+        subtitleTextStyle: typography.bodySupporting,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       ),
       cardTheme: CardThemeData(
         color: scheme.surface.withValues(alpha: 0.94),
@@ -50,6 +63,7 @@ abstract final class AppTheme {
         style: FilledButton.styleFrom(
           backgroundColor: scheme.primary,
           foregroundColor: scheme.onPrimary,
+          textStyle: typography.menuRow.copyWith(color: scheme.onPrimary),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -58,8 +72,12 @@ abstract final class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: Colors.white,
-          side: const BorderSide(color: Colors.white70, width: 1.5),
+          foregroundColor: _textOnGradient.primary,
+          textStyle: typography.menuRow,
+          side: BorderSide(
+            color: _textOnGradient.secondary.withValues(alpha: 0.9),
+            width: 1.5,
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -69,6 +87,7 @@ abstract final class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: scheme.surface.withValues(alpha: 0.92),
+        labelStyle: typography.bodySupporting.copyWith(color: scheme.onSurface),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -82,21 +101,17 @@ abstract final class AppTheme {
       chipTheme: ChipThemeData(
         backgroundColor: scheme.surface.withValues(alpha: 0.9),
         selectedColor: scheme.primaryContainer,
-        labelStyle: TextStyle(color: scheme.onSurface),
+        labelStyle: typography.bodySupporting.copyWith(color: scheme.onSurface),
         side: BorderSide(color: scheme.outline.withValues(alpha: 0.5)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(color: scheme.primary),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: FellowayColors.brandDark,
-        contentTextStyle: const TextStyle(color: Colors.white),
+        contentTextStyle: typography.menuRow,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      textTheme: Typography.material2021().black.apply(
-            bodyColor: scheme.onSurface,
-            displayColor: scheme.onSurface,
-          ),
     );
   }
 }

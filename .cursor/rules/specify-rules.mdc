@@ -37,6 +37,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-26
 - PostgreSQL `interests`, `user_interests` (existing) (011-backend-interests-catalog)
 - N/A (Stream public key in compile-time config + optional `env.json` on web host) (012-chats-stream-connect)
 - N/A (compile-time constants in web bundle only) (013-clarify-env-json)
+- Dart 3.10+ / Flutter stable + bundled Onest (400/500/600), `ThemeExtension` typography tokens, Material 3 `TextTheme` (014-mobile-typography)
+- N/A (static font assets in `frontend/assets/fonts/onest/`) (014-mobile-typography)
 
 - C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
 
@@ -57,9 +59,8 @@ tests/
 C# 12 / .NET 8: Follow standard conventions
 
 ## Recent Changes
+- 014-mobile-typography: Added Dart 3.10+ / Flutter + bundled Onest, FellowayTypography tokens
 - 013-clarify-env-json: Added N/A (compile-time constants in web bundle only)
-- 012-chats-stream-connect: Added N/A (Stream public key in compile-time config + optional `env.json` on web host)
-- 011-backend-interests-catalog: Added C# 12 / .NET 8 (API); Dart 3.10+ / Flutter stable + EF Core 8 + Npgsql; ASP.NET Core controllers; OpenAPI merge + `openapi-generator` dart-dio; existing `dio` / `go_router`
 
 
 <!-- MANUAL ADDITIONS START -->

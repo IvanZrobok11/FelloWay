@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:felloway_client/l10n/app_localizations.dart';
+import '../../../app/theme/felloway_text_colors.dart';
+import '../../../app/theme/felloway_typography.dart';
 import '../../../shared/widgets/app_assets.dart';
 import '../domain/onboarding_draft.dart';
 
@@ -12,7 +14,8 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final draft = GoRouterState.of(context).extra as OnboardingDraft?;
-    final theme = Theme.of(context);
+    final typo = context.fellowayTypography;
+    final onGradient = context.fellowayTextColors;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -29,11 +32,7 @@ class WelcomePage extends StatelessWidget {
                 Text(
                   l10n.appTitle,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
-                  ),
+                  style: typo.sectionLabel.copyWith(letterSpacing: 0.5),
                 ),
                 const Spacer(flex: 1),
                 Center(
@@ -64,20 +63,13 @@ class WelcomePage extends StatelessWidget {
                 Text(
                   l10n.onboardingWelcomeTitle,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                    color: Colors.white,
-                  ),
+                  style: typo.screenTitle,
                 ),
                 const SizedBox(height: 16),
                 Text(
                   l10n.onboardingWelcomeBody,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    height: 1.45,
-                  ),
+                  style: typo.menuRow.copyWith(color: onGradient.primary),
                 ),
                 const Spacer(flex: 2),
                 FilledButton(

@@ -43,7 +43,7 @@ class MapClusterMarker extends StatelessWidget {
               ),
               child: Text(
                 label,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: fg,
                   fontSize: isCluster ? 12 : 11,
                   fontWeight: FontWeight.w600,

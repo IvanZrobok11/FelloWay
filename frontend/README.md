@@ -45,6 +45,10 @@ Example:
 flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=API_MODE=live --dart-define=STREAM_API_KEY=your_stream_key
 ```
 
+## Typography
+
+The app uses **Onest** (bundled under `assets/fonts/onest/`) with centralized tokens in `lib/app/theme/` (`FellowayTypography`, `FellowayTextColors`). Profile and bottom navigation are the reference screens. See [specs/014-mobile-typography/quickstart.md](../specs/014-mobile-typography/quickstart.md).
+
 ## Runtime config
 
 Main defines:
