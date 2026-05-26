@@ -78,3 +78,15 @@ variable "linkedin_client_secret" {
   sensitive   = true
   description = "LinkedIn OAuth app client secret."
 }
+
+variable "stream_api_key" {
+  type        = string
+  sensitive   = true
+  description = "GetStream public API key (same value as DEV_STREAM_API_KEY in GitHub)."
+}
+
+variable "stream_api_secret" {
+  type        = string
+  sensitive   = true
+  description = "GetStream API secret (server-only)."
+}

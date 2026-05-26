@@ -114,6 +114,8 @@ resource "aws_secretsmanager_secret_version" "app" {
     Jwt__SigningKey               = var.jwt_signing_key
     OAuth__LinkedIn__ClientId     = var.linkedin_client_id
     OAuth__LinkedIn__ClientSecret = var.linkedin_client_secret
+    Stream__ApiKey                = var.stream_api_key
+    Stream__ApiSecret             = var.stream_api_secret
   })
 }
 

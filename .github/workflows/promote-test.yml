@@ -66,11 +66,19 @@ jobs:
         working-directory: frontend
         env:
           API_BASE_URL: https://test.api.${{ vars.DOMAIN_NAME }}
+          STREAM_API_KEY: ${{ vars.TEST_STREAM_API_KEY }}
         run: |
           flutter pub get
-          flutter build web --release \
-            --dart-define=API_MODE=live \
-            --dart-define=API_BASE_URL=$API_BASE_URL
+          DART_DEFINES=(
+            --dart-define=API_MODE=live
+            --dart-define=API_BASE_URL="$API_BASE_URL"
+          )
+          if [ -n "$STREAM_API_KEY" ]; then
+            DART_DEFINES+=(--dart-define=STREAM_API_KEY="$STREAM_API_KEY")
+          else
+            echo "::warning::TEST_STREAM_API_KEY not set — GetStream chat disabled in this build"
+          fi
+          flutter build web --release "${DART_DEFINES[@]}"
 
       - name: Sync web to S3
         env:

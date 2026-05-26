@@ -95,6 +95,14 @@ resource "aws_ecs_task_definition" "api" {
         name      = "OAuth__LinkedIn__ClientSecret"
         valueFrom = "${var.app_secret_arn}:OAuth__LinkedIn__ClientSecret::"
       },
+      {
+        name      = "Stream__ApiKey"
+        valueFrom = "${var.app_secret_arn}:Stream__ApiKey::"
+      },
+      {
+        name      = "Stream__ApiSecret"
+        valueFrom = "${var.app_secret_arn}:Stream__ApiSecret::"
+      },
     ]
     logConfiguration = {
       logDriver = "awslogs"

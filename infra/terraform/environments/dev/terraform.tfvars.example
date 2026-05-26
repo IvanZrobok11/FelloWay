@@ -6,6 +6,9 @@ db_instance_class = "db.t4g.micro"
 jwt_signing_key        = "change-me-min-32-characters-for-jwt-signing!!"
 linkedin_client_id     = "your-linkedin-client-id"
 linkedin_client_secret = "your-linkedin-client-secret"
+stream_api_key         = "your-getstream-api-key"
+stream_api_secret      = "your-getstream-api-secret"
+# GitHub variable DEV_STREAM_API_KEY must match stream_api_key (Flutter build).
 # LinkedIn redirect URL (after apply): https://<terraform output api_url>/auth/linkedin/callback
 
 # Custom domain (set use_custom_domain = true and fill these):

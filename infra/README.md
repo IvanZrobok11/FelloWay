@@ -75,6 +75,17 @@ linkedin_client_secret = "..."
 
 `terraform apply` writes them to `felloway/{env}/app` in Secrets Manager. ECS injects `OAuth__LinkedIn__ClientId`, `OAuth__LinkedIn__ClientSecret`, and `Frontend__BaseUrl` (same URL as web/CORS origin).
 
+## GetStream (chat)
+
+In **local** `terraform.tfvars` per environment:
+
+```hcl
+stream_api_key    = "..."   # public key (Dashboard)
+stream_api_secret = "..."   # secret (server only)
+```
+
+GitHub variable `DEV_STREAM_API_KEY` must match `stream_api_key` (Flutter web build). After `terraform apply`, redeploy ECS so tasks load `Stream__ApiKey` / `Stream__ApiSecret`.
+
 In the [LinkedIn Developer Portal](https://www.linkedin.com/developers/), set **Authorized redirect URL** to:
 
 `https://<api-public-host>/auth/linkedin/callback`
@@ -89,7 +100,7 @@ aws ecs update-service --cluster felloway-dev --service felloway-api-dev --force
 
 ## GitHub setup
 
-1. Repository variables: `AWS_ACCOUNT_ID`, `AWS_REGION` (e.g. `eu-central-1`); either `DEV_API_BASE_URL` + `DEV_WEB_BASE_URL` (technical) or `DOMAIN_NAME` (custom domain)
+1. Repository variables: `AWS_ACCOUNT_ID`, `AWS_REGION` (e.g. `eu-central-1`); either `DEV_API_BASE_URL` + `DEV_WEB_BASE_URL` (technical) or `DOMAIN_NAME` (custom domain); `DEV_STREAM_API_KEY` (GetStream **public** API key for Flutter web build; optional but required for chat UI)
 2. Environments: `dev`, `test`, `prod`
 3. Ensure OIDC roles from Terraform match workflow `environment:` values
 

@@ -6,4 +6,6 @@ db_instance_class = "db.t4g.micro"
 jwt_signing_key        = "change-me-min-32-characters-for-jwt-signing!!"
 linkedin_client_id     = "your-linkedin-client-id"
 linkedin_client_secret = "your-linkedin-client-secret"
+stream_api_key         = "your-getstream-api-key"
+stream_api_secret      = "your-getstream-api-secret"
 # LinkedIn redirect: https://test.api.felloway.click/auth/linkedin/callback
