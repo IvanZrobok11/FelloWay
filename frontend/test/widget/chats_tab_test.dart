@@ -2,6 +2,7 @@ import 'package:felloway_client/app/app.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/auth_api.dart';
+import '../helpers/auth_test_helpers.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
 import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
@@ -63,6 +64,10 @@ void main() {
       streamApiKey: '',
     );
     final authApi = AuthApi(baseUrl: config.apiBaseUrl);
+    final authCompletion = testAuthCompletion(
+      authApi: authApi,
+      authSession: authSession,
+    );
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
     final eventsRepository = EventsRepository(apiClient, config);
     final interestsRepository = InterestsRepository(apiClient);
@@ -79,6 +84,7 @@ void main() {
         config: config,
         authSession: authSession,
         authApi: authApi,
+        authCompletion: authCompletion,
         apiClient: apiClient,
         onboardingPreferences: onboarding,
         onboardingDraftStore: draftStore,
@@ -119,6 +125,10 @@ void main() {
         streamApiKey: '',
       );
       final authApi = AuthApi(baseUrl: config.apiBaseUrl);
+      final authCompletion = testAuthCompletion(
+        authApi: authApi,
+        authSession: authSession,
+      );
       final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
       final eventsRepository = EventsRepository(apiClient, config);
       final interestsRepository = InterestsRepository(apiClient);
@@ -135,6 +145,7 @@ void main() {
           config: config,
           authSession: authSession,
           authApi: authApi,
+          authCompletion: authCompletion,
           apiClient: apiClient,
           onboardingPreferences: onboarding,
           onboardingDraftStore: draftStore,

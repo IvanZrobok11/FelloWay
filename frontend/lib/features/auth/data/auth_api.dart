@@ -40,13 +40,18 @@ class AuthApi {
     return TokenResponse.fromJson(res.data ?? const {});
   }
 
-  Future<TokenResponse> completeLinkedInMobile({required String ticket}) async {
+  /// Redeems a one-time BFF ticket (mobile custom scheme or split-host web).
+  Future<TokenResponse> completeBffTicket({required String ticket}) async {
     final res = await _dio.post<Map<String, dynamic>>(
       '/auth/linkedin/mobile/complete',
       data: {'ticket': ticket},
     );
     return TokenResponse.fromJson(res.data ?? const {});
   }
+
+  @Deprecated('Use completeBffTicket')
+  Future<TokenResponse> completeLinkedInMobile({required String ticket}) =>
+      completeBffTicket(ticket: ticket);
 
   Future<Map<String, dynamic>?> getSession() async {
     final res = await _dio.get<Map<String, dynamic>>('/auth/session');

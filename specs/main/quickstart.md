@@ -1,3 +1,88 @@
+# Quickstart: Fix split-host LinkedIn BFF auth (dev/test/prod)
+
+This quickstart targets the deployed CloudFront setup where:
+
+- **Web** is served from a CloudFront host (e.g. `https://<web-host>.cloudfront.net`)
+- **API** is served from a different CloudFront host (e.g. `https://<api-host>.cloudfront.net`)
+
+## Expected web flow (split-host)
+
+1. Web navigates to `GET https://<api-host>/auth/linkedin/login?platform=web&returnUrl=https%3A%2F%2F<web-host>`
+2. LinkedIn redirects back to `https://<api-host>/auth/linkedin/callback?...`
+3. API redirects to `https://<web-host>/auth/success?ticket=...`
+4. Web calls `POST https://<api-host>/auth/linkedin/mobile/complete` with `{ "ticket": "..." }`
+5. Web stores FelloWay JWT tokens and calls `GET https://<api-host>/users/me` with `Authorization: Bearer <accessToken>`
+
+`GET /auth/session` is **not required** for split-host deployments.
+
+## LinkedIn Developer Portal setup
+
+- **Redirect URI** (per env): `https://<api-host>/auth/linkedin/callback`
+- Ensure LinkedIn app has the redirect URIs registered for **dev**, **test**, and **prod** API hosts.
+
+## Environment mapping (dev / test / prod)
+
+Terraform wires each environment automatically (`infra/terraform/modules/ecs/main.tf` sets `Cors__AllowedOrigins__0` and `Frontend__BaseUrl` from `local.web_origin_url`):
+
+| Env | Web origin (`web_origin_url`) | API public URL (`api_public_url`) | LinkedIn callback |
+|-----|------------------------------|-----------------------------------|-------------------|
+| **dev** | `https://{web_cf_domain}` or `https://{dev.web.domain}` | `https://{api_cf_domain}` or `https://{dev.api.domain}` | `https://<api-host>/auth/linkedin/callback` |
+| **test** | same pattern | same pattern | same |
+| **prod** | same pattern | same pattern | same |
+
+**Observed prod (2026-05-26)** (technical CloudFront URLs):
+
+| Role | Host |
+|------|------|
+| Web | `https://d3w0bvsi9wle0t.cloudfront.net` |
+| API | `https://dwkne2w3ldk1d.cloudfront.net` |
+
+After `terraform apply`, run `terraform output web_url` and `terraform output api_url` per environment and register the API callback in LinkedIn.
+
+## API CORS setup (per env)
+
+In non-Development environments, the API only allows explicitly configured origins.
+
+Set `Cors:AllowedOrigins` to include the deployed web origin:
+
+- `https://<web-host>` for dev
+- `https://<web-host>` for test
+- `https://<web-host>` for prod
+
+## CloudFront / HTTPS requirements
+
+CloudFront must not expose an `http://` hop for `/auth/linkedin/callback`.
+
+- Enforce **viewer HTTPS-only** (redirect HTTP → HTTPS).
+- Forward `X-Forwarded-Proto` and `Host` headers to origin so ASP.NET sees the public URL scheme/host.
+
+## Known prod failure (2026-05-26)
+
+Observed trace when web (`d3w0bvsi9wle0t.cloudfront.net`) and API (`dwkne2w3ldk1d.cloudfront.net`) differ:
+
+1. LinkedIn BFF completes → `/auth/success?ticket=...` (200)
+2. Client calls `GET /auth/session` and `GET /users/me` → **401**
+3. User redirected to `/sign-in`
+
+**Fix (client)**: split-host web must call `POST /auth/linkedin/mobile/complete`, store JWT, use Bearer (not cookie session).
+
+## Smoke checklist (per env)
+
+- Browser Network shows:
+  - `/auth/linkedin/login` → 302
+  - `/auth/linkedin/callback` → 302 (HTTPS)
+  - `/<web>/auth/success?ticket=...` → 200
+  - `POST /auth/linkedin/mobile/complete` → **2xx**
+  - `GET /users/me` (Bearer) → **200**
+
+### Smoke results (record in PR after deploy)
+
+| Env | Date | `POST .../mobile/complete` | `GET /users/me` Bearer | Notes |
+|-----|------|---------------------------|------------------------|-------|
+| dev | | | | |
+| test | | | | |
+| prod | | | | |
+
 # Quickstart: Production LinkedIn OAuth Sign-In
 
 **Feature**: `main`  

@@ -43,9 +43,23 @@ See [specs/006-hybrid-test-database/quickstart.md](../specs/006-hybrid-test-data
 
 ## CORS (browser / Flutter web)
 
-Configure allowed web origins in `Cors:AllowedOrigins` (see `appsettings.json`). In **Development**, any `http(s)://localhost` or `127.0.0.1` origin is permitted automatically. Staging/production must list explicit origins only.
+Configure allowed web origins in `Cors:AllowedOrigins` (see `appsettings.json`). In **Development**, any `http(s)://localhost` or `127.0.0.1` origin is permitted automatically. Deployed **dev / test / prod** must list each environment's **web** origin (the Flutter CloudFront URL), not the API host.
+
+ECS tasks receive `Cors__AllowedOrigins__0` and `Frontend__BaseUrl` from Terraform (`web_origin_url` per environment).
 
 See [specs/007-api-cors-policy/quickstart.md](../specs/007-api-cors-policy/quickstart.md).
+
+## LinkedIn BFF sign-in (split-host web)
+
+Production web uses **ticket → JWT** when web and API are on different hosts:
+
+1. `GET /auth/linkedin/login?platform=web&returnUrl=<web-origin>`
+2. Callback `GET /auth/linkedin/callback` (register **HTTPS** URL in LinkedIn)
+3. Redirect to `<web-origin>/auth/success?ticket=...`
+4. Browser `POST /auth/linkedin/mobile/complete` (requires CORS allowlist for web origin)
+5. Client uses **Bearer JWT** for `/users/me` — not `GET /auth/session` cross-origin
+
+Operator checklist: [specs/main/quickstart.md](../specs/main/quickstart.md).
 
 PR checklist: [`.github/pull_request_template.md`](../.github/pull_request_template.md)
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'auth/auth_session.dart';
 import 'config/app_config.dart';
+import '../features/auth/application/auth_completion_service.dart';
 import '../features/auth/data/auth_api.dart';
 import '../features/chats/application/chat_access_controller.dart';
 import '../features/chats/data/stream_chat_service.dart';
@@ -19,6 +20,7 @@ class AppScope extends InheritedWidget {
     required this.config,
     required this.apiClient,
     required this.authApi,
+    required this.authCompletion,
     required this.authSession,
     required this.onboardingPreferences,
     required this.onboardingDraftStore,
@@ -34,6 +36,7 @@ class AppScope extends InheritedWidget {
   final AppConfig config;
   final ApiClient apiClient;
   final AuthApi authApi;
+  final AuthCompletionService authCompletion;
   final AuthSession authSession;
   final OnboardingPreferences onboardingPreferences;
   final OnboardingDraftStore onboardingDraftStore;
@@ -55,6 +58,9 @@ class AppScope extends InheritedWidget {
   static ApiClient apiClientOf(BuildContext context) => _of(context).apiClient;
 
   static AuthApi authApiOf(BuildContext context) => _of(context).authApi;
+
+  static AuthCompletionService authCompletionOf(BuildContext context) =>
+      _of(context).authCompletion;
 
   static AuthSession authSessionOf(BuildContext context) =>
       _of(context).authSession;
@@ -88,6 +94,7 @@ class AppScope extends InheritedWidget {
     return oldWidget.config != config ||
         oldWidget.apiClient != apiClient ||
         oldWidget.authApi != authApi ||
+        oldWidget.authCompletion != authCompletion ||
         oldWidget.authSession != authSession ||
         oldWidget.onboardingPreferences != onboardingPreferences ||
         oldWidget.onboardingDraftStore != onboardingDraftStore ||

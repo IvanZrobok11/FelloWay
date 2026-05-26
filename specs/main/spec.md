@@ -21,6 +21,14 @@ Builds on existing contracts (`POST /auth/oauth/linkedin/token`), backend `AuthS
 - Q: When LinkedIn returns profile claims, is email required to create or sign in a user? → A: **Email optional** — create or link user without email when LinkedIn omits it; persist email when provided.
 - Q: What is the minimum environment that must pass real LinkedIn sign-in for this feature to be done? → A: **Local + staging** — real LinkedIn end-to-end on local API (localhost or tunnel) and on staging; production not required for feature completion.
 
+### Session 2026-05-26
+
+- Q: Which web session mode should production use for split API/frontend hosts? → A: **Split hosts** — after `/auth/success?ticket=...`, web redeems ticket via `POST /auth/linkedin/mobile/complete`, stores FelloWay API JWTs, and uses Bearer auth for API calls (no cross-origin cookie session dependency).
+- Q: Must LinkedIn BFF URLs stay HTTPS when CloudFront sits in front of the API? → A: **HTTPS-only end state** — LinkedIn `redirect_uri`, API `/auth/linkedin/login`, and `/auth/linkedin/callback` MUST be `https://` in configuration and in redirects seen by the browser. A transient `http://` hop from CloudFront (e.g. missing `X-Forwarded-Proto` or viewer-policy downgrade) is an **infrastructure defect to fix**, not an acceptable permanent OAuth callback URL.
+- Q: Must the deployed web frontend origin be listed in API `Cors:AllowedOrigins` for ticket handoff? → A: **Yes** — each environment's exact HTTPS web origin (e.g. `https://d3w0bvsi9wle0t.cloudfront.net`) MUST be in `Cors:AllowedOrigins`; otherwise `POST /auth/linkedin/mobile/complete` from the browser is blocked and sign-in is not complete.
+- Q: On split-host Flutter web, should the client call `GET /auth/session` after LinkedIn BFF? → A: **JWT only** — do not rely on `GET /auth/session` when web and API hosts differ; complete ticket handoff, store API JWT, use Bearer for `/users/me` and other protected calls.
+- Q: Which deployed environments must pass split-host LinkedIn BFF web sign-in for this fix? → A: **dev + test + prod only** — verify real LinkedIn BFF on all three AWS environments; **staging does not exist** in this project.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — Sign in with LinkedIn (Priority: P1)
@@ -29,19 +37,19 @@ As an attendee, I want to tap **Continue with LinkedIn** and land in the app wit
 
 **Why this priority**: LinkedIn is a primary auth provider per product requirements; without this flow, users depend on dev shortcuts or mocks.
 
-**Independent Test**: With a registered LinkedIn OAuth app and backend secrets configured, complete sign-in on a device/emulator; `GET /users/me` with the returned API bearer succeeds.
+**Independent Test**: With LinkedIn BFF configured, complete sign-in on **Flutter Web** (split-host) or mobile; `GET /users/me` with Bearer JWT succeeds. On split-host web, Network shows `POST /auth/linkedin/mobile/complete` **2xx** after `/auth/success?ticket=...`.
 
 **Acceptance Scenarios**:
 
-1. **Given** LinkedIn OAuth is configured for the environment, **When** the user completes LinkedIn authorization, **Then** the app calls `POST /auth/oauth/linkedin/token` with `code`, `redirectUri`, and `codeVerifier`, and stores only API `accessToken` and `refreshToken`.
-2. **Given** a successful token exchange, **When** the user opens profile or events, **Then** protected API calls use the API JWT Bearer header.
+1. **Given** LinkedIn BFF is configured, **When** the user completes LinkedIn on **split-host web**, **Then** the app redeems `ticket` via `POST /auth/linkedin/mobile/complete` and stores API `accessToken` and `refreshToken` (no cross-origin cookie session).
+2. **Given** a successful sign-in, **When** the user opens profile or events, **Then** protected API calls use the API JWT Bearer header.
 3. **Given** the user cancels or denies LinkedIn consent, **When** they return to the app, **Then** they see a clear error and remain signed out (no partial session).
 
 ---
 
 ### User Story 2 — Operator setup (Priority: P2)
 
-As a developer or operator, I need documented steps to register the LinkedIn app, configure secrets, and verify sign-in in local/staging environments.
+As a developer or operator, I need documented steps to register the LinkedIn app, configure secrets, and verify sign-in in **dev**, **test**, and **prod** environments.
 
 **Why this priority**: LinkedIn app verification lead time (TECH_PLAN Phase 0) blocks production profile/email scopes.
 
@@ -65,7 +73,10 @@ As a developer or operator, I need documented steps to register the LinkedIn app
 - User already linked via same LinkedIn subject — existing user receives new API tokens (same account).
 - LinkedIn secrets added after dev-only usage — same `dev-{subject}` users remain distinct from real LinkedIn identities; no automatic merge unless explicitly designed later.
 - Invalid `dev-*` code format when dev fallback is active — **4xx** with standard error envelope.
-- Local vs staging redirect URI mismatch — LinkedIn rejects authorization; document separate redirect URIs in LinkedIn app settings for mobile custom scheme and staging if applicable.
+- Per-environment redirect URI mismatch — LinkedIn rejects authorization; document separate redirect URIs in LinkedIn app settings for **dev**, **test**, and **prod** API callbacks (and mobile custom scheme if applicable).
+- API behind CloudFront redirects OAuth callback to `http://` — sign-in MAY appear to succeed at `/auth/success` but session/ticket handoff fails; operator MUST enforce HTTPS viewer policy, forward `X-Forwarded-Proto`/`Host`, and register only `https://` callback URIs in LinkedIn.
+- Web origin missing from `Cors:AllowedOrigins` — browser blocks `POST /auth/linkedin/mobile/complete`; user lands on `/auth/success` then is redirected to `/sign-in` with 401 on follow-up API calls.
+- Split-host web calls `GET /auth/session` expecting a cookie — returns **401** even when `/auth/success?ticket=` was issued; client MUST use ticket→JWT path instead.
 
 ## Requirements *(mandatory)*
 
@@ -84,17 +95,23 @@ As a developer or operator, I need documented steps to register the LinkedIn app
 - **FR-011**: Scope is limited to provider **`linkedin`**; no changes to Facebook token exchange behavior in this feature.
 - **FR-012**: On successful LinkedIn exchange, the backend MUST persist email on the user record when LinkedIn supplies it and MUST NOT require email to issue API tokens.
 - **FR-013**: When LinkedIn does not return email, the backend MUST still create or link the user keyed by LinkedIn `providerSubject` and MUST leave email unset until the user provides it elsewhere (if ever).
-- **FR-014**: Feature is complete when real LinkedIn sign-in is verified on **local** (API reachable from device via localhost or tunnel) and **staging**; production deployment is not a gate for this feature.
+- **FR-014**: Split-host LinkedIn BFF web sign-in is complete when verified on deployed **dev**, **test**, and **prod** environments (each with its own CloudFront web/API origins and CORS allowlist); there is **no staging** environment in this project.
+- **FR-015**: For deployments where web frontend and API are on different hosts, the web client MUST treat LinkedIn BFF completion as **ticket-to-JWT handoff** (`/auth/success?ticket=...` → `POST /auth/linkedin/mobile/complete`) and MUST authenticate subsequent API calls via FelloWay JWT Bearer.
+- **FR-016**: Behind reverse proxies (CloudFront/ALB), the API MUST generate LinkedIn OAuth and post-login redirect URLs using the **public HTTPS** scheme/host (forwarded headers or explicit public base URL); `http://` callback URLs MUST NOT be emitted to LinkedIn or the browser in deployed environments.
+- **FR-017**: For split-host Flutter web, the API MUST include the deployed web app's HTTPS origin in `Cors:AllowedOrigins` (per environment) so `POST /auth/linkedin/mobile/complete` from `/auth/success` succeeds from the browser.
+- **FR-018**: When Flutter web and API are on different hosts, the web client MUST NOT treat `GET /auth/session` as the primary post-login auth check; it MUST complete ticket handoff, persist FelloWay JWTs, and use Bearer credentials for protected API calls.
 
 ### Non-Functional Requirements
 
-- **NFR-001**: Sign-in flow (user tap to authenticated home or onboarding) SHOULD complete within **30 seconds** under normal network on staging.
+- **NFR-001**: Sign-in flow (user tap to authenticated home or onboarding) SHOULD complete within **30 seconds** under normal network on deployed **dev** or **test**.
 - **NFR-002**: No LinkedIn **client secret** in Flutter artifacts or repo.
 - **NFR-003**: Automated tests MUST cover token exchange success and invalid-code failure on the API; client unit test for `AuthApi.exchangeLinkedIn` remains valid.
+- **NFR-004**: Deployed smoke tests MUST show no browser-visible `http://` hop on `/auth/linkedin/callback` (only `https://` or internal redirect immediately upgraded to HTTPS).
 
 ### Validation Requirements
 
-- Manual smoke: real LinkedIn sign-in on **local** API (device/emulator → localhost or tunnel) and on **staging** → `GET /users/me` returns profile in both environments.
+- Manual smoke: real LinkedIn BFF sign-in on **dev**, **test**, and **prod** split-host web deployments → `GET /users/me` with Bearer returns profile in each environment.
+- Split-host web smoke: after LinkedIn BFF, browser shows successful `POST /auth/linkedin/mobile/complete` (2xx) from the web origin, then `GET /users/me` with Bearer returns **200**; **`GET /auth/session` MUST NOT be required** for this path to pass.
 - Backend integration test with mocked LinkedIn HTTP or contract test for exchanger.
 - `flutter analyze` and backend `dotnet test` pass.
 
@@ -108,7 +125,7 @@ As a developer or operator, I need documented steps to register the LinkedIn app
 
 ### Measurable Outcomes
 
-- **SC-001**: A tester completes real LinkedIn sign-in on **local** and **staging** (each with LinkedIn redirect URIs registered) and reaches the events shell without dev-code buttons in those runs.
+- **SC-001**: A tester completes real LinkedIn BFF sign-in on **dev**, **test**, and **prod** (each with LinkedIn redirect URIs and CORS origins registered) and reaches the events shell without dev-code buttons.
 - **SC-002**: No API request from the mobile app uses a LinkedIn-issued bearer token (only FelloWay JWT).
 - **SC-003**: Invalid or replayed authorization codes yield **4xx** from `POST /auth/oauth/linkedin/token` with no user session created.
 - **SC-004**: With LinkedIn secrets unset, a developer completes local smoke via `dev-{subject}` without LinkedIn Developer Portal access; with secrets set, the same endpoint succeeds only with a real LinkedIn code.
@@ -122,7 +139,7 @@ As a developer or operator, I need documented steps to register the LinkedIn app
 
 ## Out of Scope (this feature)
 
-- **Production** environment sign-off as a completion gate (may follow staging validation via deploy pipeline).
+- A separate **staging** environment (project uses **dev**, **test**, **prod** only).
 - **Facebook** production OAuth exchange and mobile flow changes (button may remain; no new Facebook exchanger work).
 - Storing or validating LinkedIn access tokens on the client for API authorization.
 - Admin panel or web OAuth clients.

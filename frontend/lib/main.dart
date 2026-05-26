@@ -6,8 +6,10 @@ import 'app/configure_url_strategy.dart';
 import 'app/app.dart';
 import 'app/auth/auth_session.dart';
 import 'app/config/app_config_loader.dart';
+import 'features/auth/application/auth_completion_service.dart';
 import 'features/auth/data/auth_api.dart';
 import 'features/auth/data/token_storage.dart';
+import 'features/auth/domain/web_auth_mode.dart';
 import 'features/auth/web/bff_ticket_from_browser.dart';
 import 'features/chats/application/chat_access_controller.dart';
 import 'features/chats/data/stream_chat_service.dart';
@@ -29,11 +31,24 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final onboardingPreferences = OnboardingPreferences(prefs);
   final onboardingDraftStore = OnboardingDraftStore(prefs);
-  final useWebCookies = kIsWeb && !config.useMockApi;
+
+  final webAuthMode = kIsWeb ? resolveWebAuthMode(config.apiBaseUrl) : null;
+  final useWebCookies = useWebCookieAuth(
+    isWeb: kIsWeb,
+    useMockApi: config.useMockApi,
+    webAuthMode: webAuthMode ?? WebAuthMode.sameOriginCookie,
+  );
+
   final authApi = AuthApi(
     baseUrl: config.apiBaseUrl,
     sendCredentials: useWebCookies,
   );
+  final authCompletion = AuthCompletionService(
+    authApi: authApi,
+    authSession: authSession,
+    webAuthMode: webAuthMode ?? WebAuthMode.sameOriginCookie,
+  );
+
   final apiClient = ApiClient(
     config: config,
     tokenStorage: tokenStorage,
@@ -41,25 +56,16 @@ Future<void> main() async {
     onUnauthorized: authSession.signOut,
     useCookieAuthOnWeb: useWebCookies,
   );
-  if (useWebCookies) {
-    final bffTicket = bffTicketFromBrowser();
-    final crossOriginBff = kIsWeb && isCrossOriginApi(config.apiBaseUrl);
+
+  if (kIsWeb && !config.useMockApi) {
+    final bffTicket = readBffTicket();
     if (bffTicket != null && bffTicket.isNotEmpty) {
-      try {
-        final tokens = await authApi.completeLinkedInMobile(ticket: bffTicket);
-        if (tokens.accessToken.isNotEmpty) {
-          await authSession.setAuthenticated(
-            accessToken: tokens.accessToken,
-            refreshToken: tokens.refreshToken,
-          );
-        }
-      } on Object {
-        // OAuthBffSuccessPage retries with the same ticket from the browser URL.
-      }
-    } else if (!crossOriginBff) {
-      await authSession.syncWebCookieSession(authApi);
+      await authCompletion.completeFromTicket(bffTicket);
+    } else if (authCompletion.shouldProbeCookieSession) {
+      await authCompletion.probeCookieSession();
     }
   }
+
   final eventsRepository = EventsRepository(apiClient, config);
   final interestsRepository = InterestsRepository(apiClient);
   final usersRepository = UsersRepository(apiClient, config);
@@ -74,6 +80,7 @@ Future<void> main() async {
       config: config,
       authSession: authSession,
       authApi: authApi,
+      authCompletion: authCompletion,
       apiClient: apiClient,
       onboardingPreferences: onboardingPreferences,
       onboardingDraftStore: onboardingDraftStore,

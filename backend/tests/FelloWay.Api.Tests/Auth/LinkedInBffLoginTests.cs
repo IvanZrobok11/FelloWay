@@ -45,6 +45,32 @@ public class LinkedInBffLoginTests : IClassFixture<FelloWayWebApplicationFactory
     }
 
     [Fact]
+    public async Task LinkedInLogin_WithForwardedProtoHttps_UsesHttpsInOAuthRedirectUri()
+    {
+        await using var factory = new LinkedInOAuthConfiguredFactory();
+        var client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false,
+        });
+
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            "/auth/linkedin/login?returnUrl=https://web.felloway.test");
+        request.Headers.TryAddWithoutValidation("X-Forwarded-Proto", "https");
+        request.Headers.TryAddWithoutValidation("X-Forwarded-Host", "api.felloway.test");
+
+        var response = await client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        var location = response.Headers.Location?.ToString() ?? string.Empty;
+        Assert.Contains("redirect_uri=", location, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains(
+            Uri.EscapeDataString("https://api.felloway.test/auth/linkedin/callback"),
+            location,
+            StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public async Task LinkedInLogin_WhenSecretsMissing_Returns503()
     {
         var client = _factory.CreateClient();

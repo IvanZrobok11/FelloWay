@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
 import '../../../app/config/app_config.dart';
+import '../application/auth_completion_service.dart';
 import '../mobile/linkedin_bff_auth.dart';
 import '../web/bff_ticket_from_browser.dart';
 import '../web/linkedin_bff_web_auth.dart';
@@ -58,8 +59,7 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
   Future<void> _signInWithLinkedIn() async {
     final l10n = AppLocalizations.of(context)!;
     final config = AppScope.configOf(context);
-    final session = AppScope.authSessionOf(context);
-    final authApi = AppScope.authApiOf(context);
+    final authCompletion = AppScope.authCompletionOf(context);
     final messenger = ScaffoldMessenger.of(context);
 
     if (!_liveApi(config)) {
@@ -87,17 +87,13 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
           );
           return;
         case LinkedInBffMobileTicket(:final ticket):
-          final tokens = await authApi.completeLinkedInMobile(ticket: ticket);
-          if (tokens.accessToken.isEmpty) {
+          final result = await authCompletion.completeFromTicket(ticket);
+          if (result != AuthCompletionResult.success) {
             messenger.showSnackBar(
               SnackBar(content: Text(l10n.oauthMissingTokens)),
             );
             return;
           }
-          await session.setAuthenticated(
-            accessToken: tokens.accessToken,
-            refreshToken: tokens.refreshToken,
-          );
           if (!mounted) return;
           await _afterAuthenticated();
       }
@@ -344,52 +340,44 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
   Future<void> _complete() async {
     final l10n = AppLocalizations.of(context)!;
     final session = AppScope.authSessionOf(context);
-    final authApi = AppScope.authApiOf(context);
     final users = AppScope.usersOf(context);
     final onboarding = AppScope.onboardingOf(context);
     final store = AppScope.onboardingDraftStoreOf(context);
     final messenger = ScaffoldMessenger.of(context);
 
     try {
-      final config = AppScope.configOf(context);
-      final ticket =
-          bffTicketFromBrowser() ??
-          GoRouterState.of(context).uri.queryParameters['ticket'] ??
-          Uri.base.queryParameters['ticket'];
-      if (!session.isAuthenticated &&
-          ticket != null &&
-          ticket.isNotEmpty) {
-        final tokens = await authApi.completeLinkedInMobile(ticket: ticket);
-        if (tokens.accessToken.isEmpty) {
-          messenger.showSnackBar(
-            SnackBar(content: Text(l10n.oauthMissingTokens)),
-          );
-          context.go('/sign-in');
-          return;
-        }
-        await session.setAuthenticated(
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
-        );
-      } else if (!session.isAuthenticated) {
-        if (kIsWeb && isCrossOriginApi(config.apiBaseUrl)) {
-          messenger.showSnackBar(
-            SnackBar(content: Text(l10n.oauthMissingTokens)),
-          );
-          context.go('/sign-in');
-          return;
-        }
-        final me = await users.getMe();
-        if (!mounted) return;
-        switch (me) {
-          case Success():
-            session.setAuthenticatedFromCookie();
-          case Failure(:final error):
+      final ticket = readBffTicket(uri: GoRouterState.of(context).uri);
+      final authCompletion = AppScope.authCompletionOf(context);
+      if (!session.isAuthenticated) {
+        if (ticket != null && ticket.isNotEmpty) {
+          final result = await authCompletion.completeFromTicket(ticket);
+          if (!mounted) return;
+          if (result != AuthCompletionResult.success) {
             messenger.showSnackBar(
-              SnackBar(content: Text(l10n.oauthFailed(error.message))),
+              SnackBar(content: Text(l10n.oauthMissingTokens)),
             );
             context.go('/sign-in');
             return;
+          }
+        } else if (!authCompletion.shouldProbeCookieSession) {
+          messenger.showSnackBar(
+            SnackBar(content: Text(l10n.oauthMissingTokens)),
+          );
+          context.go('/sign-in');
+          return;
+        } else {
+          final me = await users.getMe();
+          if (!mounted) return;
+          switch (me) {
+            case Success():
+              session.setAuthenticatedFromCookie();
+            case Failure(:final error):
+              messenger.showSnackBar(
+                SnackBar(content: Text(l10n.oauthFailed(error.message))),
+              );
+              context.go('/sign-in');
+              return;
+          }
         }
       }
 

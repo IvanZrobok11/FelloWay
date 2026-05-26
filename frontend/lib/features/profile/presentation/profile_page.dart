@@ -62,7 +62,9 @@ class _ProfilePageState extends State<ProfilePage> {
     if (!kIsWeb || config.useMockApi) return;
     final session = AppScope.authSessionOf(context);
     if (session.isAuthenticated) return;
-    await session.syncWebCookieSession(AppScope.authApiOf(context));
+    final authCompletion = AppScope.authCompletionOf(context);
+    if (!authCompletion.shouldProbeCookieSession) return;
+    await authCompletion.probeCookieSession();
   }
 
   @override

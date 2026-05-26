@@ -1,39 +1,55 @@
-# Implementation Plan: Production LinkedIn OAuth Sign-In
+# Implementation Plan: LinkedIn BFF auth fix + auth refactor
 
-**Branch**: `main` | **Date**: 2026-05-19 | **Spec**: [spec.md](./spec.md)
-
-**Input**: Enable real LinkedIn sign-in: mobile authorization code → backend exchange → FelloWay JWT; hybrid `dev-{subject}` when secrets absent.
+**Branch**: `main` | **Date**: 2026-05-26 | **Spec**: `specs/main/spec.md`  
+**Input**: `specs/main/spec.md` (includes clarifications 2026-05-26)
 
 ## Summary
 
-Replace the **dev-only** OAuth exchanger and the **client-side token exchange** with a production path: `flutter_appauth` obtains a LinkedIn authorization code (PKCE), `AuthApi.exchangeLinkedIn` posts it to `POST /auth/oauth/linkedin/token`, and a new **`LinkedInOAuthTokenExchanger`** (plus composite routing) exchanges with LinkedIn OIDC server-side. Facebook and dev smoke remain unchanged. Verify on **local** and **staging** with a registered LinkedIn app.
+Fix production **LinkedIn BFF** sign-in for **split-host Flutter web** (frontend CloudFront host differs from API CloudFront host):
+
+- Web success route `/auth/success?ticket=...` must complete **ticket → JWT** (`POST /auth/linkedin/mobile/complete`) and then use **Bearer JWT** for `/users/me` and protected API calls.
+- Stop treating `GET /auth/session` (cookie session probe) as required in split-host web; it returns 401 by design when cookies are not available cross-origin.
+- Infrastructure: ensure **HTTPS-only** LinkedIn callback (no CloudFront downgrade to `http://`) and ensure each env’s web origin is present in API `Cors:AllowedOrigins`.
+
+Also perform a **refactor of the authorization system** (frontend + backend integration points) so classes and functions are simpler, responsibilities are explicit, and conditions are justified (no “try everything” auth heuristics).
 
 ## Technical Context
 
-**Language/Version**: C# 12 / .NET 8; Dart 3.10+ / Flutter stable  
-**Primary Dependencies**: `flutter_appauth`, `dio`; ASP.NET Core, EF Core 8, `HttpClient`, Polly (LinkedIn HTTP), existing `AuthService` / JWT  
-**Storage**: PostgreSQL (`users`, `oauth_identities`, `refresh_tokens`); optional new `users.email` column  
-**Testing**: xUnit + `WebApplicationFactory` (backend); `flutter test` unit/widget (frontend); manual smoke per [quickstart.md](./quickstart.md)  
-**Target Platform**: Android 8+, iOS 14+; Linux App Service (staging API)  
-**Project Type**: Monorepo — `backend/`, `frontend/`, `shared/api-contracts/`  
-**Performance Goals**: Sign-in flow &lt; 30s (NFR-001); no extra round-trips beyond authorize + token + userinfo + API exchange  
-**Constraints**: Client secret server-only; no contract path change; LinkedIn-only (Facebook dev exchanger unchanged)  
-**Scale/Scope**: 1 OAuth provider productionized; 1 Flutter screen (`oauth_sign_in_page.dart`); ~4 new backend types + DI
+**Languages/Versions**:
+- **Backend**: C# 12 / .NET 8 (ASP.NET Core)
+- **Frontend**: Dart 3.x / Flutter stable (Flutter Web + iOS/Android app)
+
+**Primary dependencies (auth-related)**:
+- **Frontend**: `dio`, `go_router`, secure token storage (existing `TokenStorage`)
+- **Backend**: `AspNet.Security.OAuth.LinkedIn`, ASP.NET Core auth (`Cookie`, `JwtBearer`, `PolicyScheme`), forwarded headers (`X-Forwarded-Proto`, `X-Forwarded-Host`)
+
+**Storage**:
+- JWT tokens stored client-side (mobile + split-host web) via existing `TokenStorage`
+- Cookie sessions supported on backend (`felloway.session`) for same-origin / local dev cases, but not relied upon for split-host prod
+- One-time auth tickets stored server-side (memory cache / store) for `/auth/linkedin/mobile/complete`
+
+**Testing**:
+- Frontend: `flutter test` (unit/widget)
+- Backend: `dotnet test` (xUnit)
+
+**Target platforms**: Web, iOS, Android
+
+**Performance goals**:
+- Web BFF completion (ticket redeem + first `/users/me`) completes within **30s** on deployed dev/test under normal network.
+
+**Constraints**:
+- Environments are **dev + test + prod** (no staging).
+- Deployed auth callback must be **HTTPS-only** (CloudFront must not expose an `http://` OAuth callback to browsers/LinkedIn).
 
 ## Constitution Check
 
-*GATE: Constitution is Flutter-oriented; backend uses equivalent gates (see 002-backend-api plan).*
+*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-| Gate | Status | Notes |
-|------|--------|-------|
-| Code quality | ✅ Pass | `dotnet format` / analyzers; `dart format` / `flutter analyze` |
-| Test strategy | ✅ Pass | Mocked LinkedIn HTTP tests; existing OAuth endpoint tests; Flutter `auth_api` + sign-in widget tests |
-| UX consistency | ✅ Pass | Existing OAuth screen, snackbars for errors; hide dev button when LinkedIn defines set |
-| Performance budgets | ✅ Pass | NFR-001 (30s sign-in); no blocking work on UI thread beyond AppAuth |
-| Flutter quality checks | ✅ Pass | quickstart §7 |
-| Evidence plan | ✅ Pass | PR: local + staging smoke checklist, CI `dotnet test` + `flutter test` |
-
-**Post-design re-check**: No constitution violations. No complexity tracking required.
+- **Code quality gate defined**: `flutter analyze`, `dart format`, backend build + tests; no dead code or ambiguous cross-layer side effects.
+- **Test strategy defined**: add regression tests for split-host web login completion and for “do not call `/auth/session` in split-host mode”.
+- **UX consistency strategy defined**: consistent sign-in success/error handling; avoid loops where user lands on `/auth/success` then gets bounced to `/sign-in`.
+- **Performance budgets defined**: ticket redeem + `/users/me` within 30s (dev/test), no repeated retries or infinite redirects.
+- **Evidence plan defined**: capture browser Network trace (dev/test/prod) showing `POST /auth/linkedin/mobile/complete` 2xx and `/users/me` 200; keep analyzer/test outputs in CI logs.
 
 ## Project Structure
 
@@ -41,104 +57,96 @@ Replace the **dev-only** OAuth exchanger and the **client-side token exchange** 
 
 ```text
 specs/main/
-├── plan.md              # This file
 ├── spec.md
-├── research.md          # Phase 0
-├── data-model.md        # Phase 1
-├── quickstart.md        # Phase 1
-├── contracts/
-│   └── linkedin-oauth-flow.md
-└── tasks.md             # /speckit.tasks (not created by /speckit.plan)
+├── plan.md              # This file
+├── research.md          # Phase 0 output
+├── data-model.md        # Phase 1 output
+├── quickstart.md        # Phase 1 output
+├── contracts/           # Phase 1 output
+└── tasks.md             # Phase 2 output (/speckit.tasks)
 ```
 
 ### Source Code (repository root)
 
 ```text
-backend/src/FelloWay.Infrastructure/Auth/
-├── DevOAuthTokenExchanger.cs           # keep for dev + facebook
-├── LinkedInOAuthTokenExchanger.cs      # NEW: token + userinfo HTTP
-├── CompositeOAuthTokenExchanger.cs     # NEW: route by provider + secrets
-└── OAuthOptions.cs                     # NEW: bind OAuth:LinkedIn:*
+backend/
+├── src/FelloWay.Api/
+└── tests/
 
-backend/src/FelloWay.Application/Auth/
-└── AuthService.cs                      # map Email to User (after migration)
-
-backend/src/FelloWay.Domain/Entities/
-└── User.cs                             # add Email?
-
-frontend/lib/features/auth/
-├── presentation/oauth_sign_in_page.dart  # authorize → AuthApi (not exchange on device)
-└── data/auth_api.dart                    # existing exchangeLinkedIn
-
-shared/api-contracts/auth/openapi.yaml    # unchanged (reference only)
-
-backend/tests/FelloWay.Api.Tests/Auth/
-└── LinkedInOAuthTokenExchangerTests.cs   # NEW (mock handler)
+frontend/
+├── lib/
+│   ├── app/
+│   ├── features/
+│   └── shared/
+└── test/
 ```
 
-**Structure Decision**: Touch Infrastructure auth layer + one Application mapping change + one Flutter presentation file; contracts stay in `shared/api-contracts/`.
+**Structure Decision**: Mobile + Web Flutter client in `frontend/` talking to ASP.NET Core API in `backend/`.
 
-## Implementation Phases (for `/speckit.tasks`)
+## Phase 0: Outline & Research (output: `research.md`)
 
-### Phase A — Backend LinkedIn exchanger (P1)
+Research goals (resolve “why it redirects to /sign-in after success”):
+- Confirm the intended split-host **web auth strategy** (ticket→JWT) and why cookies are not viable across CloudFront hosts.
+- Confirm infra requirements for HTTPS-only callback behind CloudFront/ALB (forwarded headers + CloudFront viewer policy).
+- Confirm CORS requirements for browser calling `POST /auth/linkedin/mobile/complete` from the web origin.
 
-1. Add `OAuthOptions` (`OAuth:LinkedIn:ClientId`, `ClientSecret`) and configuration validation.
-2. Implement `LinkedInOAuthTokenExchanger`:
-   - POST `accessToken` with `grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, `client_secret`, `code_verifier`.
-   - GET userinfo with bearer; map `sub`, `name`, `email` → `OAuthUserInfo`.
-   - Polly handler on named `HttpClient`.
-3. Implement `CompositeOAuthTokenExchanger` per [research.md](./research.md) §3.
-4. Replace DI: `services.AddScoped<IOAuthTokenExchanger, CompositeOAuthTokenExchanger>()`.
-5. EF migration `AddUserEmail`; update `AuthService` to set `User.Email` when provided.
-6. Tests: unit/integration for linkedin-with-secrets vs dev-code rejection vs no-secrets dev path.
+## Phase 1: Design & Contracts
 
-### Phase B — Flutter sign-in flow (P1)
+### Design decisions
 
-1. Change `_exchangeOAuth` to `appAuth.authorize` + `AuthApi.exchangeLinkedIn`.
-2. Pass `redirectUri` and PKCE verifier from authorize result to API body.
-3. Store API tokens via `authSession.setAuthenticated` (unchanged).
-4. Keep `_devBackendSignIn` when `!oauthReady && !useMock` (FR-010).
-5. Facebook button: keep current handler or disable real OIDC until follow-up (no Facebook production work).
-6. Tests: unit test sign-in path mocks `AuthApi`; manual smoke per quickstart.
+- **Primary flow (split-host web)**:
+  - `GET /auth/linkedin/login?platform=web&returnUrl=<web-origin>` redirects to LinkedIn.
+  - Callback completes server-side and redirects to `<web-origin>/auth/success?ticket=...`.
+  - Flutter web reads `ticket` and calls `POST /auth/linkedin/mobile/complete`.
+  - Client stores `accessToken` + `refreshToken` and uses Bearer on subsequent requests (`/users/me`).
+  - **Do not require** `GET /auth/session` in split-host mode.
 
-### Phase C — Operator docs & staging (P2)
+- **Secondary flow (same-origin / local dev)**:
+  - Cookie session can remain supported for local or same-origin deployments, but must be clearly separated in code paths (no ambiguity).
 
-1. Finalize [quickstart.md](./quickstart.md) with local/staging checklist.
-2. Document staging secret keys for deploy pipeline (`008-aws-deploy-pipeline`).
-3. Run SC-001: real LinkedIn on local + staging.
+- **Refactor direction (auth simplicity)**:
+  - Frontend: introduce a single “post-login completion” orchestrator that chooses between:
+    - ticket→JWT completion (split-host web, and mobile)
+    - cookie session probe (only when same-origin cookie session is expected)
+  - Backend: keep `PolicyScheme` routing (Bearer vs cookie), but ensure controller endpoints used by split-host web do not assume cookie.
+  - Remove/avoid “try cookie then JWT then cookie” patterns; conditions must be based on environment/config and URL context.
 
-## Integration Boundaries
+### Contracts (output: `contracts/`)
 
-| System | Responsibility |
-|--------|----------------|
-| LinkedIn OIDC | Authorize (mobile); token + userinfo (backend only) |
-| FelloWay API | Issue JWT; link `OAuthIdentity`; optional `User.Email` |
-| Flutter | PKCE authorize; never hold LinkedIn secret |
-| Facebook | Unchanged dev exchanger |
+Document:
+- Web BFF sequence (login → callback → success ticket)
+- Ticket completion contract (`POST /auth/linkedin/mobile/complete`)
+- CORS and HTTPS invariants per environment
 
-## Complexity Tracking
+### Data model (output: `data-model.md`)
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| Composite exchanger (2 implementations) | Hybrid dev + production on same endpoint | Single class with growing if-chains harms testability |
-| `User.Email` migration | FR-012 requires persist when present | Leaving email only in OAuthUserInfo loses data after request |
+Capture the minimal entities involved:
+- `OAuthIdentity`, `User`, refresh tokens (existing)
+- `MobileAuthTicket` (one-time ticket) lifecycle: create → redeem → consumed/expired
 
-## Risks
+### Quickstart (output: `quickstart.md`)
 
-| Risk | Mitigation |
-|------|------------|
-| LinkedIn verification delay | Email optional; manual profile completion |
-| Redirect URI mismatch | Document single mobile scheme; same value in AppAuth + API body |
-| Tests depend on dev exchanger | Factory tests without secrets; separate tests with mocked LinkedIn HTTP |
+Provide operator steps for dev/test/prod:
+- Required LinkedIn redirect URIs: `https://<api-host>/auth/linkedin/callback`
+- Required web return URLs/origins: `https://<web-host>`
+- CORS: `Cors:AllowedOrigins` must include each env’s **web origin**
+- CloudFront: enforce HTTPS-only viewer policy and forward proto/host headers (or equivalent)
 
-## Artifacts Generated
+## Phase 2: Implementation Plan (high level)
 
-| Artifact | Path |
-|----------|------|
-| Research | [research.md](./research.md) |
-| Data model | [data-model.md](./data-model.md) |
-| Contract notes | [contracts/linkedin-oauth-flow.md](./contracts/linkedin-oauth-flow.md) |
-| Quickstart | [quickstart.md](./quickstart.md) |
-| Plan | [plan.md](./plan.md) |
+### Frontend (Flutter web)
+- Make split-host detection explicit and use it to:
+  - Always redeem `ticket` via `POST /auth/linkedin/mobile/complete`
+  - Never call `GET /auth/session` as a completion step in split-host mode
+- Ensure auth errors are surfaced once (snackbar) and navigation does not loop.
+- Add regression tests for the “auth success ticket is present” path.
 
-**Next command**: `/speckit.tasks` — break Phases A–C into ordered tasks.
+### Backend (.NET)
+- Ensure `/auth/linkedin/callback` builds correct **https://** redirect URIs when behind CloudFront/ALB (forwarded headers already present; verify in infra).
+- Ensure `Cors:AllowedOrigins` is correctly configured for dev/test/prod web origins.
+- Add backend tests for `/auth/linkedin/mobile/complete` (invalid/expired ticket).
+
+### Infrastructure (Terraform / CloudFront)
+- Ensure CloudFront viewer policy always redirects HTTP → HTTPS.
+- Ensure forwarding of `X-Forwarded-Proto` and `Host` to the API origin (ALB/ECS), so ASP.NET can generate HTTPS links.
+

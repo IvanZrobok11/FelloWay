@@ -3,6 +3,7 @@ import 'package:felloway_client/app/auth/auth_session.dart';
 import 'package:felloway_client/app/config/api_mode.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/auth_api.dart';
+import '../helpers/auth_test_helpers.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/auth/presentation/oauth_sign_in_page.dart';
 import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
@@ -31,6 +32,10 @@ Future<Widget> _app({
   final prefs = await SharedPreferences.getInstance();
   final tokenStorage = TokenStorage();
   final authApi = AuthApi(baseUrl: config.apiBaseUrl);
+  final authCompletion = testAuthCompletion(
+    authApi: authApi,
+    authSession: session,
+  );
   final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
   return MaterialApp.router(
     localizationsDelegates: const [
@@ -48,6 +53,7 @@ Future<Widget> _app({
         config: config,
         apiClient: apiClient,
         authApi: authApi,
+        authCompletion: authCompletion,
         authSession: session,
         onboardingPreferences: OnboardingPreferences(prefs),
         onboardingDraftStore: OnboardingDraftStore(prefs),

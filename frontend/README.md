@@ -79,8 +79,9 @@ Production LinkedIn uses a **backend-for-frontend** flow (`AspNet.Security.OAuth
 
 1. App opens `GET {API_BASE_URL}/auth/linkedin/login` (web: same-window navigation; mobile: `flutter_web_auth_2`).
 2. LinkedIn redirects to **`{API_BASE_URL}/auth/linkedin/callback`** (register this URL in LinkedIn Developer Portal — not the Flutter origin).
-3. **Web**: API redirects to `{frontend}/auth/success?ticket=...` → app calls `POST /auth/linkedin/mobile/complete` → stores JWT (same handoff as mobile; needed when web and API are on different hosts).
-4. **Mobile**: API redirects `com.felloway.app://auth/callback?ticket=...` → app calls `POST /auth/linkedin/mobile/complete` → stores JWT.
+3. **Web (split-host CloudFront)**: API redirects to `{frontend}/auth/success?ticket=...` → `AuthCompletionService` calls `POST /auth/linkedin/mobile/complete` → stores JWT → Bearer on `/users/me`. **Do not** rely on `GET /auth/session` (cookie is on the API host, not visible cross-origin).
+4. **Web (same-origin local)**: optional cookie session via credentialed `dio`; ticket handoff still works.
+5. **Mobile**: API redirects `com.felloway.app://auth/callback?ticket=...` → app calls `POST /auth/linkedin/mobile/complete` → stores JWT.
 
 **Local HTTPS (required for BFF):**
 

@@ -1,3 +1,40 @@
+# Research: Split-host LinkedIn BFF auth (main)
+
+**Date**: 2026-05-26
+
+## 1. Root cause of 401 after `/auth/success?ticket=...`
+
+**Decision**: Treat deployed Flutter web (split-host) as **ticket → JWT** auth, not cookie session.
+
+**Rationale**:
+- When frontend and API are on different CloudFront hosts, browser cookies set for the API host are not reliably available for frontend-origin XHR, and `GET /auth/session` can return 401 even after the LinkedIn flow redirects successfully.
+- The backend already issues a one-time `ticket` for cross-origin web handoff and provides `POST /auth/linkedin/mobile/complete` to exchange that ticket for FelloWay JWTs.
+
+**Alternatives considered**:
+- Cookie-only cross-origin sessions: requires shared parent domain + strict cookie policy + consistent credentialed XHR; higher operational risk and fragile with CloudFront hostnames.
+
+## 2. HTTPS-only callback behind CloudFront/ALB
+
+**Decision**: OAuth callback and redirects must be **HTTPS-only** in deployed environments; any `http://` hop is a defect to fix in CloudFront/infra.
+
+**Rationale**:
+- LinkedIn redirect URIs should be registered as `https://<api-host>/auth/linkedin/callback`.
+- The API uses forwarded headers (`X-Forwarded-Proto`, `X-Forwarded-Host`) to reconstruct the public scheme/host; CloudFront must enforce HTTPS viewer policy and forward the headers to the origin.
+
+**Alternatives considered**:
+- Allowing mixed HTTP/HTTPS: breaks OAuth guarantees and causes inconsistent redirect/cookie behavior.
+
+## 3. CORS requirement for ticket handoff
+
+**Decision**: In each environment (dev/test/prod), API `Cors:AllowedOrigins` must include the **exact HTTPS web origin**.
+
+**Rationale**:
+- Browser must be able to call `POST /auth/linkedin/mobile/complete` from `/auth/success` page.
+- Backend CORS policy in non-Development is strict allowlist only.
+
+**Alternatives considered**:
+- Wildcard origin: incompatible with `AllowCredentials` and not acceptable for deployed environments.
+
 # Research: Production LinkedIn OAuth Sign-In
 
 **Feature**: `main` (Production LinkedIn OAuth)  

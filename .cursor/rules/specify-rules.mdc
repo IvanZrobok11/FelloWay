@@ -5,7 +5,7 @@ alwaysApply: true
 ---
 # felloway_client Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-05-20
+Auto-generated from all feature plans. Last updated: 2026-05-26
 
 ## Active Technologies
 - C# 12 / .NET 8 + ASP.NET Core health checks (`Microsoft.Extensions.Diagnostics.HealthChecks`), EF Core health check (`Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore`), optional `AspNetCore.HealthChecks.UI.Client` 8.x for `UIResponseWriter` (003-custom-health-checks)
@@ -57,7 +57,6 @@ C# 12 / .NET 8: Follow standard conventions
 ## Recent Changes
 - 011-backend-interests-catalog: Added C# 12 / .NET 8 (API); Dart 3.10+ / Flutter stable + EF Core 8 + Npgsql; ASP.NET Core controllers; OpenAPI merge + `openapi-generator` dart-dio; existing `dio` / `go_router`
 - 010-connectivity-snackbar: Added Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `flutter` (Material `SnackBar`, `ScaffoldMessenger`), `dio` (error classification only), existing `app_localizations`
-- 009-linkedin-bff-auth: Added C# 12 / .NET 8 (API); Dart 3.10+ / Flutter stable (client) + `AspNet.Security.OAuth.LinkedIn` 8.x, `Microsoft.AspNetCore.Authentication.Cookies`, `Microsoft.AspNetCore.Authentication.JwtBearer`, EF Core 8 + Npgsql; Flutter: `dio`, `flutter_web_auth_2` (mobile only), `go_router`, `flutter_secure_storage`
 
 
 <!-- MANUAL ADDITIONS START -->

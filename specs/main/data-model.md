@@ -1,3 +1,42 @@
+# Data model: Split-host LinkedIn BFF auth (main)
+
+## Entities
+
+### `OAuthIdentity` (existing)
+
+- **provider**: `linkedin`
+- **providerSubject**: string (LinkedIn subject)
+- **userId**: GUID (FK to `User`)
+
+### `User` (existing)
+
+- **id**: GUID
+- **email**: nullable string
+- **displayName**: nullable string
+
+### `RefreshToken` (existing)
+
+- **userId**: GUID
+- **token**: string
+- **expiresAt**: timestamp
+
+### `MobileAuthTicket` / BFF ticket (existing concept)
+
+Represents a short-lived one-time token used to exchange a completed server-side OAuth login for FelloWay JWTs.
+
+- **ticket**: string (opaque; passed as query string from `/auth/success?ticket=...`)
+- **userId**: GUID
+- **expiresAt**: timestamp (TTL)
+- **consumedAt**: timestamp? (single-use)
+
+## Lifecycle
+
+1. Server completes LinkedIn OAuth and maps/creates user.
+2. Server creates `ticket` for the user.
+3. Web frontend opens `/auth/success?ticket=...`.
+4. Frontend calls `POST /auth/linkedin/mobile/complete` with the `ticket`.
+5. Server consumes the ticket (single-use) and issues JWT access + refresh.
+
 # Data Model: Production LinkedIn OAuth Sign-In
 
 **Feature**: `main`  

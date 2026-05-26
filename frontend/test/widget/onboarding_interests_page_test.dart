@@ -7,6 +7,7 @@ import 'package:felloway_client/app/auth/auth_session.dart';
 import 'package:felloway_client/app/config/api_mode.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/auth_api.dart';
+import '../helpers/auth_test_helpers.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/chats/application/chat_access_controller.dart';
 import 'package:felloway_client/features/chats/data/stream_chat_service.dart';
@@ -60,6 +61,11 @@ void main() {
     );
     final tokenStorage = TokenStorage();
     final authApi = AuthApi(baseUrl: config.apiBaseUrl);
+    final authSession = AuthSession(tokenStorage: tokenStorage);
+    final authCompletion = testAuthCompletion(
+      authApi: authApi,
+      authSession: authSession,
+    );
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
     apiClient.dio.httpClientAdapter = _InterestsFixtureAdapter(fixture);
 
@@ -87,7 +93,8 @@ void main() {
             config: config,
             apiClient: apiClient,
             authApi: authApi,
-            authSession: AuthSession(tokenStorage: tokenStorage),
+            authCompletion: authCompletion,
+            authSession: authSession,
             onboardingPreferences: OnboardingPreferences(prefs),
             onboardingDraftStore: OnboardingDraftStore(prefs),
             interestsRepository: InterestsRepository(apiClient),

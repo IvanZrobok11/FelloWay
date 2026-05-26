@@ -225,8 +225,5 @@ GoRouter createAppRouter({
 }
 
 bool _hasBffTicketInUrl(GoRouterState state) {
-  if (state.uri.queryParameters['ticket']?.isNotEmpty ?? false) {
-    return true;
-  }
-  return bffTicketFromBrowser()?.isNotEmpty ?? false;
+  return readBffTicket(uri: state.uri) != null;
 }

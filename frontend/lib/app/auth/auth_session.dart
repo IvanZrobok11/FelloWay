@@ -34,8 +34,9 @@ class AuthSession extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Web BFF: reconcile in-memory session with API session cookie (cross-origin credentialed calls).
+  /// Web BFF: reconcile in-memory session with API session cookie (same-origin web only).
   ///
+  /// Do not call for split-host deployments; use [AuthCompletionService.completeFromTicket].
   /// Runs at most once per app launch. Connection errors set [consumeConnectivityNotice]
   /// so the shell can show [ConnectivitySnackBar] (probe is not tied to a user action).
   Future<void> syncWebCookieSession(AuthApi authApi) async {
