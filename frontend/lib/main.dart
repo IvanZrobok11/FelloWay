@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app/configure_url_strategy.dart';
 import 'app/app.dart';
 import 'app/auth/auth_session.dart';
-import 'app/config/app_config.dart';
+import 'app/config/app_config_loader.dart';
 import 'features/auth/data/auth_api.dart';
 import 'features/auth/data/token_storage.dart';
 import 'features/chats/application/chat_access_controller.dart';
@@ -21,7 +21,7 @@ import 'shared/network/api_client.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureWebUrlStrategy();
-  final config = AppConfig.fromEnvironment();
+  final config = await loadAppConfig();
   final tokenStorage = TokenStorage();
   final authSession = AuthSession(tokenStorage: tokenStorage);
   await authSession.restore();

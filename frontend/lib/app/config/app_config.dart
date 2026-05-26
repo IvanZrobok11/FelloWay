@@ -42,6 +42,26 @@ class AppConfig {
   @Deprecated('Use useMockApi')
   bool get isDemoBackend => useMockApi;
 
+  AppConfig copyWith({
+    String? apiBaseUrl,
+    String? streamApiKey,
+    String? oauthIssuer,
+    String? oauthClientId,
+    String? oauthRedirectUrl,
+    String? oauthDiscoveryUrl,
+    ApiMode? apiMode,
+  }) {
+    return AppConfig(
+      apiBaseUrl: apiBaseUrl ?? this.apiBaseUrl,
+      streamApiKey: streamApiKey ?? this.streamApiKey,
+      oauthIssuer: oauthIssuer ?? this.oauthIssuer,
+      oauthClientId: oauthClientId ?? this.oauthClientId,
+      oauthRedirectUrl: oauthRedirectUrl ?? this.oauthRedirectUrl,
+      oauthDiscoveryUrl: oauthDiscoveryUrl ?? this.oauthDiscoveryUrl,
+      apiMode: apiMode ?? this.apiMode,
+    );
+  }
+
   static AppConfig fromEnvironment() {
     const api = String.fromEnvironment(
       'API_BASE_URL',

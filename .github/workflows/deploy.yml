@@ -172,6 +172,17 @@ jobs:
             "${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}" \
             "$IMAGE_URI"
 
+      - name: Write web runtime config (GetStream key)
+        env:
+          STREAM_API_KEY: ${{ vars.DEV_STREAM_API_KEY }}
+        run: |
+          if [ -z "$STREAM_API_KEY" ]; then
+            echo "::warning::DEV_STREAM_API_KEY not set — web/env.json will be missing; chat UI shows STREAM_API_KEY hint"
+            exit 0
+          fi
+          python3 -c "import json, os; json.dump({'streamApiKey': os.environ['STREAM_API_KEY']}, open('web-build/env.json', 'w'))"
+          echo "Wrote web-build/env.json (streamApiKey present)"
+
       - name: Sync web to S3
         env:
           BUCKET: ${{ env.PROJECT_NAME }}-web-${{ env.ENVIRONMENT }}-${{ vars.AWS_ACCOUNT_ID }}
