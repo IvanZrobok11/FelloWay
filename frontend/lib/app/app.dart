@@ -72,6 +72,7 @@ class _FellowayAppState extends State<FellowayApp> {
       onboardingPreferences: widget.onboardingPreferences,
       webSessionAuthApi: widget.authApi,
       syncWebCookieSession: kIsWeb && !widget.config.useMockApi,
+      apiBaseUrl: widget.config.apiBaseUrl,
       navigatorKey: PushHandler.rootNavigatorKey,
     );
     PushHandler.attach(_router!);

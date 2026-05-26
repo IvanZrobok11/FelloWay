@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/app_scope.dart';
 import '../../../app/config/app_config.dart';
 import '../mobile/linkedin_bff_auth.dart';
+import '../web/bff_ticket_from_browser.dart';
 import '../web/linkedin_bff_web_auth.dart';
 import '../../onboarding/domain/onboarding_draft.dart';
 import '../../profile/domain/user_profile.dart';
@@ -350,10 +351,14 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
     final messenger = ScaffoldMessenger.of(context);
 
     try {
+      final config = AppScope.configOf(context);
       final ticket =
-          Uri.base.queryParameters['ticket'] ??
-          GoRouterState.of(context).uri.queryParameters['ticket'];
-      if (ticket != null && ticket.isNotEmpty) {
+          bffTicketFromBrowser() ??
+          GoRouterState.of(context).uri.queryParameters['ticket'] ??
+          Uri.base.queryParameters['ticket'];
+      if (!session.isAuthenticated &&
+          ticket != null &&
+          ticket.isNotEmpty) {
         final tokens = await authApi.completeLinkedInMobile(ticket: ticket);
         if (tokens.accessToken.isEmpty) {
           messenger.showSnackBar(
@@ -366,7 +371,14 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
         );
-      } else {
+      } else if (!session.isAuthenticated) {
+        if (kIsWeb && isCrossOriginApi(config.apiBaseUrl)) {
+          messenger.showSnackBar(
+            SnackBar(content: Text(l10n.oauthMissingTokens)),
+          );
+          context.go('/sign-in');
+          return;
+        }
         final me = await users.getMe();
         if (!mounted) return;
         switch (me) {

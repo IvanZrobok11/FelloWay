@@ -8,6 +8,7 @@ import 'app/auth/auth_session.dart';
 import 'app/config/app_config_loader.dart';
 import 'features/auth/data/auth_api.dart';
 import 'features/auth/data/token_storage.dart';
+import 'features/auth/web/bff_ticket_from_browser.dart';
 import 'features/chats/application/chat_access_controller.dart';
 import 'features/chats/data/stream_chat_service.dart';
 import 'features/events/data/events_repository.dart';
@@ -41,8 +42,21 @@ Future<void> main() async {
     useCookieAuthOnWeb: useWebCookies,
   );
   if (useWebCookies) {
-    final bffTicket = Uri.base.queryParameters['ticket'];
-    if (bffTicket == null || bffTicket.isEmpty) {
+    final bffTicket = bffTicketFromBrowser();
+    final crossOriginBff = kIsWeb && isCrossOriginApi(config.apiBaseUrl);
+    if (bffTicket != null && bffTicket.isNotEmpty) {
+      try {
+        final tokens = await authApi.completeLinkedInMobile(ticket: bffTicket);
+        if (tokens.accessToken.isNotEmpty) {
+          await authSession.setAuthenticated(
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+          );
+        }
+      } on Object {
+        // OAuthBffSuccessPage retries with the same ticket from the browser URL.
+      }
+    } else if (!crossOriginBff) {
       await authSession.syncWebCookieSession(authApi);
     }
   }

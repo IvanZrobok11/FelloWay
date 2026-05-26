@@ -19,6 +19,10 @@ resource "aws_cloudfront_origin_access_control" "web" {
   signing_protocol                  = "sigv4"
 }
 
+data "aws_cloudfront_cache_policy" "caching_disabled" {
+  name = "Managed-CachingDisabled"
+}
+
 resource "aws_cloudfront_distribution" "web" {
   enabled             = true
   is_ipv6_enabled     = true
@@ -37,7 +41,7 @@ resource "aws_cloudfront_distribution" "web" {
     target_origin_id       = "s3-web"
     viewer_protocol_policy = "redirect-to-https"
     compress               = true
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+    cache_policy_id        = data.aws_cloudfront_cache_policy.caching_disabled.id
   }
 
   custom_error_response {

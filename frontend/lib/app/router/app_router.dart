@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/data/auth_api.dart';
+import '../../features/auth/web/bff_ticket_from_browser.dart';
 import '../auth/auth_session.dart';
 import '../notifications/push_handler.dart';
 import '../../features/onboarding/data/onboarding_preferences.dart';
@@ -29,6 +31,7 @@ GoRouter createAppRouter({
   required OnboardingPreferences onboardingPreferences,
   AuthApi? webSessionAuthApi,
   bool syncWebCookieSession = false,
+  String apiBaseUrl = '',
   GlobalKey<NavigatorState>? navigatorKey,
 }) {
   return GoRouter(
@@ -42,12 +45,14 @@ GoRouter createAppRouter({
       final onOnboarding = path.startsWith('/onboarding');
       final onSignIn = path == '/sign-in';
       final onAuthSuccess = path == '/auth/success';
-      final hasBffTicket =
-          state.uri.queryParameters['ticket']?.isNotEmpty ?? false;
+      final hasBffTicket = _hasBffTicketInUrl(state);
 
+      final crossOriginBff =
+          kIsWeb && apiBaseUrl.isNotEmpty && isCrossOriginApi(apiBaseUrl);
       if (!authSession.isAuthenticated &&
           syncWebCookieSession &&
           webSessionAuthApi != null &&
+          !crossOriginBff &&
           !onAuthSuccess &&
           !hasBffTicket) {
         await authSession.syncWebCookieSession(webSessionAuthApi);
@@ -217,4 +222,11 @@ GoRouter createAppRouter({
       ),
     ],
   );
+}
+
+bool _hasBffTicketInUrl(GoRouterState state) {
+  if (state.uri.queryParameters['ticket']?.isNotEmpty ?? false) {
+    return true;
+  }
+  return bffTicketFromBrowser()?.isNotEmpty ?? false;
 }
