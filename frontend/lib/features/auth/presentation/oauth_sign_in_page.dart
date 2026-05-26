@@ -350,7 +350,9 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
     final messenger = ScaffoldMessenger.of(context);
 
     try {
-      final ticket = GoRouterState.of(context).uri.queryParameters['ticket'];
+      final ticket =
+          Uri.base.queryParameters['ticket'] ??
+          GoRouterState.of(context).uri.queryParameters['ticket'];
       if (ticket != null && ticket.isNotEmpty) {
         final tokens = await authApi.completeLinkedInMobile(ticket: ticket);
         if (tokens.accessToken.isEmpty) {

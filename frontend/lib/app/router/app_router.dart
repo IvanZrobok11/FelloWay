@@ -42,10 +42,14 @@ GoRouter createAppRouter({
       final onOnboarding = path.startsWith('/onboarding');
       final onSignIn = path == '/sign-in';
       final onAuthSuccess = path == '/auth/success';
+      final hasBffTicket =
+          state.uri.queryParameters['ticket']?.isNotEmpty ?? false;
 
       if (!authSession.isAuthenticated &&
           syncWebCookieSession &&
-          webSessionAuthApi != null) {
+          webSessionAuthApi != null &&
+          !onAuthSuccess &&
+          !hasBffTicket) {
         await authSession.syncWebCookieSession(webSessionAuthApi);
       }
 
