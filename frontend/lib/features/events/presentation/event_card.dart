@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 
+import '../../../app/theme/felloway_text_colors.dart';
 import '../domain/event.dart';
 
 class EventCard extends StatelessWidget {
@@ -19,6 +20,7 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final lightText = FellowayTextColors.onLightSurface;
     final cover = summary.imageUrls.isNotEmpty ? summary.imageUrls.first : null;
     final dpr = MediaQuery.devicePixelRatioOf(context);
     final maxW = MediaQuery.sizeOf(context).width;
@@ -65,14 +67,18 @@ class EventCard extends StatelessWidget {
                   children: [
                     Text(
                       summary.title,
-                      style: theme.textTheme.titleMedium,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: lightText.primary,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       '${summary.city} · ${_formatDate(summary.startsAt)}',
-                      style: theme.textTheme.bodySmall,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: lightText.secondary,
+                      ),
                     ),
                     if (summary.tags.isNotEmpty) ...[
                       const SizedBox(height: 8),
@@ -84,7 +90,9 @@ class EventCard extends StatelessWidget {
                               (t) => Chip(
                                 label: Text(
                                   t,
-                                  style: theme.textTheme.labelSmall,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: lightText.secondary,
+                                  ),
                                 ),
                                 visualDensity: VisualDensity.compact,
                                 materialTapTargetSize:
@@ -98,12 +106,16 @@ class EventCard extends StatelessWidget {
                     if (isGuest)
                       Text(
                         l10n.eventCardGuestHint,
-                        style: theme.textTheme.bodySmall,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: lightText.secondary,
+                        ),
                       )
                     else if (summary.attendeePreview.isNotEmpty)
                       Text(
                         l10n.eventCardAttendeeTeaser,
-                        style: theme.textTheme.bodySmall,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: lightText.secondary,
+                        ),
                       ),
                     if (!isGuest && summary.attendeePreview.isNotEmpty)
                       const SizedBox(height: 4),
@@ -113,7 +125,9 @@ class EventCard extends StatelessWidget {
                             .map((a) => '${a.displayName} (${a.city})')
                             .take(3)
                             .join(', '),
-                        style: theme.textTheme.bodyMedium,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: lightText.primary,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

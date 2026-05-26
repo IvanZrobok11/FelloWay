@@ -9,8 +9,8 @@ import '../application/auth_completion_service.dart';
 import '../mobile/linkedin_bff_auth.dart';
 import '../web/bff_ticket_from_browser.dart';
 import '../web/linkedin_bff_web_auth.dart';
-import '../../onboarding/data/onboarding_preferences.dart';
 import '../../onboarding/domain/onboarding_draft.dart';
+import '../../../app/router/post_sign_in_navigation.dart';
 import '../../profile/domain/user_profile.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 import '../../../shared/errors/result.dart';
@@ -144,7 +144,7 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
                   content: Text(l10n.onboardingSaveFailed(error.message)),
                 ),
               );
-              context.go('/onboarding/welcome', extra: OnboardingDraft());
+              context.go('/onboarding/name', extra: OnboardingDraft());
               return;
           }
         } else {
@@ -154,11 +154,7 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
       }
 
       if (!mounted) return;
-      if (onboarding.isComplete) {
-        context.go('/events');
-      } else {
-        context.go('/onboarding/welcome', extra: OnboardingDraft());
-      }
+      await navigateAfterSignIn(context, users: users);
     } finally {
       if (mounted) setState(() => _finishing = false);
     }
@@ -310,7 +306,7 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
             messenger.showSnackBar(
               SnackBar(content: Text(l10n.onboardingSaveFailed(error.message))),
             );
-            context.go('/onboarding/welcome', extra: OnboardingDraft());
+            context.go('/onboarding/name', extra: OnboardingDraft());
             return;
           }
           await store.clearPending();
@@ -319,7 +315,7 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
       }
 
       if (!mounted) return;
-      _navigateAfterAuth(context, onboarding);
+      await navigateAfterSignIn(context, users: users);
     } catch (e) {
       if (!mounted) return;
       messenger.showSnackBar(
@@ -329,27 +325,19 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
     }
   }
 
-  void _navigateAfterAuth(
-    BuildContext context,
-    OnboardingPreferences onboarding,
-  ) {
-    if (onboarding.isComplete) {
-      context.go('/events');
-    } else {
-      context.go('/onboarding/welcome', extra: OnboardingDraft());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final session = AppScope.authSessionOf(context);
-    final onboarding = AppScope.onboardingOf(context);
     if (session.isAuthenticated &&
-        onboarding.isComplete &&
         readBffTicket(uri: GoRouterState.of(context).uri) == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        _navigateAfterAuth(context, onboarding);
+        unawaited(
+          navigateAfterSignIn(
+            context,
+            users: AppScope.usersOf(context),
+          ),
+        );
       });
     }
     return const Scaffold(

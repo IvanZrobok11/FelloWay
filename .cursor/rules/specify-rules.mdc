@@ -5,7 +5,7 @@ alwaysApply: true
 ---
 # felloway_client Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-05-26
+Auto-generated from all feature plans. Last updated: 2026-05-27
 
 ## Active Technologies
 - C# 12 / .NET 8 + ASP.NET Core health checks (`Microsoft.Extensions.Diagnostics.HealthChecks`), EF Core health check (`Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore`), optional `AspNetCore.HealthChecks.UI.Client` 8.x for `UIResponseWriter` (003-custom-health-checks)
@@ -43,6 +43,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-26
 - N/A (no client-side mock stores); `TokenStorage` unchanged (015-remove-mock-local)
 - C# 12 / .NET 8 + ASP.NET Core, `IOAuthTokenExchanger`, `AuthService`, `OAuthOptions`, LinkedIn BFF (`009-linkedin-bff-auth`) (016-remove-dev-oauth-backend)
 - PostgreSQL (unchanged); test InMemory / Testcontainers (016-remove-dev-oauth-backend)
+- Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `go_router`, `AppTheme` / `FellowayTextColors`, `UsersRepository.getMe()`, `OnboardingPreferences`, existing onboarding pages (017-post-signin-onboarding-contrast)
+- `SharedPreferences` (`OnboardingPreferences`); profile from API (017-post-signin-onboarding-contrast)
 
 - C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
 
@@ -63,9 +65,9 @@ tests/
 C# 12 / .NET 8: Follow standard conventions
 
 ## Recent Changes
+- 017-post-signin-onboarding-contrast: Added Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `go_router`, `AppTheme` / `FellowayTextColors`, `UsersRepository.getMe()`, `OnboardingPreferences`, existing onboarding pages
 - 016-remove-dev-oauth-backend: Added C# 12 / .NET 8 + ASP.NET Core, `IOAuthTokenExchanger`, `AuthService`, `OAuthOptions`, LinkedIn BFF (`009-linkedin-bff-auth`)
 - 015-remove-mock-local: Added Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `dio`, `go_router`, `flutter_appauth` / BFF web auth, `stream_chat`, existing repositories + `AppConfig`
-- 014-mobile-typography: Added Dart 3.10+ / Flutter + bundled Onest, FellowayTypography tokens
 
 
 <!-- MANUAL ADDITIONS START -->

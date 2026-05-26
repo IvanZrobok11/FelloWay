@@ -24,6 +24,14 @@ class FellowayTextColors extends ThemeExtension<FellowayTextColors> {
     accent: FellowayColors.brandYellow,
   );
 
+  /// Dark text for white/light input surfaces (onboarding fields, event card body).
+  static const FellowayTextColors onLightSurface = FellowayTextColors(
+    primary: FellowayColors.brandDark,
+    secondary: Color(0xFF5D4037),
+    tertiary: Color(0xFF8D6E63),
+    accent: FellowayColors.brandOrange,
+  );
+
   @override
   FellowayTextColors copyWith({
     Color? primary,

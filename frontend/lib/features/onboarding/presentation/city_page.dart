@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
+import '../../../app/theme/felloway_text_colors.dart';
 import '../domain/onboarding_draft.dart';
 import '../domain/onboarding_completion.dart';
 
@@ -65,6 +66,7 @@ class _CityPageState extends State<CityPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final draft = _draft!;
+    final lightText = FellowayTextColors.onLightSurface;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -80,15 +82,29 @@ class _CityPageState extends State<CityPage> {
               InputDecorator(
                 decoration: InputDecoration(
                   labelText: l10n.onboardingCityLabel,
+                  labelStyle: TextStyle(color: lightText.secondary),
                   border: const OutlineInputBorder(),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     isExpanded: true,
                     value: _cities.contains(_city) ? _city : null,
-                    hint: Text(l10n.onboardingCityLabel),
+                    hint: Text(
+                      l10n.onboardingCityLabel,
+                      style: TextStyle(color: lightText.tertiary),
+                    ),
+                    style: TextStyle(color: lightText.primary),
+                    dropdownColor: Theme.of(context).colorScheme.surface,
                     items: _cities
-                        .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                        .map(
+                          (c) => DropdownMenuItem(
+                            value: c,
+                            child: Text(
+                              c,
+                              style: TextStyle(color: lightText.primary),
+                            ),
+                          ),
+                        )
                         .toList(),
                     onChanged: (v) => setState(() {
                       _city = v;

@@ -6,7 +6,11 @@ import '../../features/auth/data/auth_api.dart';
 import '../../features/auth/web/bff_ticket_from_browser.dart';
 import '../../features/chats/presentation/stream_chat_scope.dart';
 import '../auth/auth_session.dart';
+import '../../features/profile/data/users_repository.dart';
+import '../app_scope.dart';
+import '../../shared/errors/result.dart';
 import 'resolve_initial_location.dart';
+import 'resolve_post_sign_in_route.dart';
 import '../notifications/push_handler.dart';
 import '../../features/onboarding/data/onboarding_preferences.dart';
 import '../shell/main_shell.dart';
@@ -96,8 +100,26 @@ GoRouter createAppRouter({
       }
 
       if (authSession.isAuthenticated && !onboardingPreferences.isComplete) {
-        if (!onOnboarding && !onSignIn) {
-          return '/onboarding/welcome';
+        UsersRepository? usersRepo;
+        try {
+          usersRepo = AppScope.usersOf(context);
+        } on Object {
+          usersRepo = null;
+        }
+
+        if (path == '/onboarding/welcome') {
+          final displayName = usersRepo != null
+              ? await _fetchDisplayName(usersRepo)
+              : '';
+          return resolvePostSignInRoute(displayName);
+        }
+        if (!onOnboarding && !onSignIn && !onAuthSuccess) {
+          final displayName = usersRepo != null
+              ? await _fetchDisplayName(usersRepo)
+              : '';
+          if (!profileHasDisplayName(displayName)) {
+            return '/onboarding/name';
+          }
         }
       }
 
@@ -239,4 +261,16 @@ GoRouter createAppRouter({
 
 bool _hasBffTicketInUrl(GoRouterState state) {
   return readBffTicket(uri: state.uri) != null;
+}
+
+Future<String> _fetchDisplayName(UsersRepository users) async {
+  try {
+    final me = await users.getMe();
+    return switch (me) {
+      Success(:final value) => value.displayName,
+      Failure() => '',
+    };
+  } on Object {
+    return '';
+  }
 }

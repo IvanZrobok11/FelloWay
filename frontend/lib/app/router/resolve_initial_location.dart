@@ -17,5 +17,5 @@ String resolveInitialLocation({
   }
   return onboardingPreferences.isComplete
       ? '/events'
-      : '/onboarding/welcome';
+      : '/onboarding/name';
 }
