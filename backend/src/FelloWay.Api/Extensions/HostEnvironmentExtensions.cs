@@ -13,4 +13,12 @@ public static class HostEnvironmentExtensions
     /// </summary>
     public static bool IsProdLike(this IHostEnvironment environment) =>
         environment.IsProduction() || environment.IsEnvironment("prod");
+
+    /// <summary>
+    /// ECS / AWS deploy targets (<c>dev</c>, <c>test</c>, <c>prod</c>) — not local <c>Development</c> or test host <c>Testing</c>.
+    /// </summary>
+    public static bool IsAwsDeployedEnvironment(this IHostEnvironment environment) =>
+        environment.IsEnvironment("dev")
+        || environment.IsEnvironment("test")
+        || environment.IsEnvironment("prod");
 }

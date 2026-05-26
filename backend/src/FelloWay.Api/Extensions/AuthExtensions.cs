@@ -48,10 +48,11 @@ public static class AuthExtensions
         {
             options.Cookie.Name = "felloway.session";
             options.Cookie.HttpOnly = true;
-            var relaxCookiePolicy = environment.IsDevLike() || environment.IsEnvironment("Testing");
-            options.Cookie.SecurePolicy = relaxCookiePolicy
-                ? CookieSecurePolicy.SameAsRequest
-                : CookieSecurePolicy.Always;
+            // AWS dev/test/prod: always Secure (cross-origin web→API cookies need SameSite=None + Secure).
+            // Local host only (Development / Testing): allow HTTP for SameAsRequest.
+            options.Cookie.SecurePolicy = environment.IsAwsDeployedEnvironment()
+                ? CookieSecurePolicy.Always
+                : CookieSecurePolicy.SameAsRequest;
             // Dev/test: Flutter web (e.g. :7357) calls API (e.g. :7086) with credentials — needs None, not Lax.
             options.Cookie.SameSite = SameSiteMode.None;
             options.SlidingExpiration = true;

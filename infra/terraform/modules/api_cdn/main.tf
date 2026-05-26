@@ -17,6 +17,12 @@ resource "aws_cloudfront_distribution" "api" {
     domain_name = var.alb_dns_name
     origin_id   = "alb"
 
+    # Viewer uses HTTPS; origin pull is HTTP. ASP.NET needs X-Forwarded-Proto=https for OAuth redirect_uri.
+    custom_header {
+      name  = "X-Forwarded-Proto"
+      value = "https"
+    }
+
     custom_origin_config {
       http_port              = 80
       https_port             = 443

@@ -35,12 +35,14 @@ await app.ApplyDatabaseAsync();
 var wwwroot = Path.Combine(app.Environment.ContentRootPath, "wwwroot");
 Directory.CreateDirectory(Path.Combine(wwwroot, "avatars"));
 // Behind CloudFront/ALB the app receives plain HTTP, but the public URL is HTTPS.
-// Forwarded headers make Request.Scheme/Host reflect the external URL, which OAuth middleware
-// (LinkedIn) uses to build the correct redirect_uri.
-app.UseForwardedHeaders(new ForwardedHeadersOptions
+// Trust proxy headers (default only trusts loopback) so Request.Scheme/Host match the viewer URL.
+var forwardedHeaders = new ForwardedHeadersOptions
 {
-    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
-});
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost,
+};
+forwardedHeaders.KnownNetworks.Clear();
+forwardedHeaders.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeaders);
 app.UseStaticFiles();
 app.UseCors(CorsExtensions.PolicyName);
 
