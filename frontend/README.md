@@ -8,9 +8,10 @@ Flutter mobile client for FelloWay.
    - `flutter doctor`
 2. From this directory (`frontend/`):
    - `flutter pub get`
-   - `flutter run`
+   - Set GetStream public key: `$env:STREAM_API_KEY = 'your_key'` (PowerShell) or `export STREAM_API_KEY=your_key` (bash)
+   - `flutter run` with `--dart-define=STREAM_API_KEY=...` (required unless Flutter Web loads `web/env.json` or `/env.json`)
 
-You can pass runtime config with `--dart-define`.
+You can pass runtime config with `--dart-define`. **`STREAM_API_KEY` is required** for `flutter run` and `flutter build` (app exits at startup if missing).
 
 **Flutter Web — фіксований порт:** використовуй опцію **`flutter run`**, а не `dart-define`:
 
@@ -32,7 +33,9 @@ Main defines:
 
 - `API_BASE_URL` (default: `https://api.example.com`)
 - `API_MODE` (`auto`, `mock`, `live`)
-- `STREAM_API_KEY`
+- `STREAM_API_KEY` (**required**) — GetStream public API key; `--dart-define` on every `flutter run` / `flutter build`
+- **Flutter Web (local only):** optional `web/env.json` with `{"STREAM_API_KEY":"..."}` if you omit `--dart-define` during `flutter run`
+- **CI:** `DEV_STREAM_API_KEY` → `--dart-define=STREAM_API_KEY=...` at `flutter build web` (no separate `env.json` on S3)
 - `OAUTH_ISSUER`
 - `OAUTH_CLIENT_ID`
 - `OAUTH_REDIRECT_URL` (legacy; **not used for LinkedIn BFF** — callback is `{API_BASE_URL}/auth/linkedin/callback` on the server)
@@ -54,20 +57,20 @@ Main defines:
 Quick examples:
 
 ```bash
-# Force mocks
-flutter run --dart-define=API_MODE=mock
+# Force mocks (STREAM_API_KEY still required)
+flutter run --dart-define=API_MODE=mock --dart-define=STREAM_API_KEY=your_stream_key
 
 # Force live API
-flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=API_MODE=live
+flutter run --dart-define=API_BASE_URL=https://staging.api.example --dart-define=API_MODE=live --dart-define=STREAM_API_KEY=your_stream_key
 
 # Local backend (iOS Simulator)
-flutter run --dart-define=API_BASE_URL=http://localhost:5161 --dart-define=API_MODE=live
+flutter run --dart-define=API_BASE_URL=http://localhost:5161 --dart-define=API_MODE=live --dart-define=STREAM_API_KEY=your_stream_key
 
 # Local backend (Android Emulator)
-flutter run --dart-define=API_BASE_URL=http://10.0.2.2:5161 --dart-define=API_MODE=live
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:5161 --dart-define=API_MODE=live --dart-define=STREAM_API_KEY=your_stream_key
 
 # Flutter web + local HTTPS API (requires backend CORS in Development)
-flutter run -d chrome --dart-define=API_BASE_URL=https://localhost:7086 --dart-define=API_MODE=live
+flutter run -d chrome --web-port=7357 --dart-define=API_BASE_URL=https://localhost:7086 --dart-define=API_MODE=live --dart-define=STREAM_API_KEY=your_stream_key
 ```
 
 ## LinkedIn sign-in (BFF)
@@ -83,7 +86,7 @@ Production LinkedIn uses a **backend-for-frontend** flow (`AspNet.Security.OAuth
 
 ```bash
 dotnet run --project backend/src/FelloWay.Api --launch-profile https
-flutter run -d chrome --web-port=7357 --dart-define=API_BASE_URL=https://localhost:7086 --dart-define=API_MODE=live
+flutter run -d chrome --web-port=7357 --dart-define=API_BASE_URL=https://localhost:7086 --dart-define=API_MODE=live --dart-define=STREAM_API_KEY=your_stream_key
 ```
 
 See [specs/009-linkedin-bff-auth/quickstart.md](../specs/009-linkedin-bff-auth/quickstart.md).

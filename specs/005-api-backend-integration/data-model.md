@@ -10,7 +10,7 @@
 | `apiBaseUrl` | `--dart-define=API_BASE_URL` | HTTPS staging or `http://host:port` | Must match running backend |
 | `apiMode` | `--dart-define=API_MODE` | `mock`, `live`, `auto` | `live` disables mock branches |
 | OAuth defines | `OAUTH_*` | Optional | Production/staging OIDC |
-| `streamApiKey` | `STREAM_API_KEY` | Optional | Chat; out of REST MVP |
+| `streamApiKey` | `STREAM_API_KEY` | **Required** | Chat (GetStream public key) |
 
 **Invariant (FR-006)**: When `apiMode == live`, `useMockApi` MUST be false regardless of hostname.
 

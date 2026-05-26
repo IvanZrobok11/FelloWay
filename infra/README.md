@@ -84,9 +84,9 @@ stream_api_key    = "..."   # public key (Dashboard)
 stream_api_secret = "..."   # secret (server only)
 ```
 
-GitHub variable **`DEV_STREAM_API_KEY`** must match `stream_api_key` (public GetStream key). Terraform does **not** inject this into Flutter — CI writes `env.json` on the web bucket at deploy time, and the web app loads `/env.json` at startup.
+GitHub variable **`DEV_STREAM_API_KEY`** is **required** for deploy (matches `stream_api_key` in Terraform). CI passes it as `--dart-define=STREAM_API_KEY=...` when building Flutter web.
 
-After `terraform apply`, redeploy ECS (API) and re-run deploy workflow (web). Check: `https://<web_url>/env.json` should return `{"streamApiKey":"..."}`.
+After `terraform apply`, redeploy ECS (API) and re-run deploy workflow (web).
 
 In the [LinkedIn Developer Portal](https://www.linkedin.com/developers/), set **Authorized redirect URL** to:
 

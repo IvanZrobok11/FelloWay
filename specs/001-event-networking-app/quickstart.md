@@ -26,7 +26,7 @@ The app reads build-time defines in `AppConfig.fromEnvironment()`:
 |--------|---------|----------------|
 | `API_BASE_URL` | REST base URL | `https://api.example.com` |
 | `API_MODE` | `mock` = in-app REST stubs; `live` = always use HTTP; omit or `auto` = mock if URL contains `example.com`, else live | `auto` (implicit) |
-| `STREAM_API_KEY` | GetStream client key | empty (chat UI limited without key) |
+| `STREAM_API_KEY` | GetStream public API key | **required** (app fails at startup if missing) |
 | `OAUTH_ISSUER` | OIDC issuer | empty |
 | `OAUTH_CLIENT_ID` | Native client id | empty |
 | `OAUTH_REDIRECT_URL` | Redirect URI | `com.felloway.app:/oauthredirect` |

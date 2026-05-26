@@ -10,7 +10,8 @@
       "toolArgs": [
         "--web-port=7357",
         "--dart-define=API_MODE=live",
-        "--dart-define=API_BASE_URL=https://localhost:7086"
+        "--dart-define=API_BASE_URL=https://localhost:7086",
+        "--dart-define=STREAM_API_KEY=${env:STREAM_API_KEY}"
       ]
     },
     {
@@ -22,7 +23,8 @@
       "toolArgs": [
         "--web-port=7357",
         "--dart-define=API_MODE=live",
-        "--dart-define=API_BASE_URL=https://localhost:7086"
+        "--dart-define=API_BASE_URL=https://localhost:7086",
+        "--dart-define=STREAM_API_KEY=${env:STREAM_API_KEY}"
       ]
     }
   ]
