@@ -60,13 +60,7 @@ Future<void> main() async {
   if (kIsWeb && !config.useMockApi) {
     final bffTicket = readBffTicket();
     if (bffTicket != null && bffTicket.isNotEmpty) {
-      final result = await authCompletion.completeFromTicket(bffTicket);
-      if (result == AuthCompletionResult.failed && kDebugMode) {
-        debugPrint(
-          'BFF ticket handoff failed on startup (check Network for '
-          'POST /auth/linkedin/mobile/complete and CORS)',
-        );
-      }
+      await authCompletion.completeFromTicket(bffTicket);
     } else if (authCompletion.shouldProbeCookieSession) {
       await authCompletion.probeCookieSession();
     }

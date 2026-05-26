@@ -113,26 +113,18 @@ class ApiClient {
   AppFailure mapDioError(Object e) {
     if (e is DioException) {
       final status = e.response?.statusCode;
-      final dioMsg = e.message ?? '';
-      final isUnauthorized = status == 401 ||
-          dioMsg.contains('status code of 401') ||
-          dioMsg.contains('status code: 401');
-
       final parsed = ErrorResponse.tryParse(e.response?.data);
       if (parsed != null) {
-        if (isUnauthorized) {
-          return const NetworkFailure('Unauthorized');
-        }
         return NetworkFailure(
           status != null
               ? 'HTTP $status: ${parsed.displayMessage}'
               : parsed.displayMessage,
         );
       }
-      if (isUnauthorized) {
+      if (status == 401) {
         return const NetworkFailure('Unauthorized');
       }
-      final msg = e.response?.data?.toString() ?? dioMsg;
+      final msg = e.response?.data?.toString() ?? e.message ?? 'Network error';
       final shortMsg = msg.contains('validateStatus')
           ? (status != null ? 'HTTP $status' : 'Network error')
           : msg;
