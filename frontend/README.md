@@ -4,16 +4,21 @@ Flutter mobile client for FelloWay.
 
 ## Mobile web debugging (Eruda)
 
-On Flutter Web, open the in-browser devtools panel (network, console, storage):
+Eruda loads from `web/index.html` when **`deploy_env.js`** says the build is not production:
 
-| How | Action |
-|-----|--------|
-| **Enable** | Add `?eruda=1` to the URL (e.g. `https://your-app.cloudfront.net/?eruda=1`) |
-| **Persist** | After first visit with `?eruda=1`, Eruda stays on until you clear site data |
-| **Disable** | Open `?eruda=0` |
-| **Local dev** | Eruda loads automatically on `localhost` / `127.0.0.1` |
+| Environment | `deploy_env.js` (CI writes before `flutter build web`) | Eruda |
+|-------------|--------------------------------------------------------|-------|
+| **dev** | `dev` | on |
+| **test** | `test` | on |
+| **prod** | `prod` | off |
+| **local** (`flutter run -d chrome`) | default `dev` in repo, or `localhost` fallback | on |
 
-Rebuild/redeploy `web/index.html` after changing this (included in `flutter build web`).
+| Override | Action |
+|----------|--------|
+| Force on prod | `?eruda=1` |
+| Force off | `?eruda=0` |
+
+Script loads from jsDelivr CDN at runtime (dev/test only; not in the repo).
 
 ## Run the app
 

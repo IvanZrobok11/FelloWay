@@ -32,27 +32,25 @@
   <title>felloway_client</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Mobile web console: ?eruda=1 or localStorage.eruda=1 (see frontend/README.md) -->
+  <!-- Eruda: dev/test deploys only (see web/deploy_env.js + frontend/README.md) -->
+  <script src="deploy_env.js"></script>
   <script>
     (function () {
       var params = new URLSearchParams(location.search);
-      if (params.has('eruda')) {
-        if (params.get('eruda') === '0') {
-          localStorage.removeItem('eruda');
-          return;
-        }
-        localStorage.setItem('eruda', '1');
-      }
+      if (params.get('eruda') === '0') return;
+
       var host = location.hostname;
-      var devHost =
-        host === 'localhost' ||
-        host === '127.0.0.1' ||
-        host.endsWith('.localhost');
-      var enabled =
-        localStorage.getItem('eruda') === '1' ||
-        params.get('eruda') === '1' ||
-        devHost;
-      if (!enabled) return;
+      var env = window.__FELLOWAY_DEPLOY_ENV__;
+      if (!env) {
+        env =
+          host === 'localhost' ||
+          host === '127.0.0.1' ||
+          host.endsWith('.localhost')
+            ? 'dev'
+            : 'prod';
+      }
+
+      if (env === 'prod' && params.get('eruda') !== '1') return;
 
       var s = document.createElement('script');
       s.src = 'https://cdn.jsdelivr.net/npm/eruda@3.4.3/eruda.min.js';

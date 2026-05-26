@@ -73,6 +73,7 @@ jobs:
             echo "::error::Set GitHub variable TEST_STREAM_API_KEY"
             exit 1
           fi
+          printf '%s\n' "window.__FELLOWAY_DEPLOY_ENV__ = 'test';" > web/deploy_env.js
           flutter build web --release \
             --dart-define=API_MODE=live \
             --dart-define=API_BASE_URL="$API_BASE_URL" \
