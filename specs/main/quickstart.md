@@ -158,30 +158,15 @@ Tap **Continue with LinkedIn** → complete login → app should reach events/on
 2. Build app with staging `API_BASE_URL` and same OAuth dart-defines (client id is public).
 3. Repeat manual smoke: LinkedIn sign-in → `GET /users/me`.
 
-## 5. Dev fallback (no LinkedIn app)
+## 5. Auth on deployed environments
 
-Backend: do **not** set LinkedIn secrets.
-
-```powershell
-flutter run --dart-define=API_BASE_URL=http://localhost:5161 --dart-define=API_MODE=live
-```
-
-Use **Sign in (local backend)** → posts `dev-smoke-user`.
-
-Or curl:
-
-```bash
-curl -s -X POST http://localhost:5161/auth/oauth/linkedin/token \
-  -H "Content-Type: application/json" \
-  -d "{\"code\":\"dev-smoke-user\",\"redirectUri\":\"http://localhost\",\"codeVerifier\":\"dev\"}"
-```
+Configure LinkedIn OAuth secrets on the API (see `009-linkedin-bff-auth`). Sign in via **LinkedIn BFF** from the web client (`GET /auth/linkedin/login`). Development authorization codes are **not** accepted on deployed API — see [016-remove-dev-oauth-backend](../016-remove-dev-oauth-backend/quickstart.md).
 
 ## 6. Manual smoke checklist
 
-- [ ] **Local + secrets**: LinkedIn button → API JWT → `GET /users/me` 200
-- [ ] **Local + secrets**: `dev-test` code returns **400**
-- [ ] **Local + no secrets**: `dev-smoke-user` returns 200
-- [ ] **Staging**: same LinkedIn button flow against staging base URL
+- [ ] **Deployed dev**: LinkedIn BFF → API JWT → `GET /users/me` 200
+- [ ] **Deployed dev**: `POST /auth/oauth/linkedin/token` with `dev-smoke-user` returns **400** (no tokens)
+- [ ] **Staging**: same LinkedIn BFF flow against staging base URL
 - [ ] Cancel LinkedIn login → error snackbar, still signed out
 - [ ] No API call uses LinkedIn bearer (inspect proxy logs)
 

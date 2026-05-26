@@ -74,9 +74,9 @@ void main() {
           onboardingPreferences: OnboardingPreferences(prefs),
           onboardingDraftStore: OnboardingDraftStore(prefs),
           interestsRepository: InterestsRepository(apiClient),
-          eventsRepository: EventsRepository(apiClient, config),
-          usersRepository: UsersRepository(apiClient, config),
-          tripsRepository: TripsRepository(apiClient, config),
+          eventsRepository: EventsRepository(apiClient),
+          usersRepository: UsersRepository(apiClient),
+          tripsRepository: TripsRepository(apiClient),
           streamChatService: StreamChatService(
             config: config,
             apiClient: apiClient,

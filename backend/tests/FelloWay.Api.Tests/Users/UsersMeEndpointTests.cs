@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using FelloWay.Api.Tests.Auth;
 using FelloWay.Api.Tests.Infrastructure;
 using FelloWay.Infrastructure.Persistence;
 using FelloWay.Infrastructure.Persistence.Seed;
@@ -25,7 +26,7 @@ public class UsersMeEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
     [Fact]
     public async Task GetAndUpdateProfile_WorksForAuthenticatedUser()
     {
-        var token = await LoginAsync("dev-profile-user");
+        var token = await _client.LoginAsync("dev-profile-user");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         using var scope = _factory.Services.CreateScope();
@@ -52,7 +53,7 @@ public class UsersMeEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
     [Fact]
     public async Task UpdateMe_WithInvalidInterestIds_ReturnsBadRequest()
     {
-        var token = await LoginAsync("dev-invalid-interests");
+        var token = await _client.LoginAsync("dev-invalid-interests");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         using var scope = _factory.Services.CreateScope();
@@ -74,7 +75,7 @@ public class UsersMeEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
     [Fact]
     public async Task UpdateMe_WithValidInterestIds_PersistsOnGetMe()
     {
-        var token = await LoginAsync("dev-valid-interests");
+        var token = await _client.LoginAsync("dev-valid-interests");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         using var scope = _factory.Services.CreateScope();
@@ -111,21 +112,6 @@ public class UsersMeEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
         var client = _factory.CreateClient();
         var response = await client.GetAsync("/users/me");
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-    }
-
-    private async Task<string> LoginAsync(string subject)
-    {
-        var response = await _client.PostAsJsonAsync(
-            "/auth/oauth/linkedin/token",
-            new
-            {
-                code = $"dev-{subject}",
-                redirectUri = "com.felloway.app:/oauthredirect",
-                codeVerifier = "verifier",
-            });
-        response.EnsureSuccessStatusCode();
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>();
-        return json.GetProperty("accessToken").GetString()!;
     }
 
     private static async Task SeedAsync(FelloWayWebApplicationFactory factory)

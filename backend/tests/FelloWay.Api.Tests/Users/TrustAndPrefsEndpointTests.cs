@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using FelloWay.Api.Tests.Auth;
 using FelloWay.Api.Tests.Events;
 using FelloWay.Api.Tests.Infrastructure;
 using FelloWay.Infrastructure.Persistence;
@@ -30,14 +31,14 @@ public class TrustAndPrefsEndpointTests : IClassFixture<FelloWayWebApplicationFa
         var db = scope.ServiceProvider.GetRequiredService<FelloWayDbContext>();
         var cityId = await db.Cities.Select(c => c.Id).FirstAsync();
 
-        var authorToken = await LoginAsync("trust-author");
+        var authorToken = await _client.LoginAsync("trust-author");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorToken);
         await _client.PutAsJsonAsync(
             "/users/me",
             new { displayName = "Author", homeCityId = cityId, interestIds = Array.Empty<Guid>() });
         await _client.PostAsync($"/events/{eventId}/attend", null);
 
-        var subjectToken = await LoginAsync("trust-subject");
+        var subjectToken = await _client.LoginAsync("trust-subject");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", subjectToken);
         await _client.PutAsJsonAsync(
             "/users/me",
@@ -68,21 +69,6 @@ public class TrustAndPrefsEndpointTests : IClassFixture<FelloWayWebApplicationFa
                 directMessages = true,
             });
         Assert.Equal(HttpStatusCode.NoContent, prefsResponse.StatusCode);
-    }
-
-    private async Task<string> LoginAsync(string subject)
-    {
-        var response = await _client.PostAsJsonAsync(
-            "/auth/oauth/linkedin/token",
-            new
-            {
-                code = $"dev-{subject}",
-                redirectUri = "com.felloway.app:/oauthredirect",
-                codeVerifier = "verifier",
-            });
-        response.EnsureSuccessStatusCode();
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>();
-        return json.GetProperty("accessToken").GetString()!;
     }
 
     private async Task<Guid> UserIdForSubjectAsync(string subject)

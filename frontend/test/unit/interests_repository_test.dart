@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:felloway_client/app/config/api_mode.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/onboarding/data/interests_repository.dart';
@@ -37,8 +36,7 @@ void main() {
 
     const config = AppConfig(
       apiBaseUrl: 'http://localhost:5161',
-      streamApiKey: '',
-      apiMode: ApiMode.live,
+      streamApiKey: ''
     );
     final api = ApiClient(config: config, tokenStorage: TokenStorage());
     api.dio.httpClientAdapter = _FixtureAdapter(fixture);

@@ -86,9 +86,9 @@ void main() {
           onboardingPreferences: OnboardingPreferences(prefs),
           onboardingDraftStore: OnboardingDraftStore(prefs),
           interestsRepository: InterestsRepository(apiClient),
-          eventsRepository: EventsRepository(apiClient, config),
-          usersRepository: UsersRepository(apiClient, config),
-          tripsRepository: TripsRepository(apiClient, config),
+          eventsRepository: EventsRepository(apiClient),
+          usersRepository: UsersRepository(apiClient),
+          tripsRepository: TripsRepository(apiClient),
           streamChatService: streamChatService,
           chatAccessController: ChatAccessController(),
           child: const ChatsListPage(),
@@ -136,7 +136,7 @@ void main() {
         streamApiKey: '',
       );
       final apiClient = ApiClient(config: config, tokenStorage: TokenStorage());
-      final usersRepository = UsersRepository(apiClient, config);
+      final usersRepository = UsersRepository(apiClient);
       final streamChatService = StreamChatService(
         config: config,
         apiClient: apiClient,

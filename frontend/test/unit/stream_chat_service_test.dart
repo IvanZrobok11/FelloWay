@@ -17,7 +17,7 @@ void main() {
     );
     final tokenStorage = TokenStorage();
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
-    final usersRepository = UsersRepository(apiClient, config);
+    final usersRepository = UsersRepository(apiClient);
     final service = StreamChatService(config: config, apiClient: apiClient);
 
     await service.syncWithSession(

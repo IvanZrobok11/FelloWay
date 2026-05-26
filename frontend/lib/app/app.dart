@@ -75,7 +75,6 @@ class _FellowayAppState extends State<FellowayApp> {
       webSessionAuthApi: widget.authApi,
       syncWebCookieSession: useWebCookieAuth(
         isWeb: kIsWeb,
-        useMockApi: widget.config.useMockApi,
         webAuthMode: widget.authCompletion.webAuthMode,
       ),
       apiBaseUrl: widget.config.apiBaseUrl,

@@ -6,11 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FelloWay.Api.Tests.Auth;
 
-public class OAuthDevCodeWithoutSecretsTests : IClassFixture<FelloWayWebApplicationFactory>
+public class OAuthDevCodeWithoutSecretsTests : IClassFixture<ProductionOAuthWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public OAuthDevCodeWithoutSecretsTests(FelloWayWebApplicationFactory factory)
+    public OAuthDevCodeWithoutSecretsTests(ProductionOAuthWebApplicationFactory factory)
     {
         using var scope = factory.Services.CreateScope();
         var seeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
@@ -19,7 +19,7 @@ public class OAuthDevCodeWithoutSecretsTests : IClassFixture<FelloWayWebApplicat
     }
 
     [Fact]
-    public async Task DevCode_Accepted_WhenLinkedInSecretsAbsent()
+    public async Task DevCode_Rejected_WhenLinkedInSecretsAbsent()
     {
         var response = await _client.PostAsJsonAsync(
             "/auth/oauth/linkedin/token",
@@ -30,6 +30,6 @@ public class OAuthDevCodeWithoutSecretsTests : IClassFixture<FelloWayWebApplicat
                 codeVerifier = "verifier",
             });
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 }

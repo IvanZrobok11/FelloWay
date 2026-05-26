@@ -61,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _ensureWebSession() async {
     final config = AppScope.configOf(context);
-    if (!kIsWeb || config.useMockApi) return;
+    if (!kIsWeb) return;
     final session = AppScope.authSessionOf(context);
     if (session.isAuthenticated) return;
     final authCompletion = AppScope.authCompletionOf(context);
@@ -73,9 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final auth = AppScope.authSessionOf(context);
-    if (!auth.isAuthenticated &&
-        kIsWeb &&
-        !AppScope.configOf(context).useMockApi) {
+    if (!auth.isAuthenticated && kIsWeb) {
       unawaited(
         _ensureWebSession().then((_) {
           if (!mounted) return;

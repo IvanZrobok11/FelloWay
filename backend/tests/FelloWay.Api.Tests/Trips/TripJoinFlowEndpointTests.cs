@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using FelloWay.Api.Tests.Auth;
 using FelloWay.Api.Tests.Events;
 using FelloWay.Api.Tests.Infrastructure;
 using FelloWay.Infrastructure.Persistence;
@@ -32,7 +33,7 @@ public class TripJoinFlowEndpointTests : IClassFixture<FelloWayWebApplicationFac
         var kyivId = await db.Cities.Where(c => c.Name == "Kyiv").Select(c => c.Id).FirstAsync();
         var lvivId = await db.Cities.Where(c => c.Name == "Lviv").Select(c => c.Id).FirstAsync();
 
-        var ownerToken = await LoginAsync("trip-owner");
+        var ownerToken = await _client.LoginAsync("trip-owner");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ownerToken);
         await _client.PostAsync($"/events/{eventId}/attend", null);
 
@@ -50,7 +51,7 @@ public class TripJoinFlowEndpointTests : IClassFixture<FelloWayWebApplicationFac
         var tripJson = await createResponse.Content.ReadFromJsonAsync<JsonElement>();
         var tripId = tripJson.GetProperty("id").GetGuid();
 
-        var kyivUserToken = await LoginAsync("trip-kyiv-guest");
+        var kyivUserToken = await _client.LoginAsync("trip-kyiv-guest");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", kyivUserToken);
         await SetHomeCityAsync(kyivUserToken, kyivId);
         await _client.PostAsync($"/events/{eventId}/attend", null);
@@ -58,7 +59,7 @@ public class TripJoinFlowEndpointTests : IClassFixture<FelloWayWebApplicationFac
         var autoJoin = await _client.PostAsync($"/trips/{tripId}/join", null);
         Assert.Equal(HttpStatusCode.Created, autoJoin.StatusCode);
 
-        var lvivUserToken = await LoginAsync("trip-lviv-guest");
+        var lvivUserToken = await _client.LoginAsync("trip-lviv-guest");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lvivUserToken);
         await SetHomeCityAsync(lvivUserToken, lvivId);
         await _client.PostAsync($"/events/{eventId}/attend", null);
@@ -78,21 +79,6 @@ public class TripJoinFlowEndpointTests : IClassFixture<FelloWayWebApplicationFac
         var list = await _client.GetFromJsonAsync<JsonElement>($"/events/{eventId}/trips");
         var trip = list.GetProperty("items").EnumerateArray().First(t => t.GetProperty("id").GetGuid() == tripId);
         Assert.True(trip.GetProperty("memberCount").GetInt32() >= 3);
-    }
-
-    private async Task<string> LoginAsync(string subject)
-    {
-        var response = await _client.PostAsJsonAsync(
-            "/auth/oauth/linkedin/token",
-            new
-            {
-                code = $"dev-{subject}",
-                redirectUri = "com.felloway.app:/oauthredirect",
-                codeVerifier = "verifier",
-            });
-        response.EnsureSuccessStatusCode();
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>();
-        return json.GetProperty("accessToken").GetString()!;
     }
 
     private async Task SetHomeCityAsync(string token, Guid cityId)

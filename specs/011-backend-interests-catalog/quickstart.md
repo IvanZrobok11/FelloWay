@@ -2,6 +2,8 @@
 
 **Branch**: `011-backend-interests-catalog`
 
+> **Note (2026-05-26)**: Client no longer has `API_MODE=mock` — see [`015-remove-mock-local`](../015-remove-mock-local/quickstart.md).
+
 ## Prerequisites
 
 - PostgreSQL running (local API)

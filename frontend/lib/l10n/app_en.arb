@@ -19,10 +19,9 @@
   "emptyStateTitle": "Nothing here yet",
   "guestSignInPrompt": "Sign in to continue",
   "signInTitle": "Sign in",
-  "signInSubtitle": "Use LinkedIn or Facebook to continue.",
+  "signInSubtitle": "Use LinkedIn to continue.",
   "oauthLinkedIn": "Continue with LinkedIn",
   "oauthFacebook": "Continue with Facebook",
-  "demoSignIn": "Demo sign-in (debug)",
   "oauthNotConfigured": "OAuth is not configured. Set OAUTH_CLIENT_ID dart-define (LinkedIn). Discovery URL is not required on web.",
   "oauthMissingTokens": "No access token returned.",
   "oauthFailed": "Sign-in failed: {message}",
@@ -108,7 +107,6 @@
   "chatsGuestMessage": "Sign in to see your chats.",
   "chatsStreamKeyHint": "Chat is not enabled on this deploy. Set the GitHub STREAM_API_KEY variable for this environment and redeploy the web app (CI build-time config only).",
   "chatsConnecting": "Connecting to chat…",
-  "chatsDemoHint": "Demo API: chat uses GetStream only with a real backend token.",
   "chatsLoadError": "Could not load chats: {message}",
   "@chatsLoadError": {
     "placeholders": {

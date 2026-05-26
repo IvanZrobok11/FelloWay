@@ -49,16 +49,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signInTitle => 'Sign in';
 
   @override
-  String get signInSubtitle => 'Use LinkedIn or Facebook to continue.';
+  String get signInSubtitle => 'Use LinkedIn to continue.';
 
   @override
   String get oauthLinkedIn => 'Continue with LinkedIn';
 
   @override
   String get oauthFacebook => 'Continue with Facebook';
-
-  @override
-  String get demoSignIn => 'Demo sign-in (debug)';
 
   @override
   String get oauthNotConfigured =>
@@ -225,10 +222,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatsConnecting => 'Connecting to chat…';
-
-  @override
-  String get chatsDemoHint =>
-      'Demo API: chat uses GetStream only with a real backend token.';
 
   @override
   String chatsLoadError(Object message) {

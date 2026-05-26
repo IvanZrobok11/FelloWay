@@ -14,7 +14,6 @@ enum StreamChatConnectStatus {
   connecting,
   connected,
   missingApiKey,
-  demoSkipped,
   error,
 }
 
@@ -50,11 +49,6 @@ class StreamChatService extends ChangeNotifier {
     }
     if (_config.streamApiKey.isEmpty) {
       _setState(StreamChatConnectStatus.missingApiKey, null);
-      return;
-    }
-    if (_config.useMockApi) {
-      await disconnect();
-      _setState(StreamChatConnectStatus.demoSkipped, null);
       return;
     }
 

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
-import '../../../app/config/app_config.dart';
 import '../application/auth_completion_service.dart';
 import '../mobile/linkedin_bff_auth.dart';
 import '../web/bff_ticket_from_browser.dart';
@@ -55,18 +54,11 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
     }
   }
 
-  bool _liveApi(AppConfig config) => !config.useMockApi;
-
   Future<void> _signInWithLinkedIn() async {
     final l10n = AppLocalizations.of(context)!;
     final config = AppScope.configOf(context);
     final authCompletion = AppScope.authCompletionOf(context);
     final messenger = ScaffoldMessenger.of(context);
-
-    if (!_liveApi(config)) {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.oauthNotConfigured)));
-      return;
-    }
 
     setState(() => _finishing = true);
     try {
@@ -108,92 +100,27 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
     }
   }
 
-  Future<void> _signInWithFacebookDev() async {
-    final messenger = ScaffoldMessenger.of(context);
-    final session = AppScope.authSessionOf(context);
-    final authApi = AppScope.authApiOf(context);
-    try {
-      final tokens = await authApi.exchangeFacebook(code: 'dev-smoke-user');
-      if (tokens.accessToken.isEmpty) {
-        messenger.showSnackBar(
-          const SnackBar(content: Text('Backend returned no access token')),
-        );
-        return;
-      }
-      await session.setAuthenticated(
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      );
-      if (!mounted) return;
-      await _afterAuthenticated();
-    } catch (e) {
-      if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(content: Text('Facebook sign-in failed: $e')),
-      );
-    }
-  }
-
-  Future<void> _devBackendSignIn() async {
-    final messenger = ScaffoldMessenger.of(context);
-    final session = AppScope.authSessionOf(context);
-    final authApi = AppScope.authApiOf(context);
-    try {
-      final tokens = await authApi.exchangeLinkedIn(code: 'dev-smoke-user');
-      if (tokens.accessToken.isEmpty) {
-        messenger.showSnackBar(
-          const SnackBar(content: Text('Backend returned no access token')),
-        );
-        return;
-      }
-      await session.setAuthenticated(
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      );
-      if (!mounted) return;
-      await _afterAuthenticated();
-    } catch (e) {
-      if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(content: Text('Dev backend sign-in failed: $e')),
-      );
-    }
-  }
-
-  Future<void> _demoSignIn() async {
-    final session = AppScope.authSessionOf(context);
-    await session.setAuthenticated(
-      accessToken: 'demo-access-token',
-      refreshToken: 'demo-refresh-token',
-    );
-    if (!mounted) return;
-    await _afterAuthenticated();
-  }
-
   Future<void> _afterAuthenticated() async {
     setState(() => _finishing = true);
     try {
       final store = AppScope.onboardingDraftStoreOf(context);
       final users = AppScope.usersOf(context);
       final onboarding = AppScope.onboardingOf(context);
-      final config = AppScope.configOf(context);
       final l10n = AppLocalizations.of(context)!;
       final pending = store.loadPending();
 
       if (pending != null) {
-        var pushDraft = config.useMockApi;
-        if (!config.useMockApi) {
-          final me = await users.getMe();
-          if (!mounted) return;
-          switch (me) {
-            case Success(:final value):
-              final hasServerProfile =
-                  value.displayName.trim().isNotEmpty &&
-                  value.homeCityLabel.trim().isNotEmpty;
-              pushDraft = !hasServerProfile;
-            case Failure():
-              pushDraft = true;
-          }
+        var pushDraft = true;
+        final me = await users.getMe();
+        if (!mounted) return;
+        switch (me) {
+          case Success(:final value):
+            final hasServerProfile =
+                value.displayName.trim().isNotEmpty &&
+                value.homeCityLabel.trim().isNotEmpty;
+            pushDraft = !hasServerProfile;
+          case Failure():
+            pushDraft = true;
         }
 
         if (pushDraft) {
@@ -203,7 +130,7 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
             interests: pending.interests,
             hobbies: pending.hobbies,
             homeCityLabel: pending.homeCityLabel,
-            homeCityId: config.useMockApi ? null : _devHomeCityIdFromDefine(),
+            homeCityId: _devHomeCityIdFromDefine(),
           );
           final up = await users.updateMe(profile);
           if (!mounted) return;
@@ -246,8 +173,6 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final config = AppScope.configOf(context);
-    final useMock = config.useMockApi;
-    final liveApi = _liveApi(config);
     final error = Uri.base.queryParameters['error'];
 
     return Scaffold(
@@ -273,40 +198,18 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
                   ),
                 ],
                 const SizedBox(height: 24),
-                if (kIsWeb && liveApi) ...[
+                if (kIsWeb) ...[
                   Text(
                     'LinkedIn BFF login: ${config.apiBaseUrl}/auth/linkedin/login',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 16),
                 ],
-                if (liveApi) ...[
-                  FilledButton.icon(
-                    onPressed: _finishing ? null : _signInWithLinkedIn,
-                    icon: const Icon(Icons.business_center_outlined),
-                    label: Text(l10n.oauthLinkedIn),
-                  ),
-                  const SizedBox(height: 12),
-                  FilledButton.tonalIcon(
-                    onPressed: _finishing ? null : _signInWithFacebookDev,
-                    icon: const Icon(Icons.facebook_outlined),
-                    label: Text(l10n.oauthFacebook),
-                  ),
-                ],
-                if (!useMock) ...[
-                  FilledButton.icon(
-                    onPressed: _finishing ? null : _devBackendSignIn,
-                    icon: const Icon(Icons.developer_mode_outlined),
-                    label: const Text('Sign in (local backend)'),
-                  ),
-                ],
-                if (useMock && kDebugMode) ...[
-                  const SizedBox(height: 24),
-                  OutlinedButton(
-                    onPressed: _finishing ? null : _demoSignIn,
-                    child: Text(l10n.demoSignIn),
-                  ),
-                ],
+                FilledButton.icon(
+                  onPressed: _finishing ? null : _signInWithLinkedIn,
+                  icon: const Icon(Icons.business_center_outlined),
+                  label: Text(l10n.oauthLinkedIn),
+                ),
               ],
             ),
           ),

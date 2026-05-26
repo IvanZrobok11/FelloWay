@@ -68,7 +68,7 @@ After generation: `cd frontend && flutter pub get`.
 
 - Prefer **OpenAPI 3** YAML per domain (`openapi.yaml`); merged in Swashbuckle via `OpenApiContractMerger` (see `backend/src/FelloWay.Api/OpenApi/`) and for mobile via `scripts/generate-api-client.sh` (`@redocly/cli join` + `openapi-generator-cli`).
 - Keep breaking changes versioned or noted in PR descriptions.
-- Mobile mock catalog: `frontend/lib/shared/mocks/mock_api_catalog.dart` should stay aligned with these contracts.
+- Client uses live API only (`015-remove-mock-local`); align generated Dart models with these contracts when OpenAPI changes.
 
 ## Legacy summary
 

@@ -35,7 +35,6 @@ Future<void> main() async {
   final webAuthMode = kIsWeb ? resolveWebAuthMode(config.apiBaseUrl) : null;
   final useWebCookies = useWebCookieAuth(
     isWeb: kIsWeb,
-    useMockApi: config.useMockApi,
     webAuthMode: webAuthMode ?? WebAuthMode.sameOriginCookie,
   );
 
@@ -57,7 +56,7 @@ Future<void> main() async {
     useCookieAuthOnWeb: useWebCookies,
   );
 
-  if (kIsWeb && !config.useMockApi) {
+  if (kIsWeb) {
     final bffTicket = readBffTicket();
     if (bffTicket != null && bffTicket.isNotEmpty) {
       await authCompletion.completeFromTicket(bffTicket);
@@ -66,10 +65,10 @@ Future<void> main() async {
     }
   }
 
-  final eventsRepository = EventsRepository(apiClient, config);
+  final eventsRepository = EventsRepository(apiClient);
   final interestsRepository = InterestsRepository(apiClient);
-  final usersRepository = UsersRepository(apiClient, config);
-  final tripsRepository = TripsRepository(apiClient, config);
+  final usersRepository = UsersRepository(apiClient);
+  final tripsRepository = TripsRepository(apiClient);
   final streamChatService = StreamChatService(
     config: config,
     apiClient: apiClient,

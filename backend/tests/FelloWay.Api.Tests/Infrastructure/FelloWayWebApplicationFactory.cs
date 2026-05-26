@@ -1,3 +1,5 @@
+using FelloWay.Api.Tests.Auth;
+using FelloWay.Application.Common.Interfaces;
 using FelloWay.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -14,6 +16,11 @@ public class FelloWayWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly string _databaseName = $"felloway_mem_{Guid.NewGuid():N}";
 
+    /// <summary>
+    /// When true (default), swaps in <see cref="TestOAuthTokenExchanger"/> for authenticated endpoint tests.
+    /// </summary>
+    protected virtual bool RegisterTestOAuthExchanger => true;
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
@@ -29,6 +36,12 @@ public class FelloWayWebApplicationFactory : WebApplicationFactory<Program>
 
             services.AddDbContext<FelloWayDbContext>(options =>
                 options.UseInMemoryDatabase(_databaseName));
+
+            if (RegisterTestOAuthExchanger)
+            {
+                services.RemoveAll<IOAuthTokenExchanger>();
+                services.AddScoped<IOAuthTokenExchanger, TestOAuthTokenExchanger>();
+            }
         });
     }
 }

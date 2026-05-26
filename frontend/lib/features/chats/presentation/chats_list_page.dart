@@ -57,16 +57,6 @@ class ChatsListPage extends StatelessWidget {
                 ),
               ),
             );
-          case StreamChatConnectStatus.demoSkipped:
-            return Scaffold(
-              appBar: AppBar(title: Text(l10n.chatsPlaceholderTitle)),
-              body: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(l10n.chatsDemoHint, textAlign: TextAlign.center),
-                ),
-              ),
-            );
           case StreamChatConnectStatus.connecting:
             return Scaffold(
               appBar: AppBar(title: Text(l10n.chatsPlaceholderTitle)),

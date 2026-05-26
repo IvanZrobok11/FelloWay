@@ -2,7 +2,9 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using FelloWay.Api.Tests.Auth;
 using FelloWay.Api.Tests.Infrastructure;
+
 namespace FelloWay.Api.Tests.Events;
 
 public class EventAttendEndpointTests : IClassFixture<FelloWayWebApplicationFactory>
@@ -21,7 +23,7 @@ public class EventAttendEndpointTests : IClassFixture<FelloWayWebApplicationFact
     public async Task AttendAndLeave_UpdatesJoinedState()
     {
         var eventId = await EventsTestHelper.FirstEventIdAsync(_factory);
-        var token = await LoginAsync("dev-events-user");
+        var token = await _client.LoginAsync("dev-events-user");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var attend = await _client.PostAsync($"/events/{eventId}/attend", null);
@@ -42,7 +44,7 @@ public class EventAttendEndpointTests : IClassFixture<FelloWayWebApplicationFact
     public async Task GetAttendees_WhenNotJoined_ReturnsBadRequest()
     {
         var eventId = await EventsTestHelper.FirstEventIdAsync(_factory);
-        var token = await LoginAsync("dev-events-guest");
+        var token = await _client.LoginAsync("dev-events-guest");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var response = await _client.GetAsync($"/events/{eventId}/attendees");
@@ -55,7 +57,7 @@ public class EventAttendEndpointTests : IClassFixture<FelloWayWebApplicationFact
         var eventId = await EventsTestHelper.FirstEventIdAsync(_factory);
         await EventsTestHelper.SeedSecondUserAttendeeAsync(_factory, eventId, "Olena");
 
-        var token = await LoginAsync("dev-events-member");
+        var token = await _client.LoginAsync("dev-events-member");
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         await _client.PostAsync($"/events/{eventId}/attend", null);
@@ -67,18 +69,4 @@ public class EventAttendEndpointTests : IClassFixture<FelloWayWebApplicationFact
         Assert.True(json.GetProperty("items").GetArrayLength() >= 2);
     }
 
-    private async Task<string> LoginAsync(string subject)
-    {
-        var response = await _client.PostAsJsonAsync(
-            "/auth/oauth/linkedin/token",
-            new
-            {
-                code = $"dev-{subject}",
-                redirectUri = "com.felloway.app:/oauthredirect",
-                codeVerifier = "verifier",
-            });
-        response.EnsureSuccessStatusCode();
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>();
-        return json.GetProperty("accessToken").GetString()!;
-    }
 }

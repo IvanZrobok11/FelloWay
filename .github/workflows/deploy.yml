@@ -79,6 +79,7 @@ jobs:
             exit 1
           fi
           printf '%s\n' "window.__FELLOWAY_DEPLOY_ENV__ = 'dev';" > web/deploy_env.js
+          # Client is live-only (015); API_MODE kept for workflow compatibility.
           flutter build web --release \
             --dart-define=API_MODE=live \
             --dart-define=API_BASE_URL="$API_BASE_URL" \

@@ -39,6 +39,10 @@ Auto-generated from all feature plans. Last updated: 2026-05-26
 - N/A (compile-time constants in web bundle only) (013-clarify-env-json)
 - Dart 3.10+ / Flutter stable + bundled Onest (400/500/600), `ThemeExtension` typography tokens, Material 3 `TextTheme` (014-mobile-typography)
 - N/A (static font assets in `frontend/assets/fonts/onest/`) (014-mobile-typography)
+- Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `dio`, `go_router`, `flutter_appauth` / BFF web auth, `stream_chat`, existing repositories + `AppConfig` (015-remove-mock-local)
+- N/A (no client-side mock stores); `TokenStorage` unchanged (015-remove-mock-local)
+- C# 12 / .NET 8 + ASP.NET Core, `IOAuthTokenExchanger`, `AuthService`, `OAuthOptions`, LinkedIn BFF (`009-linkedin-bff-auth`) (016-remove-dev-oauth-backend)
+- PostgreSQL (unchanged); test InMemory / Testcontainers (016-remove-dev-oauth-backend)
 
 - C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
 
@@ -59,8 +63,9 @@ tests/
 C# 12 / .NET 8: Follow standard conventions
 
 ## Recent Changes
+- 016-remove-dev-oauth-backend: Added C# 12 / .NET 8 + ASP.NET Core, `IOAuthTokenExchanger`, `AuthService`, `OAuthOptions`, LinkedIn BFF (`009-linkedin-bff-auth`)
+- 015-remove-mock-local: Added Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `dio`, `go_router`, `flutter_appauth` / BFF web auth, `stream_chat`, existing repositories + `AppConfig`
 - 014-mobile-typography: Added Dart 3.10+ / Flutter + bundled Onest, FellowayTypography tokens
-- 013-clarify-env-json: Added N/A (compile-time constants in web bundle only)
 
 
 <!-- MANUAL ADDITIONS START -->

@@ -1,6 +1,5 @@
 import 'package:felloway_client/app/app.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
-import 'package:felloway_client/app/config/api_mode.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/auth_api.dart';
 import '../helpers/auth_test_helpers.dart';
@@ -64,7 +63,6 @@ void main() {
     const config = AppConfig(
       apiBaseUrl: 'https://test.local',
       streamApiKey: '',
-      apiMode: ApiMode.mock,
     );
     final authApi = AuthApi(baseUrl: config.apiBaseUrl);
     final authCompletion = testAuthCompletion(
@@ -72,10 +70,10 @@ void main() {
       authSession: authSession,
     );
     final apiClient = ApiClient(config: config, tokenStorage: tokenStorage);
-    final eventsRepository = EventsRepository(apiClient, config);
+    final eventsRepository = EventsRepository(apiClient);
     final interestsRepository = InterestsRepository(apiClient);
-    final usersRepository = UsersRepository(apiClient, config);
-    final tripsRepository = TripsRepository(apiClient, config);
+    final usersRepository = UsersRepository(apiClient);
+    final tripsRepository = TripsRepository(apiClient);
     final streamChatService = StreamChatService(
       config: config,
       apiClient: apiClient,

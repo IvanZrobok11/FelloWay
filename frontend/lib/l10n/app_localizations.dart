@@ -179,7 +179,7 @@ abstract class AppLocalizations {
   /// No description provided for @signInSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Use LinkedIn or Facebook to continue.'**
+  /// **'Use LinkedIn to continue.'**
   String get signInSubtitle;
 
   /// No description provided for @oauthLinkedIn.
@@ -193,12 +193,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue with Facebook'**
   String get oauthFacebook;
-
-  /// No description provided for @demoSignIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Demo sign-in (debug)'**
-  String get demoSignIn;
 
   /// No description provided for @oauthNotConfigured.
   ///
@@ -493,12 +487,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connecting to chat…'**
   String get chatsConnecting;
-
-  /// No description provided for @chatsDemoHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Demo API: chat uses GetStream only with a real backend token.'**
-  String get chatsDemoHint;
 
   /// No description provided for @chatsLoadError.
   ///

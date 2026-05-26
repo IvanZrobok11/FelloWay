@@ -22,8 +22,7 @@ WebAuthMode resolveWebAuthMode(String apiBaseUrl) {
 /// Whether web should send credentialed cookies on API requests.
 bool useWebCookieAuth({
   required bool isWeb,
-  required bool useMockApi,
   required WebAuthMode webAuthMode,
 }) {
-  return isWeb && !useMockApi && webAuthMode == WebAuthMode.sameOriginCookie;
+  return isWeb && webAuthMode == WebAuthMode.sameOriginCookie;
 }

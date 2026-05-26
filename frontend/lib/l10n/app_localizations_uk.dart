@@ -49,16 +49,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signInTitle => 'Увійти';
 
   @override
-  String get signInSubtitle => 'Продовжити через LinkedIn або Facebook.';
+  String get signInSubtitle => 'Продовжити через LinkedIn.';
 
   @override
   String get oauthLinkedIn => 'Продовжити з LinkedIn';
 
   @override
   String get oauthFacebook => 'Продовжити з Facebook';
-
-  @override
-  String get demoSignIn => 'Демо-вхід (debug)';
 
   @override
   String get oauthNotConfigured =>
@@ -224,10 +221,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get chatsConnecting => 'Підключення до чату…';
-
-  @override
-  String get chatsDemoHint =>
-      'Демо API: чат працює лише з реальним токеном бекенду.';
 
   @override
   String chatsLoadError(Object message) {

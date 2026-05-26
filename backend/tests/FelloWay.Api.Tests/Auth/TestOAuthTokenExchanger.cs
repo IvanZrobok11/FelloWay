@@ -1,12 +1,13 @@
 using FelloWay.Application.Common.Interfaces;
 using FelloWay.Domain.Common;
 
-namespace FelloWay.Infrastructure.Auth;
+namespace FelloWay.Api.Tests.Auth;
 
 /// <summary>
-/// Development/test OAuth exchanger. Accepts code <c>dev-{subject}</c> or <c>test-code</c>.
+/// Test-host-only OAuth exchanger. Accepts <c>dev-{subject}</c> or <c>test-code</c> for CI.
+/// Not registered in production Infrastructure.
 /// </summary>
-public class DevOAuthTokenExchanger : IOAuthTokenExchanger
+public sealed class TestOAuthTokenExchanger : IOAuthTokenExchanger
 {
     public Task<OAuthUserInfo> ExchangeAsync(
         string provider,
@@ -20,9 +21,9 @@ public class DevOAuthTokenExchanger : IOAuthTokenExchanger
             throw new DomainException("Unsupported OAuth provider.");
         }
 
-        if (!OAuthDevCode.IsDevCode(code))
+        if (!IsDevCode(code))
         {
-            throw new DomainException("Invalid authorization code for development OAuth.");
+            throw new DomainException("Invalid authorization code for test OAuth.");
         }
 
         var subject = code switch
@@ -33,4 +34,7 @@ public class DevOAuthTokenExchanger : IOAuthTokenExchanger
 
         return Task.FromResult(new OAuthUserInfo(subject, $"Dev User {subject}", null));
     }
+
+    private static bool IsDevCode(string code) =>
+        code == "test-code" || code.StartsWith("dev-", StringComparison.Ordinal);
 }

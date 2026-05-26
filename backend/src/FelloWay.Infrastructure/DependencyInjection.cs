@@ -37,8 +37,7 @@ public static class DependencyInjection
         services.Configure<OAuthOptions>(configuration.GetSection(OAuthOptions.SectionName));
         services.AddMemoryCache();
         services.AddSingleton<IMobileAuthTicketStore, MobileAuthTicketStore>();
-        services.AddScoped<DevOAuthTokenExchanger>();
-        services.AddScoped<IOAuthTokenExchanger, CompositeOAuthTokenExchanger>();
+        services.AddScoped<IOAuthTokenExchanger, ProductionOAuthTokenExchanger>();
         services.Configure<StreamOptions>(configuration.GetSection(StreamOptions.SectionName));
         services.AddScoped<IStreamChatService, StreamChatService>();
         services.AddScoped<IEventChannelSyncService, DevEventChannelSyncService>();

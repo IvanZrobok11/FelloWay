@@ -42,10 +42,10 @@ void main() {
       authApi: authApi,
       onUnauthorized: authSession.signOut,
     );
-    final eventsRepository = EventsRepository(apiClient, config);
+    final eventsRepository = EventsRepository(apiClient);
     final interestsRepository = InterestsRepository(apiClient);
-    final usersRepository = UsersRepository(apiClient, config);
-    final tripsRepository = TripsRepository(apiClient, config);
+    final usersRepository = UsersRepository(apiClient);
+    final tripsRepository = TripsRepository(apiClient);
     final streamChatService = StreamChatService(
       config: config,
       apiClient: apiClient,

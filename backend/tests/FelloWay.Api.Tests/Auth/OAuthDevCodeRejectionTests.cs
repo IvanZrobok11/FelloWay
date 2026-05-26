@@ -7,11 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FelloWay.Api.Tests.Auth;
 
-public class OAuthDevCodeRejectionTests : IClassFixture<LinkedInConfiguredWebApplicationFactory>
+public class OAuthDevCodeRejectionTests : IClassFixture<LinkedInConfiguredProductionOAuthFactory>
 {
     private readonly HttpClient _client;
 
-    public OAuthDevCodeRejectionTests(LinkedInConfiguredWebApplicationFactory factory)
+    public OAuthDevCodeRejectionTests(LinkedInConfiguredProductionOAuthFactory factory)
     {
         SeedAsync(factory).GetAwaiter().GetResult();
         _client = factory.CreateClient();
@@ -33,7 +33,7 @@ public class OAuthDevCodeRejectionTests : IClassFixture<LinkedInConfiguredWebApp
     }
 
     [Fact]
-    public async Task DevCode_StillAccepted_WhenLinkedInSecretsConfigured()
+    public async Task DevCode_Rejected_WhenLinkedInSecretsConfigured()
     {
         var response = await _client.PostAsJsonAsync(
             "/auth/oauth/linkedin/token",
@@ -44,7 +44,7 @@ public class OAuthDevCodeRejectionTests : IClassFixture<LinkedInConfiguredWebApp
                 codeVerifier = "verifier",
             });
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     private static async Task SeedAsync(WebApplicationFactory<Program> factory)
@@ -52,18 +52,5 @@ public class OAuthDevCodeRejectionTests : IClassFixture<LinkedInConfiguredWebApp
         using var scope = factory.Services.CreateScope();
         var seeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
         await seeder.SeedAsync();
-    }
-}
-
-/// <summary>
-/// In-memory host with LinkedIn OAuth secrets set (real codes rejected; dev-* still allowed).
-/// </summary>
-public class LinkedInConfiguredWebApplicationFactory : FelloWayWebApplicationFactory
-{
-    protected override void ConfigureWebHost(Microsoft.AspNetCore.Hosting.IWebHostBuilder builder)
-    {
-        builder.UseSetting("OAuth:LinkedIn:ClientId", "test-client-id");
-        builder.UseSetting("OAuth:LinkedIn:ClientSecret", "test-client-secret");
-        base.ConfigureWebHost(builder);
     }
 }

@@ -49,14 +49,14 @@ void main() {
       onboardingPreferences: OnboardingPreferences(prefs),
       onboardingDraftStore: OnboardingDraftStore(prefs),
       interestsRepository: InterestsRepository(apiClient),
-      eventsRepository: EventsRepository(apiClient, config),
-      usersRepository: UsersRepository(apiClient, config),
+      eventsRepository: EventsRepository(apiClient),
+      usersRepository: UsersRepository(apiClient),
       streamChatService: StreamChatService(
         config: config,
         apiClient: apiClient,
       ),
       chatAccessController: ChatAccessController(),
-      tripsRepository: TripsRepository(apiClient, config),
+      tripsRepository: TripsRepository(apiClient),
       child: MaterialApp(
         locale: const Locale('en'),
         localizationsDelegates: const [

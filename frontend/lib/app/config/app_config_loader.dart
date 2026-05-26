@@ -9,6 +9,15 @@ const _streamApiKeyOptional = bool.fromEnvironment(
 Future<AppConfig> loadAppConfig() async {
   final config = AppConfig.fromEnvironment();
 
+  if (config.apiBaseUrl.trim().isEmpty) {
+    throw StateError(
+      'API_BASE_URL is required. '
+      'For dev/test/prod web, set GitHub variable '
+      'DEV_/TEST_/PROD API URL and pass '
+      '--dart-define=API_BASE_URL=... at flutter build web.',
+    );
+  }
+
   if (!_streamApiKeyOptional && config.streamApiKey.trim().isEmpty) {
     throw StateError(
       'STREAM_API_KEY is required. '

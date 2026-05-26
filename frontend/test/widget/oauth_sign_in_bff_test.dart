@@ -1,6 +1,5 @@
 import 'package:felloway_client/app/app_scope.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
-import 'package:felloway_client/app/config/api_mode.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/auth_api.dart';
 import '../helpers/auth_test_helpers.dart';
@@ -58,9 +57,9 @@ Future<Widget> _app({
         onboardingPreferences: OnboardingPreferences(prefs),
         onboardingDraftStore: OnboardingDraftStore(prefs),
         interestsRepository: InterestsRepository(apiClient),
-        eventsRepository: EventsRepository(apiClient, config),
-        usersRepository: UsersRepository(apiClient, config),
-        tripsRepository: TripsRepository(apiClient, config),
+        eventsRepository: EventsRepository(apiClient),
+        usersRepository: UsersRepository(apiClient),
+        tripsRepository: TripsRepository(apiClient),
         streamChatService: StreamChatService(
           config: config,
           apiClient: apiClient,
@@ -78,8 +77,7 @@ void main() {
   testWidgets('live mode shows LinkedIn BFF button', (tester) async {
     const config = AppConfig(
       apiBaseUrl: 'https://localhost:7086',
-      streamApiKey: '',
-      apiMode: ApiMode.live,
+      streamApiKey: ''
     );
     final session = AuthSession(tokenStorage: TokenStorage());
 

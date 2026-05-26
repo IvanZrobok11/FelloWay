@@ -80,7 +80,7 @@ test/
 ### Phase 1 — Auth bridge (P1)
 
 1. Add `AuthApi` (or extend auth data layer): `POST /auth/oauth/linkedin/token`, `POST /auth/refresh`.
-2. **Dev live sign-in** on `OAuthSignInPage` when `API_MODE=live` and OAuth not configured: exchange `dev-{subject}` (configurable subject or fixed `dev-smoke-user`).
+2. ~~**Dev live sign-in**~~ **Superseded by [016-remove-dev-oauth-backend](../016-remove-dev-oauth-backend/spec.md)**: no `dev-smoke-user` on deployed API; use LinkedIn BFF only.
 3. Keep `FlutterAppAuth` path when `OAUTH_CLIENT_ID` + discovery URL set (may still need backend exchange if tokens are provider-only — document in tasks).
 4. Reject `demo-access-token` when `useMockApi` is false (disable demo button or show message in live mode).
 

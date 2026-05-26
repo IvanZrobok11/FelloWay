@@ -1,3 +1,4 @@
+import 'package:felloway_client/app/theme/app_theme.dart';
 import 'package:felloway_client/features/onboarding/presentation/name_page.dart';
 import 'package:felloway_client/features/onboarding/presentation/welcome_page.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
@@ -21,6 +22,7 @@ void main() {
     );
     await tester.pumpWidget(
       MaterialApp.router(
+        theme: AppTheme.light(),
         routerConfig: router,
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -51,6 +53,7 @@ void main() {
     );
     await tester.pumpWidget(
       MaterialApp.router(
+        theme: AppTheme.light(),
         routerConfig: router,
         localizationsDelegates: const [
           AppLocalizations.delegate,

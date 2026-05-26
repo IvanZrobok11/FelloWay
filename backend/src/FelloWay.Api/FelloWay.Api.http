@@ -14,14 +14,7 @@ Content-Type: application/json
 ### Session probe (cookie or bearer)
 GET {{FelloWay.Api_HostAddress}}/auth/session
 
-### Dev LinkedIn token exchange (when OAuth:LinkedIn secrets empty)
-POST {{FelloWay.Api_HostAddress}}/auth/oauth/linkedin/token
-Content-Type: application/json
-
-{
-  "code": "dev-smoke-user",
-  "redirectUri": "com.felloway.app:/oauthredirect",
-  "codeVerifier": "dev"
-}
+### Production sign-in: use LinkedIn BFF (not dev authorization codes on deployed API)
+# GET {{FelloWay.Api_HostAddress}}/auth/linkedin/login?returnUrl=https://localhost:7357&platform=web
 
 ### Run API: dotnet run --project backend/src/FelloWay.Api --launch-profile https

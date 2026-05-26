@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:felloway_client/app/app_scope.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
-import 'package:felloway_client/app/config/api_mode.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/auth_api.dart';
 import '../helpers/auth_test_helpers.dart';
@@ -56,8 +55,7 @@ void main() {
             as Map<String, dynamic>;
     const config = AppConfig(
       apiBaseUrl: 'http://localhost:5161',
-      streamApiKey: '',
-      apiMode: ApiMode.live,
+      streamApiKey: ''
     );
     final tokenStorage = TokenStorage();
     final authApi = AuthApi(baseUrl: config.apiBaseUrl);
@@ -98,9 +96,9 @@ void main() {
             onboardingPreferences: OnboardingPreferences(prefs),
             onboardingDraftStore: OnboardingDraftStore(prefs),
             interestsRepository: InterestsRepository(apiClient),
-            eventsRepository: EventsRepository(apiClient, config),
-            usersRepository: UsersRepository(apiClient, config),
-            tripsRepository: TripsRepository(apiClient, config),
+            eventsRepository: EventsRepository(apiClient),
+            usersRepository: UsersRepository(apiClient),
+            tripsRepository: TripsRepository(apiClient),
             streamChatService: StreamChatService(
               config: config,
               apiClient: apiClient,

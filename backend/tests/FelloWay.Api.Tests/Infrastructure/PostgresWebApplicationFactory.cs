@@ -1,6 +1,10 @@
+using FelloWay.Api.Tests.Auth;
+using FelloWay.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 
 namespace FelloWay.Api.Tests.Infrastructure;
@@ -34,6 +38,12 @@ public class PostgresWebApplicationFactory : WebApplicationFactory<Program>
                 {
                     ["ConnectionStrings:Default"] = csb.ConnectionString,
                 });
+        });
+
+        builder.ConfigureServices(services =>
+        {
+            services.RemoveAll<IOAuthTokenExchanger>();
+            services.AddScoped<IOAuthTokenExchanger, TestOAuthTokenExchanger>();
         });
     }
 }

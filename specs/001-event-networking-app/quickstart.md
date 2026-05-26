@@ -3,6 +3,8 @@
 **Feature**: `001-event-networking-app`  
 **Date**: 2026-04-03
 
+> **Superseded (2026-05-26)**: Client mock/local runtime removed in [`015-remove-mock-local`](../015-remove-mock-local/quickstart.md). Use deployed dev smoke + live API only; ignore `API_MODE=mock` / `auto` below.
+
 ## Prerequisites
 
 - Flutter SDK (stable), Dart 3.x

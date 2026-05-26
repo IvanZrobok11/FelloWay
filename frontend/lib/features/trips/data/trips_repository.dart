@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../../../app/config/app_config.dart';
 import '../../../shared/errors/app_failure.dart';
 import '../../../shared/errors/result.dart';
-import '../../../shared/mocks/mock_api_catalog.dart';
 import '../../../shared/network/api_client.dart';
 import '../domain/trip_chat.dart';
 
@@ -44,17 +42,12 @@ class CreateTripDraft {
   }
 }
 
-// Live mode: mock-only until wired to backend (see specs/005-api-backend-integration).
 class TripsRepository {
-  TripsRepository(this._api, this._config);
+  TripsRepository(this._api);
 
   final ApiClient _api;
-  final AppConfig _config;
 
   Future<Result<List<TripChatSummary>>> listTrips(String eventId) async {
-    if (_config.useMockApi) {
-      return Success(MockApiCatalog.tripsForEvent(eventId));
-    }
     try {
       final res = await _api.dio.get<Map<String, dynamic>>(
         '/events/$eventId/trips',
@@ -74,23 +67,6 @@ class TripsRepository {
     String eventId,
     CreateTripDraft draft,
   ) async {
-    if (_config.useMockApi) {
-      final id = 'demo-trip-${DateTime.now().millisecondsSinceEpoch}';
-      return Success(
-        TripChatSummary(
-          id: id,
-          eventId: eventId,
-          routeLabel: draft.routeLabel,
-          departureAt: draft.departureAt,
-          transportRole: draft.transportRole,
-          targetCityLabel: draft.targetCityLabel,
-          capacity: draft.capacity,
-          memberCount: 1,
-          ownerUserId: 'me',
-          myMembership: TripMyMembership.owner,
-        ),
-      );
-    }
     try {
       final res = await _api.dio.post<Map<String, dynamic>>(
         '/events/$eventId/trips',
@@ -107,9 +83,6 @@ class TripsRepository {
   }
 
   Future<Result<bool>> requestJoin(String tripId) async {
-    if (_config.useMockApi) {
-      return const Success(true);
-    }
     try {
       await _api.dio.post<void>('/trips/$tripId/join');
       return const Success(true);
@@ -119,9 +92,6 @@ class TripsRepository {
   }
 
   Future<Result<bool>> cancelJoinRequest(String tripId) async {
-    if (_config.useMockApi) {
-      return const Success(true);
-    }
     try {
       await _api.dio.delete<void>('/trips/$tripId/join');
       return const Success(true);
@@ -131,9 +101,6 @@ class TripsRepository {
   }
 
   Future<Result<List<TripJoinRequest>>> listJoinRequests(String tripId) async {
-    if (_config.useMockApi) {
-      return Success(MockApiCatalog.demoJoinRequests());
-    }
     try {
       final res = await _api.dio.get<Map<String, dynamic>>(
         '/trips/$tripId/join-requests',
@@ -160,9 +127,6 @@ class TripsRepository {
   }
 
   Future<Result<bool>> approveJoin(String tripId, String userId) async {
-    if (_config.useMockApi) {
-      return const Success(true);
-    }
     try {
       await _api.dio.post<void>('/trips/$tripId/approve/$userId');
       return const Success(true);

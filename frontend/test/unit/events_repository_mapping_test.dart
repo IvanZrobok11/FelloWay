@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:felloway_client/app/config/api_mode.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/token_storage.dart';
 import 'package:felloway_client/features/events/data/events_repository.dart';
@@ -39,14 +38,13 @@ void main() {
 
     const config = AppConfig(
       apiBaseUrl: 'http://localhost:5161',
-      streamApiKey: '',
-      apiMode: ApiMode.live,
+      streamApiKey: ''
     );
     final tokenStorage = TokenStorage();
     final api = ApiClient(config: config, tokenStorage: tokenStorage);
     api.dio.httpClientAdapter = _FixtureAdapter(fixture);
 
-    final repo = EventsRepository(api, config);
+    final repo = EventsRepository(api);
     final result = await repo.listEvents();
 
     expect(result, isA<Success>());

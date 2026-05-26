@@ -3,6 +3,8 @@
 **Feature**: `005-api-backend-integration`  
 **Date**: 2026-05-17
 
+> **Note (2026-05-26)**: `API_MODE=mock` removed from the client — see [`015-remove-mock-local`](../015-remove-mock-local/quickstart.md). Live integration smoke below still applies against a running API.
+
 ## Prerequisites
 
 - Backend running locally ([002 quickstart](../002-backend-api/quickstart.md)): PostgreSQL, migrations, `dotnet run --project src/FelloWay.Api`
@@ -53,18 +55,16 @@ flutter run \
 
 **Pass criteria**: All steps succeed (SC-001). Record date + commit SHA in PR description.
 
-## 4. Optional: curl sanity (same machine)
+## 4. Optional: curl sanity (deployed dev)
+
+Development OAuth codes (`dev-smoke-user`, etc.) are **not** supported on deployed API. Use LinkedIn BFF sign-in from the web app, then:
 
 ```bash
-# Replace PORT and subject
-curl -s -X POST http://localhost:PORT/auth/oauth/linkedin/token \
-  -H "Content-Type: application/json" \
-  -d '{"code":"dev-smoke-user","redirectUri":"http://localhost","codeVerifier":"x"}'
-
-# Use accessToken from response:
-curl -s http://localhost:PORT/users/me -H "Authorization: Bearer <accessToken>"
-curl -s http://localhost:PORT/events -H "Authorization: Bearer <accessToken>"
+curl -s https://dev.api.<domain>/users/me -H "Authorization: Bearer <accessToken>"
+curl -s https://dev.api.<domain>/events -H "Authorization: Bearer <accessToken>"
 ```
+
+See [016 production OAuth policy](../016-remove-dev-oauth-backend/contracts/oauth-token-exchange-policy.md) and [016 quickstart](../016-remove-dev-oauth-backend/quickstart.md).
 
 ## 5. Quality gates
 

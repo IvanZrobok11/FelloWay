@@ -1,10 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../../../app/config/app_config.dart';
 import '../../../shared/errors/app_failure.dart';
 import '../../../shared/errors/result.dart';
-import '../../../shared/mocks/mock_api_catalog.dart';
-import '../../../shared/mocks/mock_event_attendance_store.dart';
 import '../../../shared/network/api_client.dart';
 import '../domain/event.dart';
 
@@ -16,10 +13,9 @@ class EventsPage {
 }
 
 class EventsRepository {
-  EventsRepository(this._api, this._config);
+  EventsRepository(this._api);
 
   final ApiClient _api;
-  final AppConfig _config;
 
   Future<Result<EventsPage>> listEvents({
     String? query,
@@ -27,22 +23,6 @@ class EventsRepository {
     String? interest,
     String? cursor,
   }) async {
-    if (_config.useMockApi) {
-      var items = MockApiCatalog.eventSummaries();
-      final q = query?.trim().toLowerCase();
-      if (q != null && q.isNotEmpty) {
-        items = items.where((e) => e.title.toLowerCase().contains(q)).toList();
-      }
-      final c = city?.trim().toLowerCase();
-      if (c != null && c.isNotEmpty) {
-        items = items.where((e) => e.city.toLowerCase().contains(c)).toList();
-      }
-      final tag = interest?.trim();
-      if (tag != null && tag.isNotEmpty) {
-        items = items.where((e) => e.tags.contains(tag)).toList();
-      }
-      return Success(EventsPage(items: items, nextCursor: null));
-    }
     try {
       final res = await _api.dio.get<Map<String, dynamic>>(
         '/events',
@@ -66,9 +46,6 @@ class EventsRepository {
   }
 
   Future<Result<Event>> getEvent(String id) async {
-    if (_config.useMockApi) {
-      return Success(MockApiCatalog.eventDetail(id));
-    }
     try {
       final res = await _api.dio.get<Map<String, dynamic>>('/events/$id');
       final data = res.data;
@@ -82,10 +59,6 @@ class EventsRepository {
   }
 
   Future<Result<bool>> attend(String id) async {
-    if (_config.useMockApi) {
-      MockEventAttendanceStore.setStatus(id, AttendStatus.attending);
-      return const Success(true);
-    }
     try {
       await _api.dio.post<void>('/events/$id/attend');
       return const Success(true);
@@ -95,10 +68,6 @@ class EventsRepository {
   }
 
   Future<Result<bool>> leave(String id) async {
-    if (_config.useMockApi) {
-      MockEventAttendanceStore.setStatus(id, AttendStatus.notAttending);
-      return const Success(true);
-    }
     try {
       await _api.dio.delete<void>('/events/$id/attend');
       return const Success(true);
@@ -113,9 +82,6 @@ class EventsRepository {
     required int stars,
     String? comment,
   }) async {
-    if (_config.useMockApi) {
-      return const Success(true);
-    }
     try {
       await _api.dio.post<void>(
         '/events/$eventId/attendees/$attendeeUserId/review',

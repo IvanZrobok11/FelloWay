@@ -2,10 +2,10 @@ import 'package:felloway_client/app/config/app_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('linkedInBffCallbackUriForApi uses HTTPS local default', () {
+  test('linkedInBffCallbackUriForApi uses API host path', () {
     expect(
-      AppConfig.linkedInBffCallbackUriForApi('https://api.example.com'),
-      'https://localhost:7086/auth/linkedin/callback',
+      AppConfig.linkedInBffCallbackUriForApi('https://dev.api.example.com'),
+      'https://dev.api.example.com/auth/linkedin/callback',
     );
     expect(
       AppConfig.linkedInBffCallbackUriForApi('https://localhost:7086'),

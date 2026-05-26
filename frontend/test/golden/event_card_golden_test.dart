@@ -1,8 +1,8 @@
+import 'package:felloway_client/app/theme/app_theme.dart';
 import 'package:felloway_client/features/events/domain/event.dart';
 import 'package:felloway_client/features/onboarding/presentation/welcome_page.dart';
 import 'package:felloway_client/features/events/presentation/event_card.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -44,7 +44,7 @@ void main() {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeData.light(),
+        theme: AppTheme.light(),
         home: Scaffold(
           body: Center(
             child: ConstrainedBox(
@@ -73,6 +73,7 @@ void main() {
     await pumpGoldenSurface(
       tester,
       MaterialApp.router(
+        theme: AppTheme.light(),
         locale: const Locale('en'),
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -81,7 +82,6 @@ void main() {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeData.light(),
         routerConfig: router,
       ),
     );

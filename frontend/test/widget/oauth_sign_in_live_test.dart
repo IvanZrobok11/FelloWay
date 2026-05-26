@@ -1,6 +1,5 @@
 import 'package:felloway_client/app/app_scope.dart';
 import 'package:felloway_client/app/auth/auth_session.dart';
-import 'package:felloway_client/app/config/api_mode.dart';
 import 'package:felloway_client/app/config/app_config.dart';
 import 'package:felloway_client/features/auth/data/auth_api.dart';
 import '../helpers/auth_test_helpers.dart';
@@ -24,13 +23,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('live mode shows dev backend sign-in, not demo', (tester) async {
+  testWidgets('sign-in shows LinkedIn only (no demo or local backend)', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     const config = AppConfig(
-      apiBaseUrl: 'http://localhost:5161',
+      apiBaseUrl: 'https://dev.api.example.com',
       streamApiKey: '',
-      apiMode: ApiMode.live,
     );
     final tokenStorage = TokenStorage();
     final authSession = AuthSession(tokenStorage: tokenStorage);
@@ -58,9 +58,9 @@ void main() {
           onboardingPreferences: OnboardingPreferences(prefs),
           onboardingDraftStore: OnboardingDraftStore(prefs),
           interestsRepository: InterestsRepository(apiClient),
-          eventsRepository: EventsRepository(apiClient, config),
-          usersRepository: UsersRepository(apiClient, config),
-          tripsRepository: TripsRepository(apiClient, config),
+          eventsRepository: EventsRepository(apiClient),
+          usersRepository: UsersRepository(apiClient),
+          tripsRepository: TripsRepository(apiClient),
           streamChatService: StreamChatService(
             config: config,
             apiClient: apiClient,
@@ -72,7 +72,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Sign in (local backend)'), findsOneWidget);
+    expect(find.textContaining('LinkedIn'), findsWidgets);
+    expect(find.text('Sign in (local backend)'), findsNothing);
     expect(find.textContaining('Demo'), findsNothing);
   });
 }

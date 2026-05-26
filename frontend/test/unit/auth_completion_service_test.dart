@@ -60,7 +60,6 @@ void main() {
       expect(
         useWebCookieAuth(
           isWeb: true,
-          useMockApi: false,
           webAuthMode: WebAuthMode.splitHostJwt,
         ),
         isFalse,
@@ -71,7 +70,6 @@ void main() {
       expect(
         useWebCookieAuth(
           isWeb: true,
-          useMockApi: false,
           webAuthMode: WebAuthMode.sameOriginCookie,
         ),
         isTrue,
