@@ -1,6 +1,6 @@
 using FelloWay.Api.Extensions;
-using FelloWay.Api.Options;
 using FelloWay.Api.Middleware;
+using FelloWay.Api.Options;
 using FelloWay.Api.Services;
 using FelloWay.Application;
 using FelloWay.Application.Common.Interfaces;
@@ -38,7 +38,7 @@ app.UseCors(CorsExtensions.PolicyName);
 
 var hangfireEnabled = !app.Configuration.GetValue("Database:DisableHangfire", false);
 
-if (app.Environment.IsDevLike())
+if (!app.Environment.IsProdLike())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -55,7 +55,7 @@ app.UseAuthorization();
 app.MapFelloWayHealthChecks();
 app.MapControllers();
 
-if (app.Environment.IsDevLike() && hangfireEnabled)
+if (!app.Environment.IsProdLike() && hangfireEnabled)
 {
     RecurringJob.AddOrUpdate<PostEventReviewReminderJob>(
         "post-event-review-reminder",
