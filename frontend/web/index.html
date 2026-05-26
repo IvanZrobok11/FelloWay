@@ -35,12 +35,15 @@
   <!-- Eruda: dev/test deploys only (see web/deploy_env.js + frontend/README.md) -->
   <script src="deploy_env.js"></script>
   <script>
+    console.log('deploy_env.js', window.__FELLOWAY_DEPLOY_ENV__);
     (function () {
       var params = new URLSearchParams(location.search);
+      console.log('params.get(eruda)', params.get('eruda'));
       if (params.get('eruda') === '0') return;
 
       var host = location.hostname;
       var env = window.__FELLOWAY_DEPLOY_ENV__;
+      console.log('env', env);
       if (!env) {
         env =
           host === 'localhost' ||
@@ -51,10 +54,11 @@
       }
 
       if (env === 'prod' && params.get('eruda') !== '1') return;
-
+      console.log('env === prod && params.get(eruda) !== 1', env === 'prod' && params.get('eruda') !== '1');
       var s = document.createElement('script');
       s.src = 'https://cdn.jsdelivr.net/npm/eruda@3.4.3/eruda.min.js';
       s.onload = function () {
+        console.log('eruda.init()');
         eruda.init();
       };
       document.head.appendChild(s);
