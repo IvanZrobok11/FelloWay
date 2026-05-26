@@ -2,6 +2,19 @@
 
 Flutter mobile client for FelloWay.
 
+## Mobile web debugging (Eruda)
+
+On Flutter Web, open the in-browser devtools panel (network, console, storage):
+
+| How | Action |
+|-----|--------|
+| **Enable** | Add `?eruda=1` to the URL (e.g. `https://your-app.cloudfront.net/?eruda=1`) |
+| **Persist** | After first visit with `?eruda=1`, Eruda stays on until you clear site data |
+| **Disable** | Open `?eruda=0` |
+| **Local dev** | Eruda loads automatically on `localhost` / `127.0.0.1` |
+
+Rebuild/redeploy `web/index.html` after changing this (included in `flutter build web`).
+
 ## Run the app
 
 1. Install Flutter (stable) and verify setup:
