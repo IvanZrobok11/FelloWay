@@ -8,6 +8,7 @@ using FelloWay.Infrastructure;
 using FelloWay.Infrastructure.Jobs;
 using FluentValidation;
 using Hangfire;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,13 @@ await app.ApplyDatabaseAsync();
 
 var wwwroot = Path.Combine(app.Environment.ContentRootPath, "wwwroot");
 Directory.CreateDirectory(Path.Combine(wwwroot, "avatars"));
+// Behind CloudFront/ALB the app receives plain HTTP, but the public URL is HTTPS.
+// Forwarded headers make Request.Scheme/Host reflect the external URL, which OAuth middleware
+// (LinkedIn) uses to build the correct redirect_uri.
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
+});
 app.UseStaticFiles();
 app.UseCors(CorsExtensions.PolicyName);
 
