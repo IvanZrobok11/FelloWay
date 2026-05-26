@@ -179,6 +179,8 @@ jobs:
 
       - name: Resolve deploy URLs
         id: urls
+        env:
+          DISTRIBUTION_ID: ${{ vars.DEV_CLOUDFRONT_DISTRIBUTION_ID }}
         run: |
           if [ -n "${{ vars.DEV_API_BASE_URL }}" ]; then
             echo "api_base=${{ vars.DEV_API_BASE_URL }}" >> "$GITHUB_OUTPUT"
@@ -188,14 +190,22 @@ jobs:
             echo "Set GitHub variable DEV_API_BASE_URL"
             exit 1
           fi
-          if [ -n "${{ vars.DEV_WEB_BASE_URL }}" ]; then
-            echo "web_base=${{ vars.DEV_WEB_BASE_URL }}" >> "$GITHUB_OUTPUT"
-          elif [ -n "${{ vars.DOMAIN_NAME }}" ]; then
+          if [ -n "${{ vars.DOMAIN_NAME }}" ]; then
             echo "web_base=https://dev.app.${{ vars.DOMAIN_NAME }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "$DISTRIBUTION_ID" ]; then
+            WEB_DOMAIN="$(aws cloudfront get-distribution --id "$DISTRIBUTION_ID" --query 'Distribution.DomainName' --output text)"
+            echo "web_base=https://$WEB_DOMAIN" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ vars.DEV_WEB_BASE_URL }}" ]; then
+            echo "web_base=${{ vars.DEV_WEB_BASE_URL }}" >> "$GITHUB_OUTPUT"
           else
-            echo "Set GitHub variable DEV_WEB_BASE_URL"
+            echo "Set DEV_CLOUDFRONT_DISTRIBUTION_ID or DEV_WEB_BASE_URL"
             exit 1
           fi
+
+      - name: Print smoke test targets
+        run: |
+          echo "Smoke API URL: ${{ steps.urls.outputs.api_base }}"
+          echo "Smoke Web URL: ${{ steps.urls.outputs.web_base }}"
 
       - name: Smoke test API
         run: curl -f "${{ steps.urls.outputs.api_base }}/health"
