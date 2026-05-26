@@ -323,7 +323,7 @@ class _OAuthSignInPageState extends State<OAuthSignInPage> {
   }
 }
 
-/// Web route after API redirects to `/auth/success` with session cookie.
+/// Web route after API redirects to `/auth/success?ticket=...` (JWT handoff).
 class OAuthBffSuccessPage extends StatefulWidget {
   const OAuthBffSuccessPage({super.key});
 
@@ -343,23 +343,40 @@ class _OAuthBffSuccessPageState extends State<OAuthBffSuccessPage> {
   Future<void> _complete() async {
     final l10n = AppLocalizations.of(context)!;
     final session = AppScope.authSessionOf(context);
+    final authApi = AppScope.authApiOf(context);
     final users = AppScope.usersOf(context);
     final onboarding = AppScope.onboardingOf(context);
     final store = AppScope.onboardingDraftStoreOf(context);
     final messenger = ScaffoldMessenger.of(context);
 
     try {
-      final me = await users.getMe();
-      if (!mounted) return;
-      switch (me) {
-        case Success():
-          session.setAuthenticatedFromCookie();
-        case Failure(:final error):
+      final ticket = GoRouterState.of(context).uri.queryParameters['ticket'];
+      if (ticket != null && ticket.isNotEmpty) {
+        final tokens = await authApi.completeLinkedInMobile(ticket: ticket);
+        if (tokens.accessToken.isEmpty) {
           messenger.showSnackBar(
-            SnackBar(content: Text(l10n.oauthFailed(error.message))),
+            SnackBar(content: Text(l10n.oauthMissingTokens)),
           );
           context.go('/sign-in');
           return;
+        }
+        await session.setAuthenticated(
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        );
+      } else {
+        final me = await users.getMe();
+        if (!mounted) return;
+        switch (me) {
+          case Success():
+            session.setAuthenticatedFromCookie();
+          case Failure(:final error):
+            messenger.showSnackBar(
+              SnackBar(content: Text(l10n.oauthFailed(error.message))),
+            );
+            context.go('/sign-in');
+            return;
+        }
       }
 
       final pending = store.loadPending();

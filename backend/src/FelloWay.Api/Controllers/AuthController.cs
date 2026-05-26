@@ -66,6 +66,9 @@ public class AuthController(
         return Challenge(props, LinkedInAuthenticationDefaults.AuthenticationScheme);
     }
 
+    /// <summary>
+    /// Consumes a one-time BFF ticket from mobile custom-scheme or web <c>/auth/success?ticket=</c>.
+    /// </summary>
     [HttpPost("linkedin/mobile/complete")]
     [AllowAnonymous]
     public async Task<ActionResult<TokenResponseDto>> CompleteLinkedInMobile(

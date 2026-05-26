@@ -95,7 +95,13 @@ public static class LinkedInBffAuthHandler
                     ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8),
                 });
 
-            var successUri = $"{returnUrl.TrimEnd('/')}/auth/success";
+            // Cross-origin web (separate CloudFront hosts) cannot rely on credentialed XHR with
+            // the API cookie; hand off a one-time ticket like mobile (POST .../mobile/complete).
+            var handoffTicket = ticketStore.Create(tokenResponse.UserId);
+            var successUri = QueryHelpers.AddQueryString(
+                $"{returnUrl.TrimEnd('/')}/auth/success",
+                "ticket",
+                handoffTicket);
             context.Response.Redirect(successUri);
             context.HandleResponse();
         }

@@ -41,7 +41,10 @@ Future<void> main() async {
     useCookieAuthOnWeb: useWebCookies,
   );
   if (useWebCookies) {
-    await authSession.syncWebCookieSession(authApi);
+    final bffTicket = Uri.base.queryParameters['ticket'];
+    if (bffTicket == null || bffTicket.isEmpty) {
+      await authSession.syncWebCookieSession(authApi);
+    }
   }
   final eventsRepository = EventsRepository(apiClient, config);
   final interestsRepository = InterestsRepository(apiClient);
