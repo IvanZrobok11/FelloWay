@@ -36,20 +36,18 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final useCookie = kIsWeb && _useCookieAuthOnWeb;
-          if (!useCookie) {
-            final token = await _tokenStorage.readAccessToken();
-            if (token != null && token.isNotEmpty) {
-              options.headers['Authorization'] = 'Bearer $token';
-            }
+          // Web BFF uses session cookies; dev/token sign-in still stores JWT — send both when present.
+          final token = await _tokenStorage.readAccessToken();
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
           }
           handler.next(options);
         },
         onError: (error, handler) async {
           final retried = error.requestOptions.extra['retried'] == true;
-          final useCookie = kIsWeb && _useCookieAuthOnWeb;
           if (error.response?.statusCode == 401 && !retried && _authApi != null) {
-            if (!useCookie) {
+            final refresh = await _tokenStorage.readRefreshToken();
+            if (refresh != null && refresh.isNotEmpty) {
               try {
                 final refreshed = await _refreshTokensOnce();
                 if (refreshed) {
@@ -123,8 +121,16 @@ class ApiClient {
               : parsed.displayMessage,
         );
       }
+      if (status == 401) {
+        return const NetworkFailure('Unauthorized');
+      }
       final msg = e.response?.data?.toString() ?? e.message ?? 'Network error';
-      return NetworkFailure(status != null ? 'HTTP $status: $msg' : msg);
+      final shortMsg = msg.contains('validateStatus')
+          ? (status != null ? 'HTTP $status' : 'Network error')
+          : msg;
+      return NetworkFailure(
+        status != null ? 'HTTP $status: $shortMsg' : shortMsg,
+      );
     }
     return NetworkFailure(e.toString());
   }

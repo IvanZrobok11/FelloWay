@@ -53,6 +53,57 @@ void main() {
     expect(calls, 2);
     expect(await tokenStorage.readAccessToken(), 'fresh-access');
   });
+
+  test('web cookie mode still sends Bearer when JWT is stored', () async {
+    const config = AppConfig(
+      apiBaseUrl: 'http://localhost:5161',
+      streamApiKey: 'test-key',
+    );
+    final tokenStorage = _MemoryTokenStorage(
+      access: 'stored-jwt',
+      refresh: 'stored-refresh',
+    );
+    final client = ApiClient(
+      config: config,
+      tokenStorage: tokenStorage,
+      useCookieAuthOnWeb: true,
+    );
+
+    RequestOptions? captured;
+    client.dio.httpClientAdapter = _CaptureAdapter(
+      onFetch: (options) {
+        captured = options;
+        return ResponseBody.fromString(
+          jsonEncode({'id': 'u1', 'displayName': 'Test'}),
+          200,
+          headers: {
+            Headers.contentTypeHeader: [Headers.jsonContentType],
+          },
+        );
+      },
+    );
+
+    await client.dio.get<Map<String, dynamic>>('/users/me');
+    expect(captured?.headers['Authorization'], 'Bearer stored-jwt');
+  });
+}
+
+class _CaptureAdapter implements HttpClientAdapter {
+  _CaptureAdapter({required this.onFetch});
+
+  final ResponseBody Function(RequestOptions options) onFetch;
+
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<List<int>>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    return onFetch(options);
+  }
 }
 
 class _MemoryTokenStorage extends TokenStorage {
