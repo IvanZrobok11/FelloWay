@@ -211,4 +211,4 @@ jobs:
         run: curl -f "${{ steps.urls.outputs.api_base }}/health"
 
       - name: Smoke test web
-        run: curl -f "${{ steps.urls.outputs.web_base }}/"
+        run: curl -f "${{ steps.urls.outputs.web_base }}/health"
