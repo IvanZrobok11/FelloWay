@@ -45,6 +45,8 @@ Auto-generated from all feature plans. Last updated: 2026-05-27
 - PostgreSQL (unchanged); test InMemory / Testcontainers (016-remove-dev-oauth-backend)
 - Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `go_router`, `AppTheme` / `FellowayTextColors`, `UsersRepository.getMe()`, `OnboardingPreferences`, existing onboarding pages (017-post-signin-onboarding-contrast)
 - `SharedPreferences` (`OnboardingPreferences`); profile from API (017-post-signin-onboarding-contrast)
+- C# 12 / .NET 8 (admin web + API extensions); Terraform ≥ 1.5 + ASP.NET Core Razor Pages, cookie auth, `HttpClient`, EF Core (API only), existing `IBlobStorageService`, ALB host rules, ECS Fargate, Secrets Manager, GitHub Actions environments (018-github-env-admin-panel)
+- PostgreSQL via API (existing `events` table); blob storage for cover images (018-github-env-admin-panel)
 
 - C# 12 / .NET 8 + ASP.NET Core, EF Core 8 + Npgsql, Swashbuckle, FluentValidation, Stream Chat .NET SDK, Azure.Storage.Blobs, Hangfire (PostgreSQL storage), Polly (HTTP resilience for OAuth) (002-backend-api)
 
@@ -65,9 +67,9 @@ tests/
 C# 12 / .NET 8: Follow standard conventions
 
 ## Recent Changes
+- 018-github-env-admin-panel: Added C# 12 / .NET 8 (admin web + API extensions); Terraform ≥ 1.5 + ASP.NET Core Razor Pages, cookie auth, `HttpClient`, EF Core (API only), existing `IBlobStorageService`, ALB host rules, ECS Fargate, Secrets Manager, GitHub Actions environments
 - 017-post-signin-onboarding-contrast: Added Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `go_router`, `AppTheme` / `FellowayTextColors`, `UsersRepository.getMe()`, `OnboardingPreferences`, existing onboarding pages
 - 016-remove-dev-oauth-backend: Added C# 12 / .NET 8 + ASP.NET Core, `IOAuthTokenExchanger`, `AuthService`, `OAuthOptions`, LinkedIn BFF (`009-linkedin-bff-auth`)
-- 015-remove-mock-local: Added Dart 3.10+ / Flutter stable (`frontend/`, SDK `^3.10.4`) + `dio`, `go_router`, `flutter_appauth` / BFF web auth, `stream_chat`, existing repositories + `AppConfig`
 
 
 <!-- MANUAL ADDITIONS START -->

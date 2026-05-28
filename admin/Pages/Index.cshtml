@@ -1,0 +1,18 @@
+@page
+@model FelloWay.Admin.Pages.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="card">
+    <h1>Dashboard</h1>
+    <p>Signed in as <strong>@User.Identity?.Name</strong>.</p>
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <p class="success">@Model.StatusMessage</p>
+    }
+    <p>
+        <a class="btn" asp-page="/Events/Index">Manage events</a>
+        <a class="btn" asp-page="/Events/Create">Create event</a>
+    </p>
+</div>

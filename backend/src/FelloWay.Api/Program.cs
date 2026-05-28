@@ -34,6 +34,7 @@ await app.ApplyDatabaseAsync();
 
 var wwwroot = Path.Combine(app.Environment.ContentRootPath, "wwwroot");
 Directory.CreateDirectory(Path.Combine(wwwroot, "avatars"));
+Directory.CreateDirectory(Path.Combine(wwwroot, "event-covers"));
 // Behind CloudFront/ALB the app receives plain HTTP, but the public URL is HTTPS.
 // Trust proxy headers (default only trusts loopback) so Request.Scheme/Host match the viewer URL.
 var forwardedHeaders = new ForwardedHeadersOptions

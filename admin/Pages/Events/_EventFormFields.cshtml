@@ -1,0 +1,37 @@
+@model FelloWay.Admin.Pages.Events.EventFormInput
+
+<div class="form-group">
+    <label asp-for="Title">Title</label>
+    <input asp-for="Title" />
+    <span asp-validation-for="Title" class="error"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Description">Description</label>
+    <textarea asp-for="Description" rows="4"></textarea>
+</div>
+<div class="form-group">
+    <label asp-for="StartsAt">Starts at (UTC)</label>
+    <input asp-for="StartsAt" type="datetime-local" />
+    <span asp-validation-for="StartsAt" class="error"></span>
+</div>
+<div class="form-group">
+    <label asp-for="EndsAt">Ends at (UTC)</label>
+    <input asp-for="EndsAt" type="datetime-local" />
+    <span asp-validation-for="EndsAt" class="error"></span>
+</div>
+<div class="form-group">
+    <label asp-for="CityId">City</label>
+    <select asp-for="CityId" asp-items="@(ViewData["Cities"] as IEnumerable<SelectListItem> ?? Array.Empty<SelectListItem>())"></select>
+</div>
+<div class="form-group">
+    <label asp-for="Venue">Venue</label>
+    <input asp-for="Venue" />
+</div>
+<div class="form-group">
+    <label asp-for="Capacity">Capacity</label>
+    <input asp-for="Capacity" type="number" min="1" />
+</div>
+<div class="form-group">
+    <label asp-for="OfficialUrl">Official URL</label>
+    <input asp-for="OfficialUrl" type="url" />
+</div>

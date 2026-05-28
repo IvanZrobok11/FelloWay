@@ -113,14 +113,27 @@ jobs:
           tags: felloway-api:${{ github.sha }}
           load: true
 
+      - name: Build admin image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./admin/Dockerfile
+          push: false
+          tags: felloway-admin:${{ github.sha }}
+          load: true
+
       - name: Save docker image
-        run: docker save felloway-api:${{ github.sha }} -o felloway-api-image.tar
+        run: |
+          docker save felloway-api:${{ github.sha }} -o felloway-api-image.tar
+          docker save felloway-admin:${{ github.sha }} -o felloway-admin-image.tar
 
       - name: Upload docker image
         uses: actions/upload-artifact@v4
         with:
           name: docker-image
-          path: felloway-api-image.tar
+          path: |
+            felloway-api-image.tar
+            felloway-admin-image.tar
           retention-days: 1
 
   deploy-dev:
@@ -142,7 +155,9 @@ jobs:
           path: web-build
 
       - name: Load docker image
-        run: docker load -i felloway-api-image.tar
+        run: |
+          docker load -i felloway-api-image.tar
+          docker load -i felloway-admin-image.tar
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -163,6 +178,10 @@ jobs:
           docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:$IMAGE_TAG
           docker tag felloway-api:$IMAGE_TAG $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:latest
           docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}:latest
+          docker tag felloway-admin:$IMAGE_TAG $ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}:$IMAGE_TAG
+          docker tag felloway-admin:$IMAGE_TAG $ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}:latest
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}:latest
 
       - name: Deploy ECS service (new task definition with API image)
         env:
@@ -176,6 +195,20 @@ jobs:
             "${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}" \
             "${{ env.PROJECT_NAME }}-api-${{ env.ENVIRONMENT }}" \
             "$IMAGE_URI"
+
+      - name: Deploy ECS admin service
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
+        run: |
+          chmod +x .github/scripts/ecs-deploy-admin-image.sh
+          ADMIN_IMAGE_URI="$ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}:$IMAGE_TAG"
+          .github/scripts/ecs-deploy-admin-image.sh \
+            "${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}" \
+            "${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}" \
+            "${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}" \
+            "$ADMIN_IMAGE_URI" \
+            admin || echo "Admin ECS service not provisioned yet (terraform apply with admin_host)"
 
       - name: Sync web to S3
         env:

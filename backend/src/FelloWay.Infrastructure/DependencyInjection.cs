@@ -44,10 +44,13 @@ public static class DependencyInjection
         services.AddScoped<ITripChannelSyncService, DevTripChannelSyncService>();
 
         var avatarRoot = Path.Combine(environment.ContentRootPath, "wwwroot", "avatars");
+        var eventCoverRoot = Path.Combine(environment.ContentRootPath, "wwwroot", "event-covers");
         services.Configure<BlobStorageOptions>(opts =>
         {
             opts.AvatarRootPath = avatarRoot;
             opts.PublicBasePath = "/avatars";
+            opts.EventCoverRootPath = eventCoverRoot;
+            opts.EventCoverPublicBasePath = "/event-covers";
         });
         services.AddScoped<IBlobStorageService, LocalBlobStorageService>();
         services.AddSingleton<CustomPushDispatcher>();

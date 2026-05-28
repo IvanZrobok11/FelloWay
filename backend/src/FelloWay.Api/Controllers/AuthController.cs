@@ -1,10 +1,10 @@
 using System.Security.Claims;
 using AspNet.Security.OAuth.LinkedIn;
+using FelloWay.Api.Auth;
+using FelloWay.Api.Options;
 using FelloWay.Application.Auth;
 using FelloWay.Application.Auth.Models;
 using FelloWay.Application.Common.Interfaces;
-using FelloWay.Api.Auth;
-using FelloWay.Api.Options;
 using FelloWay.Domain.Common;
 using FelloWay.Infrastructure.Auth;
 using FluentValidation;

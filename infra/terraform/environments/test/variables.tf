@@ -26,6 +26,30 @@ variable "web_host" {
   type = string
 }
 
+variable "admin_host" {
+  type        = string
+  default     = ""
+  description = "Admin panel hostname (e.g. admin.test.example.com)."
+}
+
+variable "admin_username" {
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "admin_password" {
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "admin_service_key" {
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 variable "vpc_cidr" {
   type    = string
   default = "10.20.0.0/16"

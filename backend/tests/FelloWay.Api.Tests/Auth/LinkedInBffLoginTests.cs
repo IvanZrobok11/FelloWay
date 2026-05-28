@@ -1,11 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
+using FelloWay.Api.Tests.Infrastructure;
 using FelloWay.Application.Auth.Models;
 using FelloWay.Domain.Entities;
 using FelloWay.Domain.Enums;
 using FelloWay.Infrastructure.Auth;
 using FelloWay.Infrastructure.Persistence;
-using FelloWay.Api.Tests.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;

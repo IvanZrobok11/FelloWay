@@ -72,6 +72,10 @@ jobs:
           docker tag $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-test:$IMAGE_TAG \
             $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-prod:$IMAGE_TAG
           docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-api-prod:$IMAGE_TAG
+          docker pull $ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-test:$IMAGE_TAG
+          docker tag $ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-test:$IMAGE_TAG \
+            $ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-prod:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-prod:$IMAGE_TAG
 
       - name: Deploy ECS prod
         env:
@@ -85,6 +89,20 @@ jobs:
             "${{ env.PROJECT_NAME }}-api-prod" \
             "${{ env.PROJECT_NAME }}-api-prod" \
             "$IMAGE_URI"
+
+      - name: Deploy ECS admin prod
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          chmod +x .github/scripts/ecs-deploy-admin-image.sh
+          ADMIN_IMAGE_URI="$ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-prod:$IMAGE_TAG"
+          .github/scripts/ecs-deploy-admin-image.sh \
+            "${{ env.PROJECT_NAME }}-prod" \
+            "${{ env.PROJECT_NAME }}-admin-prod" \
+            "${{ env.PROJECT_NAME }}-admin-prod" \
+            "$ADMIN_IMAGE_URI" \
+            admin || echo "Admin ECS service not provisioned yet"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2

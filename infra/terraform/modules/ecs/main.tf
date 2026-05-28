@@ -103,6 +103,10 @@ resource "aws_ecs_task_definition" "api" {
         name      = "Stream__ApiSecret"
         valueFrom = "${var.app_secret_arn}:Stream__ApiSecret::"
       },
+      {
+        name      = "AdminAuth__ServiceKey"
+        valueFrom = "${var.app_secret_arn}:AdminAuth__ServiceKey::"
+      },
     ]
     logConfiguration = {
       logDriver = "awslogs"

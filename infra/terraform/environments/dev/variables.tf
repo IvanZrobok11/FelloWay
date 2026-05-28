@@ -37,6 +37,33 @@ variable "web_host" {
   description = "Web hostname; required when use_custom_domain is true."
 }
 
+variable "admin_host" {
+  type        = string
+  default     = ""
+  description = "Admin panel hostname; required for admin ECS when use_custom_domain is true."
+}
+
+variable "admin_username" {
+  type        = string
+  sensitive   = true
+  default     = ""
+  description = "Operator login for admin panel (from GitHub Environment ADMIN_USERNAME)."
+}
+
+variable "admin_password" {
+  type        = string
+  sensitive   = true
+  default     = ""
+  description = "Operator password for admin panel (from GitHub Environment ADMIN_PASSWORD)."
+}
+
+variable "admin_service_key" {
+  type        = string
+  sensitive   = true
+  default     = ""
+  description = "Service key for admin→API calls (from GitHub Environment ADMIN_SERVICE_KEY)."
+}
+
 variable "vpc_cidr" {
   type    = string
   default = "10.10.0.0/16"

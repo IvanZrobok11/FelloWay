@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FelloWay Admin</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="top-bar">
+        <a class="brand" asp-page="/Index">FelloWay Admin</a>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <nav>
+                <a asp-page="/Events/Index">Events</a>
+                <a asp-page="/Events/Create">Create event</a>
+                <form method="post" asp-page="/Index" asp-page-handler="Logout" class="inline-form">
+                    <button type="submit" class="link-button">Sign out</button>
+                </form>
+            </nav>
+        }
+    </header>
+    <main class="container">
+        @RenderBody()
+    </main>
+</body>
+</html>

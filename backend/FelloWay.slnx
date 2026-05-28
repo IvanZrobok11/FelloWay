@@ -5,8 +5,12 @@
     <Project Path="src/FelloWay.Domain/FelloWay.Domain.csproj" />
     <Project Path="src/FelloWay.Infrastructure/FelloWay.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/admin/">
+    <Project Path="../admin/FelloWay.Admin.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/FelloWay.Api.Tests/FelloWay.Api.Tests.csproj" />
     <Project Path="tests/FelloWay.Application.Tests/FelloWay.Application.Tests.csproj" />
+    <Project Path="tests/FelloWay.Admin.Tests/FelloWay.Admin.Tests.csproj" />
   </Folder>
 </Solution>

@@ -1,6 +1,7 @@
 using System.Text;
 using AspNet.Security.OAuth.LinkedIn;
 using FelloWay.Api.Auth;
+using FelloWay.Application.Admin;
 using FelloWay.Infrastructure.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,6 +17,8 @@ public static class AuthExtensions
         IConfiguration configuration,
         IHostEnvironment environment)
     {
+        services.Configure<AdminAuthOptions>(configuration.GetSection(AdminAuthOptions.SectionName));
+
         var signingKey = configuration["Jwt:SigningKey"]
             ?? "felloway-dev-signing-key-change-in-production-min-32-chars!!";
 
@@ -71,7 +74,10 @@ public static class AuthExtensions
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)),
                 ClockSkew = TimeSpan.FromMinutes(1),
             };
-        });
+        })
+        .AddScheme<AuthenticationSchemeOptions, AdminServiceKeyAuthenticationHandler>(
+            AdminServiceKeyAuthenticationHandler.SchemeName,
+            _ => { });
 
         if (linkedInConfigured)
         {
@@ -119,6 +125,11 @@ public static class AuthExtensions
         services.AddAuthorization(options =>
         {
             options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
+            options.AddPolicy(
+                "AdminContent",
+                policy => policy
+                    .AddAuthenticationSchemes(AdminServiceKeyAuthenticationHandler.SchemeName)
+                    .RequireAuthenticatedUser());
         });
 
         return services;

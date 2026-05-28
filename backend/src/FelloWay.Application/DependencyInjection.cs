@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<ITripService, TripService>();
         services.AddScoped<IUserTrustService, UserTrustService>();
         services.AddScoped<IAdminModerationService, AdminModerationService>();
+        services.AddScoped<IAdminEventContentService, AdminEventContentService>();
         return services;
     }
 }
