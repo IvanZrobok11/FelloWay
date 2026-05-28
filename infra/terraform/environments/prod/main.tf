@@ -11,6 +11,13 @@ module "network" {
   aws_region   = var.aws_region
 }
 
+locals {
+  admin_enabled    = var.admin_service_key != ""
+  web_origin_url   = "https://${var.web_host}"
+  api_public_url   = "https://${var.api_host}"
+  admin_public_url = local.admin_enabled && var.admin_host != "" ? "https://${var.admin_host}" : ""
+}
+
 resource "aws_acm_certificate" "api" {
   domain_name               = var.api_host
   subject_alternative_names = var.admin_host != "" ? [var.admin_host] : []
@@ -78,8 +85,8 @@ module "alb" {
   public_subnet_ids    = module.network.public_subnet_ids
   security_group_id    = module.network.alb_security_group_id
   certificate_arn      = aws_acm_certificate_validation.api.certificate_arn
-  admin_host           = var.admin_host
-  enable_admin_routing = var.admin_host != ""
+  create_admin_target_group = local.admin_enabled
+  admin_listener_hosts      = var.admin_host != "" ? [var.admin_host] : []
 }
 
 module "rds" {
@@ -109,11 +116,6 @@ resource "aws_secretsmanager_secret_version" "app" {
   })
 }
 
-locals {
-  web_origin_url = "https://${var.web_host}"
-  api_public_url = "https://${var.api_host}"
-}
-
 module "ecs" {
   source                 = "../../modules/ecs"
   project_name           = var.project_name
@@ -130,7 +132,7 @@ module "ecs" {
   cpu                    = var.ecs_cpu
   memory                 = var.ecs_memory
   desired_count          = var.ecs_desired_count
-  enable_admin_service   = var.admin_host != ""
+  enable_admin_service   = local.admin_enabled
 }
 
 module "web" {

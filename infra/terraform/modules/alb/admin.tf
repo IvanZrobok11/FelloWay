@@ -1,5 +1,5 @@
 resource "aws_lb_target_group" "admin" {
-  count = var.enable_admin_routing ? 1 : 0
+  count = var.create_admin_target_group ? 1 : 0
 
   name        = "${var.project_name}-${var.environment}-admin"
   port        = var.target_port
@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "admin" {
 }
 
 resource "aws_lb_listener_rule" "admin" {
-  count = var.enable_admin_routing ? 1 : 0
+  count = var.create_admin_target_group && length(var.admin_listener_hosts) > 0 ? 1 : 0
 
   listener_arn = var.enable_https ? aws_lb_listener.https[0].arn : aws_lb_listener.http_forward[0].arn
   priority     = 100
@@ -34,7 +34,7 @@ resource "aws_lb_listener_rule" "admin" {
 
   condition {
     host_header {
-      values = [var.admin_host]
+      values = var.admin_listener_hosts
     }
   }
 }

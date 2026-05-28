@@ -6,6 +6,11 @@ output "web_url" {
   value = "https://${var.web_host}"
 }
 
+output "admin_url" {
+  value       = local.admin_public_url != "" ? local.admin_public_url : null
+  description = "Admin panel URL when admin_host and admin_service_key are configured."
+}
+
 output "ecr_repository_url" {
   value = module.ecs.ecr_repository_url
 }

@@ -18,12 +18,14 @@ variable "target_port" {
   type    = number
   default = 8080
 }
-variable "admin_host" {
-  type        = string
-  default     = ""
-  description = "Admin panel hostname for ALB host-based routing"
+variable "create_admin_target_group" {
+  type        = bool
+  default     = false
+  description = "Create ALB target group for felloway-admin ECS service."
 }
-variable "enable_admin_routing" {
-  type    = bool
-  default = false
+
+variable "admin_listener_hosts" {
+  type        = list(string)
+  default     = []
+  description = "Host header values that forward to admin target group (custom domain)."
 }

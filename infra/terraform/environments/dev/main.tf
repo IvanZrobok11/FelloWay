@@ -12,6 +12,10 @@ module "network" {
   aws_region   = var.aws_region
 }
 
+locals {
+  admin_enabled = var.admin_service_key != ""
+}
+
 resource "aws_acm_certificate" "api" {
   count             = var.use_custom_domain ? 1 : 0
   domain_name       = var.api_host
@@ -78,21 +82,29 @@ resource "aws_acm_certificate_validation" "web" {
 }
 
 module "alb" {
-  source               = "../../modules/alb"
-  project_name         = var.project_name
-  environment          = var.environment
-  vpc_id               = module.network.vpc_id
-  public_subnet_ids    = module.network.public_subnet_ids
-  security_group_id    = module.network.alb_security_group_id
-  enable_https         = var.use_custom_domain
-  certificate_arn      = var.use_custom_domain ? aws_acm_certificate_validation.api[0].certificate_arn : null
-  admin_host           = var.admin_host
-  enable_admin_routing = var.use_custom_domain && var.admin_host != ""
+  source                    = "../../modules/alb"
+  project_name              = var.project_name
+  environment               = var.environment
+  vpc_id                    = module.network.vpc_id
+  public_subnet_ids         = module.network.public_subnet_ids
+  security_group_id         = module.network.alb_security_group_id
+  enable_https              = var.use_custom_domain
+  certificate_arn           = var.use_custom_domain ? aws_acm_certificate_validation.api[0].certificate_arn : null
+  create_admin_target_group = local.admin_enabled
+  admin_listener_hosts = var.use_custom_domain && var.admin_host != "" ? [var.admin_host] : []
 }
 
 module "api_cdn" {
   count        = var.use_custom_domain ? 0 : 1
   source       = "../../modules/api_cdn"
+  project_name = var.project_name
+  environment  = var.environment
+  alb_dns_name = module.alb.alb_dns_name
+}
+
+module "admin_cdn" {
+  count        = var.use_custom_domain ? 0 : (local.admin_enabled ? 1 : 0)
+  source       = "../../modules/admin_cdn"
   project_name = var.project_name
   environment  = var.environment
   alb_dns_name = module.alb.alb_dns_name
@@ -137,6 +149,12 @@ module "web" {
 locals {
   web_origin_url = var.use_custom_domain ? "https://${var.web_host}" : "https://${module.web.cloudfront_domain_name}"
   api_public_url = var.use_custom_domain ? "https://${var.api_host}" : "https://${module.api_cdn[0].distribution_domain_name}"
+
+  admin_public_url = !local.admin_enabled ? "" : (
+    var.use_custom_domain ? (
+      var.admin_host != "" ? "https://${var.admin_host}" : ""
+    ) : "https://${module.admin_cdn[0].distribution_domain_name}"
+  )
 }
 
 module "ecs" {
@@ -155,7 +173,7 @@ module "ecs" {
   cpu                    = var.ecs_cpu
   memory                 = var.ecs_memory
   desired_count          = var.ecs_desired_count
-  enable_admin_service   = var.use_custom_domain && var.admin_host != ""
+  enable_admin_service   = local.admin_enabled
 }
 
 module "dns" {

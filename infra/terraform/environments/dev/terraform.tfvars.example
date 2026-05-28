@@ -1,5 +1,11 @@
-# Technical URLs (no domain registration). After apply: terraform output api_url web_url
+# Technical URLs (no domain registration). After apply:
+#   terraform output api_url web_url admin_url
 use_custom_domain = false
+
+# Admin panel (technical URL = CloudFront dxxxx.cloudfront.net when use_custom_domain is false):
+# admin_username    = "..."
+# admin_password    = "..."
+# admin_service_key = "long-random-string"
 
 vpc_cidr          = "10.10.0.0/16"
 db_instance_class = "db.t4g.micro"

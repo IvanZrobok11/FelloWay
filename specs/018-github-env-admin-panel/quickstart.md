@@ -18,11 +18,22 @@ Also ensure existing deploy secrets/vars (`AWS_ACCOUNT_ID`, OIDC role, etc.) per
 
 ## After deploy
 
+**Custom domain** (`use_custom_domain = true` + `admin_host`):
+
 | Environment | Admin URL (example) | API URL |
 |-------------|---------------------|---------|
 | dev | `https://admin.dev.<domain>` | `https://dev.api.<domain>` |
 | test | `https://admin.test.<domain>` | `https://test.api.<domain>` |
 | prod | `https://admin.<domain>` | `https://api.<domain>` |
+
+**Technical URLs** (`use_custom_domain = false` + `admin_service_key` in tfvars):
+
+```bash
+cd infra/terraform/environments/dev
+terraform output admin_url   # https://dxxxxxxxx.cloudfront.net
+terraform output api_url
+terraform output web_url
+```
 
 ## Smoke checklist
 

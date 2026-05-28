@@ -8,6 +8,18 @@ output "web_url" {
   description = "Public Flutter web URL."
 }
 
+output "admin_url" {
+  value = length(module.admin_cdn) > 0 ? "https://${module.admin_cdn[0].distribution_domain_name}" : (
+    var.use_custom_domain && var.admin_host != "" ? "https://${var.admin_host}" : null
+  )
+  description = "Public admin panel URL (technical CloudFront or custom admin_host)."
+}
+
+output "admin_cloudfront_distribution_id" {
+  value       = length(module.admin_cdn) > 0 ? module.admin_cdn[0].distribution_id : null
+  description = "Admin CloudFront distribution when use_custom_domain is false."
+}
+
 output "use_custom_domain" {
   value = var.use_custom_domain
 }
