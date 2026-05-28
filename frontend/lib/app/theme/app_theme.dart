@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'felloway_colors.dart';
+import 'felloway_light_input.dart';
 import 'felloway_text_colors.dart';
 import 'felloway_typography.dart';
 
@@ -20,7 +21,7 @@ abstract final class AppTheme {
       useMaterial3: true,
       fontFamily: FellowayTypography.fontFamily,
       scaffoldBackgroundColor: Colors.transparent,
-      extensions: [_textOnGradient, typography],
+      extensions: [_textOnGradient, typography, FellowayLightInput.standard],
       textTheme: textTheme,
       appBarTheme: AppBarTheme(
         centerTitle: true,
@@ -87,7 +88,9 @@ abstract final class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: scheme.surface.withValues(alpha: 0.92),
-        labelStyle: typography.bodySupporting.copyWith(color: scheme.onSurface),
+        labelStyle: FellowayLightInput.standard.labelStyle,
+        hintStyle: FellowayLightInput.standard.hintStyle,
+        floatingLabelStyle: FellowayLightInput.standard.labelStyle,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

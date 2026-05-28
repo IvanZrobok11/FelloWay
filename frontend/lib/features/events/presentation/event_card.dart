@@ -42,8 +42,11 @@ class EventCard extends StatelessWidget {
             children: [
               AspectRatio(
                 aspectRatio: 16 / 9,
-                child: cover != null
-                    ? Image.network(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (cover != null)
+                      Image.network(
                         cover,
                         fit: BoxFit.cover,
                         cacheWidth: cacheW,
@@ -55,25 +58,48 @@ class EventCard extends StatelessWidget {
                               child: const Icon(Icons.event, size: 48),
                             ),
                       )
-                    : ColoredBox(
+                    else
+                      ColoredBox(
                         color: theme.colorScheme.surfaceContainerHighest,
                         child: const Icon(Icons.event, size: 48),
                       ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.72),
+                            ],
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 24, 12, 12),
+                          child: Text(
+                            summary.title,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      summary.title,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: lightText.primary,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
                     Text(
                       '${summary.city} · ${_formatDate(summary.startsAt)}',
                       style: theme.textTheme.bodySmall?.copyWith(

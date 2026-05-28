@@ -9,6 +9,7 @@ import '../../../app/app_scope.dart';
 import '../../../app/theme/felloway_text_colors.dart';
 import '../../../app/theme/felloway_typography.dart';
 import '../../../shared/errors/result.dart';
+import '../../../shared/utils/external_url.dart';
 import '../domain/user_profile.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -225,8 +226,16 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           if (p.linkedinUrl != null)
             ListTile(
+              leading: const Icon(Icons.link),
               title: Text(l10n.profileLinkedIn, style: _sectionTitle(context)),
-              subtitle: Text(p.linkedinUrl!),
+              subtitle: Text(
+                p.linkedinUrl!,
+                style: typo.bodySupporting.copyWith(
+                  color: context.fellowayTextColors.accent,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+              onTap: () => openExternalUrl(p.linkedinUrl!),
             ),
           if (p.facebookUrl != null)
             ListTile(

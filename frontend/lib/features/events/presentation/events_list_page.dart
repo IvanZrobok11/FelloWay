@@ -5,6 +5,8 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../app/theme/felloway_light_input.dart';
+import '../../../app/theme/felloway_text_colors.dart';
 import '../../../shared/errors/connectivity_failure.dart';
 import '../../../shared/errors/result.dart';
 import '../../../shared/widgets/error_display.dart';
@@ -112,6 +114,7 @@ class _EventsListPageState extends State<EventsListPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final auth = AppScope.authSessionOf(context).isAuthenticated;
+    final lightInput = context.fellowayLightInput;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.eventsScreenTitle)),
@@ -124,10 +127,11 @@ class _EventsListPageState extends State<EventsListPage> {
               textField: true,
               child: TextField(
                 controller: _searchController,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
+                style: lightInput.textStyle,
+                decoration: FellowayLightInput.decoration(
+                  context,
                   hintText: l10n.eventsSearchHint,
-                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.search),
                 ),
                 onChanged: _onSearchChanged,
               ),
@@ -145,6 +149,7 @@ class _EventsListPageState extends State<EventsListPage> {
   }
 
   Widget _buildBody(AppLocalizations l10n, bool auth) {
+    final onGradient = context.fellowayTextColors;
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -160,7 +165,13 @@ class _EventsListPageState extends State<EventsListPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(24),
-            child: Text(l10n.emptyStateTitle, textAlign: TextAlign.center),
+            child: Text(
+              l10n.emptyStateTitle,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: onGradient.primary,
+              ),
+            ),
           ),
         ],
       );

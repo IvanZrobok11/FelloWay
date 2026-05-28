@@ -3,6 +3,7 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../app/theme/felloway_light_input.dart';
 import '../../../shared/errors/result.dart';
 
 class EventFeedbackPage extends StatefulWidget {
@@ -92,6 +93,8 @@ class _EventFeedbackPageState extends State<EventFeedbackPage> {
       );
     }
 
+    final lightInput = context.fellowayLightInput;
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.eventFeedbackTitle)),
       body: ListView(
@@ -113,9 +116,10 @@ class _EventFeedbackPageState extends State<EventFeedbackPage> {
           ),
           TextField(
             controller: _comment,
-            decoration: InputDecoration(
+            style: lightInput.textStyle,
+            decoration: FellowayLightInput.decoration(
+              context,
               labelText: l10n.eventFeedbackCommentLabel,
-              border: const OutlineInputBorder(),
             ),
             maxLines: 4,
             textCapitalization: TextCapitalization.sentences,

@@ -3,6 +3,7 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../app/theme/felloway_text_colors.dart';
 import '../../../shared/errors/result.dart';
 import '../domain/trip_chat.dart';
 import 'trip_join_flow.dart';
@@ -85,6 +86,7 @@ class _EventTripsSectionState extends State<EventTripsSection> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final streamReady = AppScope.streamChatOf(context).isReady;
+    final onGradient = context.fellowayTextColors;
 
     if (!widget.authenticated) {
       return const SizedBox.shrink();
@@ -94,7 +96,9 @@ class _EventTripsSectionState extends State<EventTripsSection> {
         padding: const EdgeInsets.only(top: 16),
         child: Text(
           l10n.tripsJoinEventHint,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: onGradient.primary,
+          ),
         ),
       );
     }
@@ -110,11 +114,14 @@ class _EventTripsSectionState extends State<EventTripsSection> {
                 header: true,
                 child: Text(
                   l10n.tripsSectionTitle,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: onGradient.primary,
+                  ),
                 ),
               ),
             ),
             TextButton.icon(
+              style: TextButton.styleFrom(foregroundColor: onGradient.primary),
               onPressed: () async {
                 final created = await context.push<bool>(
                   '/event/${widget.eventId}/trips/create?city=${Uri.encodeComponent(widget.eventCity)}',
@@ -140,7 +147,12 @@ class _EventTripsSectionState extends State<EventTripsSection> {
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           )
         else if (_trips.isEmpty)
-          Text(l10n.tripsEmpty)
+          Text(
+            l10n.tripsEmpty,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: onGradient.primary,
+            ),
+          )
         else
           ..._trips.map(
             (t) => _TripCard(

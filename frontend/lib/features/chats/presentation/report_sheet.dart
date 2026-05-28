@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:felloway_client/l10n/app_localizations.dart';
 
+import '../../../app/theme/felloway_light_input.dart';
+
 /// Reporting API is TBD in contracts; this is the mobile entry point (UI).
 Future<void> showReportSheet(BuildContext context) async {
   final l10n = AppLocalizations.of(context)!;
@@ -27,9 +29,10 @@ Future<void> showReportSheet(BuildContext context) async {
             const SizedBox(height: 12),
             TextField(
               controller: controller,
-              decoration: InputDecoration(
+              style: ctx.fellowayLightInput.textStyle,
+              decoration: FellowayLightInput.decoration(
+                ctx,
                 labelText: l10n.chatReportDetailsLabel,
-                border: const OutlineInputBorder(),
               ),
               maxLines: 4,
             ),

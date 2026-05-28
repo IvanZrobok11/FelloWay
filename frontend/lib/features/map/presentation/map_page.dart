@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../app/theme/felloway_text_colors.dart';
 import '../../../shared/errors/result.dart';
 import '../../events/domain/event.dart';
 import '../application/map_camera_controller.dart';
@@ -81,6 +82,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final onGradient = context.fellowayTextColors;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.mapScreenTitle)),
@@ -91,7 +93,9 @@ class _MapPageState extends State<MapPage> {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: Text(
               l10n.mapDiscoveryHint,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: onGradient.primary,
+              ),
             ),
           ),
           SingleChildScrollView(
@@ -99,9 +103,10 @@ class _MapPageState extends State<MapPage> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
-                FilterChip(
-                  label: Text(l10n.mapFilterAll),
+                _MapFilterChip(
+                  label: l10n.mapFilterAll,
                   selected: _interestFilter == null,
+                  onGradient: onGradient,
                   onSelected: (_) {
                     setState(() => _interestFilter = null);
                     _load();
@@ -111,9 +116,10 @@ class _MapPageState extends State<MapPage> {
                 ..._tags.map(
                   (t) => Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: FilterChip(
-                      label: Text(t),
+                    child: _MapFilterChip(
+                      label: t,
                       selected: _interestFilter == t,
+                      onGradient: onGradient,
                       onSelected: (v) {
                         setState(() => _interestFilter = v ? t : null);
                         _load();
@@ -141,8 +147,16 @@ class _MapPageState extends State<MapPage> {
       viewport: MapViewport(zoom: _camera.zoom),
     );
 
+    final onGradient = context.fellowayTextColors;
     if (points.isEmpty) {
-      return Center(child: Text(l10n.emptyStateTitle));
+      return Center(
+        child: Text(
+          l10n.emptyStateTitle,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: onGradient.primary,
+          ),
+        ),
+      );
     }
 
     return FlutterMap(
@@ -199,6 +213,41 @@ class _MapPageState extends State<MapPage> {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _MapFilterChip extends StatelessWidget {
+  const _MapFilterChip({
+    required this.label,
+    required this.selected,
+    required this.onGradient,
+    required this.onSelected,
+  });
+
+  final String label;
+  final bool selected;
+  final FellowayTextColors onGradient;
+  final ValueChanged<bool> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: selected ? scheme.onPrimary : onGradient.primary,
+        ),
+      ),
+      selected: selected,
+      onSelected: onSelected,
+      backgroundColor: Colors.white.withValues(alpha: 0.12),
+      selectedColor: scheme.primary,
+      checkmarkColor: scheme.onPrimary,
+      side: BorderSide(
+        color: onGradient.secondary.withValues(alpha: 0.85),
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../app/theme/felloway_light_input.dart';
 import '../../../shared/errors/connectivity_failure.dart';
 import '../../../shared/errors/result.dart';
 import '../../onboarding/domain/interest_catalog_item.dart';
@@ -20,7 +21,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   final _bio = TextEditingController();
   final _city = TextEditingController();
   final _hobbies = TextEditingController();
-  final _linkedin = TextEditingController();
   final _facebook = TextEditingController();
 
   UserProfile? _original;
@@ -43,7 +43,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     _bio.dispose();
     _city.dispose();
     _hobbies.dispose();
-    _linkedin.dispose();
     _facebook.dispose();
     super.dispose();
   }
@@ -78,7 +77,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     _city.text = p.homeCityLabel;
     _hobbies.text = p.hobbies;
     _selectedInterestIds = p.interests.toSet();
-    _linkedin.text = p.linkedinUrl ?? '';
     _facebook.text = p.facebookUrl ?? '';
   }
 
@@ -119,7 +117,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       displayName: _name.text.trim(),
       bio: _bio.text.trim().isEmpty ? null : _bio.text.trim(),
       avatarUrl: _avatarUrl,
-      linkedinUrl: _linkedin.text.trim().isEmpty ? null : _linkedin.text.trim(),
+      linkedinUrl: orig.linkedinUrl,
       facebookUrl: _facebook.text.trim().isEmpty ? null : _facebook.text.trim(),
       interests: _selectedInterestIds.toList(),
       hobbies: _hobbies.text.trim(),
@@ -158,6 +156,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       );
     }
 
+    final lightInput = context.fellowayLightInput;
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.profileEditTitle)),
       body: ListView(
@@ -189,27 +189,30 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           ),
           TextField(
             controller: _name,
-            decoration: InputDecoration(
+            style: lightInput.textStyle,
+            decoration: FellowayLightInput.decoration(
+              context,
               labelText: l10n.onboardingNameLabel,
-              border: const OutlineInputBorder(),
             ),
             textCapitalization: TextCapitalization.words,
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _bio,
-            decoration: InputDecoration(
+            style: lightInput.textStyle,
+            decoration: FellowayLightInput.decoration(
+              context,
               labelText: l10n.profileEditBioLabel,
-              border: const OutlineInputBorder(),
             ),
             maxLines: 3,
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _city,
-            decoration: InputDecoration(
+            style: lightInput.textStyle,
+            decoration: FellowayLightInput.decoration(
+              context,
               labelText: l10n.onboardingCityLabel,
-              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 12),
@@ -254,26 +257,19 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           const SizedBox(height: 12),
           TextField(
             controller: _hobbies,
-            decoration: InputDecoration(
+            style: lightInput.textStyle,
+            decoration: FellowayLightInput.decoration(
+              context,
               labelText: l10n.onboardingHobbiesLabel,
-              border: const OutlineInputBorder(),
             ),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _linkedin,
-            decoration: InputDecoration(
-              labelText: l10n.profileLinkedIn,
-              border: const OutlineInputBorder(),
-            ),
-            keyboardType: TextInputType.url,
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _facebook,
-            decoration: InputDecoration(
+            style: lightInput.textStyle,
+            decoration: FellowayLightInput.decoration(
+              context,
               labelText: l10n.profileFacebook,
-              border: const OutlineInputBorder(),
             ),
             keyboardType: TextInputType.url,
           ),

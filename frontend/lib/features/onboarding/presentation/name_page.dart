@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:felloway_client/l10n/app_localizations.dart';
-import '../../../app/theme/felloway_text_colors.dart';
+import '../../../app/theme/felloway_light_input.dart';
 import '../domain/onboarding_draft.dart';
 
 class NamePage extends StatefulWidget {
@@ -37,7 +37,7 @@ class _NamePageState extends State<NamePage> {
     final l10n = AppLocalizations.of(context)!;
     final draft = _draft!;
     final controller = _controller!;
-    final lightText = FellowayTextColors.onLightSurface;
+    final lightInput = context.fellowayLightInput;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -52,11 +52,10 @@ class _NamePageState extends State<NamePage> {
             children: [
               TextField(
                 controller: controller,
-                style: TextStyle(color: lightText.primary),
-                decoration: InputDecoration(
+                style: lightInput.textStyle,
+                decoration: FellowayLightInput.decoration(
+                  context,
                   labelText: l10n.onboardingNameLabel,
-                  labelStyle: TextStyle(color: lightText.secondary),
-                  border: const OutlineInputBorder(),
                 ),
                 textInputAction: TextInputAction.next,
                 onChanged: (v) => draft.displayName = v,

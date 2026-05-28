@@ -3,6 +3,7 @@ import 'package:felloway_client/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_scope.dart';
+import '../../../app/theme/felloway_light_input.dart';
 import '../../../shared/errors/connectivity_failure.dart';
 import '../../../shared/errors/result.dart';
 import '../data/trips_repository.dart';
@@ -100,6 +101,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final lightInput = context.fellowayLightInput;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.tripCreateTitle)),
       body: Semantics(
@@ -112,9 +114,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
             TextField(
               key: const Key('trip_route_field'),
               controller: _routeCtrl,
-              decoration: InputDecoration(
+              style: lightInput.textStyle,
+              decoration: FellowayLightInput.decoration(
+                context,
                 labelText: l10n.tripRouteLabel,
-                border: const OutlineInputBorder(),
               ),
               onChanged: (_) => setState(() {}),
             ),
@@ -122,9 +125,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
             TextField(
               key: const Key('trip_city_field'),
               controller: _cityCtrl,
-              decoration: InputDecoration(
+              style: lightInput.textStyle,
+              decoration: FellowayLightInput.decoration(
+                context,
                 labelText: l10n.tripTargetCityLabel,
-                border: const OutlineInputBorder(),
               ),
               onChanged: (_) => setState(() {}),
             ),
