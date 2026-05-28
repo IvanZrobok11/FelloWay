@@ -17,10 +17,10 @@ locals {
 }
 
 resource "aws_acm_certificate" "api" {
-  count             = var.use_custom_domain ? 1 : 0
-  domain_name       = var.api_host
+  count                     = var.use_custom_domain ? 1 : 0
+  domain_name               = var.api_host
   subject_alternative_names = var.admin_host != "" ? [var.admin_host] : []
-  validation_method = "DNS"
+  validation_method         = "DNS"
   lifecycle {
     create_before_destroy = true
   }
@@ -91,7 +91,7 @@ module "alb" {
   enable_https              = var.use_custom_domain
   certificate_arn           = var.use_custom_domain ? aws_acm_certificate_validation.api[0].certificate_arn : null
   create_admin_target_group = local.admin_enabled
-  admin_listener_hosts = var.use_custom_domain && var.admin_host != "" ? [var.admin_host] : []
+  admin_listener_hosts      = var.use_custom_domain && var.admin_host != "" ? [var.admin_host] : []
 }
 
 module "api_cdn" {

@@ -78,13 +78,13 @@ resource "aws_acm_certificate_validation" "web" {
 }
 
 module "alb" {
-  source               = "../../modules/alb"
-  project_name         = var.project_name
-  environment          = var.environment
-  vpc_id               = module.network.vpc_id
-  public_subnet_ids    = module.network.public_subnet_ids
-  security_group_id    = module.network.alb_security_group_id
-  certificate_arn      = aws_acm_certificate_validation.api.certificate_arn
+  source                    = "../../modules/alb"
+  project_name              = var.project_name
+  environment               = var.environment
+  vpc_id                    = module.network.vpc_id
+  public_subnet_ids         = module.network.public_subnet_ids
+  security_group_id         = module.network.alb_security_group_id
+  certificate_arn           = aws_acm_certificate_validation.api.certificate_arn
   create_admin_target_group = local.admin_enabled
   admin_listener_hosts      = var.admin_host != "" ? [var.admin_host] : []
 }

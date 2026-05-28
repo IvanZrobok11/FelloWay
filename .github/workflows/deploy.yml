@@ -201,14 +201,22 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
         run: |
+          CLUSTER="${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}"
+          SERVICE="${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}"
+          if ! aws ecs describe-services --cluster "$CLUSTER" --services "$SERVICE" \
+            --query 'services[?status==`ACTIVE`].serviceName' --output text | grep -q "$SERVICE"; then
+            echo "::warning::Admin ECS service $SERVICE not found or not ACTIVE."
+            echo "Run terraform apply in environments/dev with admin_service_key set, then re-run deploy."
+            exit 0
+          fi
           chmod +x .github/scripts/ecs-deploy-admin-image.sh
           ADMIN_IMAGE_URI="$ECR_REGISTRY/${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}:$IMAGE_TAG"
           .github/scripts/ecs-deploy-admin-image.sh \
-            "${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}" \
-            "${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}" \
-            "${{ env.PROJECT_NAME }}-admin-${{ env.ENVIRONMENT }}" \
+            "$CLUSTER" \
+            "$SERVICE" \
+            "$SERVICE" \
             "$ADMIN_IMAGE_URI" \
-            admin || echo "Admin ECS service not provisioned yet (terraform apply with admin_host)"
+            admin
 
       - name: Sync web to S3
         env:

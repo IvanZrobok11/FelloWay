@@ -33,21 +33,21 @@ variable "admin_host" {
 }
 
 variable "admin_username" {
-  type        = string
-  sensitive   = true
-  default     = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 
 variable "admin_password" {
-  type        = string
-  sensitive   = true
-  default     = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 
 variable "admin_service_key" {
-  type        = string
-  sensitive   = true
-  default     = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 
 variable "vpc_cidr" {

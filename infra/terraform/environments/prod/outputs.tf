@@ -7,8 +7,8 @@ output "web_url" {
 }
 
 output "admin_url" {
-  value       = local.admin_public_url != "" ? local.admin_public_url : null
-  description = "Admin panel URL when admin_host and admin_service_key are configured."
+  value       = var.admin_host != "" ? "https://${var.admin_host}" : null
+  description = "Admin panel URL when admin_host is configured."
 }
 
 output "ecr_repository_url" {
