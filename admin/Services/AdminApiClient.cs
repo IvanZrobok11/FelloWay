@@ -23,7 +23,7 @@ public sealed class AdminApiClient
     {
         using var request = CreateRequest(HttpMethod.Get, "admin/events/cities");
         var response = await _http.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        await AdminApiException.EnsureSuccessAsync(response, cancellationToken);
         var payload = await response.Content.ReadFromJsonAsync<CitiesResponse>(JsonOptions, cancellationToken)
             ?? throw new InvalidOperationException("Empty cities response.");
         return payload.Items;
@@ -33,7 +33,7 @@ public sealed class AdminApiClient
     {
         using var request = CreateRequest(HttpMethod.Get, "admin/events");
         var response = await _http.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        await AdminApiException.EnsureSuccessAsync(response, cancellationToken);
         var payload = await response.Content.ReadFromJsonAsync<EventsListResponse>(JsonOptions, cancellationToken)
             ?? throw new InvalidOperationException("Empty events response.");
         return payload.Items;
@@ -43,7 +43,7 @@ public sealed class AdminApiClient
     {
         using var request = CreateRequest(HttpMethod.Get, $"admin/events/{id}");
         var response = await _http.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        await AdminApiException.EnsureSuccessAsync(response, cancellationToken);
         return await response.Content.ReadFromJsonAsync<AdminEventDetail>(JsonOptions, cancellationToken)
             ?? throw new InvalidOperationException("Empty event response.");
     }
@@ -53,7 +53,7 @@ public sealed class AdminApiClient
         using var request = CreateRequest(HttpMethod.Post, "admin/events");
         request.Content = JsonContent.Create(payload, options: JsonOptions);
         var response = await _http.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        await AdminApiException.EnsureSuccessAsync(response, cancellationToken);
         var created = await response.Content.ReadFromJsonAsync<CreatedResponse>(JsonOptions, cancellationToken)
             ?? throw new InvalidOperationException("Empty create response.");
         return created.Id;
@@ -67,7 +67,7 @@ public sealed class AdminApiClient
         using var request = CreateRequest(HttpMethod.Put, $"admin/events/{id}");
         request.Content = JsonContent.Create(payload, options: JsonOptions);
         var response = await _http.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        await AdminApiException.EnsureSuccessAsync(response, cancellationToken);
     }
 
     public async Task<string> UploadCoverAsync(
@@ -84,7 +84,7 @@ public sealed class AdminApiClient
         form.Add(streamContent, "file", fileName);
         request.Content = form;
         var response = await _http.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        await AdminApiException.EnsureSuccessAsync(response, cancellationToken);
         var payload = await response.Content.ReadFromJsonAsync<CoverResponse>(JsonOptions, cancellationToken)
             ?? throw new InvalidOperationException("Empty cover response.");
         return payload.CoverImageUrl;

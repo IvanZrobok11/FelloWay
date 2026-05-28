@@ -11,10 +11,12 @@ public sealed class EventFormInput
     public string? Description { get; set; }
 
     [Required]
-    public DateTimeOffset StartsAt { get; set; }
+    [DataType(DataType.DateTime)]
+    public DateTime StartsAt { get; set; }
 
     [Required]
-    public DateTimeOffset EndsAt { get; set; }
+    [DataType(DataType.DateTime)]
+    public DateTime EndsAt { get; set; }
 
     [Required]
     public Guid CityId { get; set; }

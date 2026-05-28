@@ -10,8 +10,9 @@
     {
         <p class="error">@Model.ErrorMessage</p>
     }
+    <div asp-validation-summary="All" class="error"></div>
     <form method="post" enctype="multipart/form-data">
-        <partial name="_EventFormFields" model="Model.Input" />
+        <partial name="_EventFormFields" for="Input" />
         <div class="form-group">
             <label asp-for="Input.CoverFile">Cover image</label>
             <input asp-for="Input.CoverFile" type="file" accept="image/*" />

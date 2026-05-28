@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace FelloWay.Admin.Pages.Events;
 
 [Authorize]
-public class CreateModel(AdminApiClient apiClient) : PageModel
+public class CreateModel(AdminApiClient apiClient, IWebHostEnvironment environment) : PageModel
 {
     [BindProperty]
     public EventFormInput Input { get; set; } = new();
@@ -47,8 +47,8 @@ public class CreateModel(AdminApiClient apiClient) : PageModel
                 new AdminEventCreatePayload(
                     Input.Title.Trim(),
                     Input.Description,
-                    Input.StartsAt,
-                    Input.EndsAt,
+                    EventFormMapping.ToUtcOffset(Input.StartsAt),
+                    EventFormMapping.ToUtcOffset(Input.EndsAt),
                     Input.CityId,
                     Input.Venue,
                     Input.Capacity,
@@ -69,9 +69,14 @@ public class CreateModel(AdminApiClient apiClient) : PageModel
             TempData["StatusMessage"] = "Event created.";
             return RedirectToPage("Index");
         }
-        catch (Exception)
+        catch (AdminApiException ex)
         {
-            ErrorMessage = "Could not create the event. Check API connectivity and validation.";
+            ErrorMessage = FormatApiError(ex);
+            return Page();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = FormatApiError(ex);
             return Page();
         }
     }
@@ -113,4 +118,9 @@ public class CreateModel(AdminApiClient apiClient) : PageModel
             ModelState.AddModelError($"{nameof(Input)}.{nameof(Input.CityId)}", "City is required.");
         }
     }
+
+    private string FormatApiError(Exception ex) =>
+        environment.IsDevelopment()
+            ? ex.Message
+            : "Could not create the event. Check API connectivity and validation.";
 }

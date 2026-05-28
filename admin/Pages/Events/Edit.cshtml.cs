@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace FelloWay.Admin.Pages.Events;
 
 [Authorize]
-public class EditModel(AdminApiClient apiClient) : PageModel
+public class EditModel(AdminApiClient apiClient, IWebHostEnvironment environment) : PageModel
 {
     [BindProperty]
     public EventFormInput Input { get; set; } = new();
@@ -61,8 +61,8 @@ public class EditModel(AdminApiClient apiClient) : PageModel
                 new AdminEventUpdatePayload(
                     Input.Title.Trim(),
                     Input.Description,
-                    Input.StartsAt,
-                    Input.EndsAt,
+                    EventFormMapping.ToUtcOffset(Input.StartsAt),
+                    EventFormMapping.ToUtcOffset(Input.EndsAt),
                     Input.CityId,
                     Input.Venue,
                     Input.Capacity,
@@ -84,9 +84,9 @@ public class EditModel(AdminApiClient apiClient) : PageModel
             TempData["StatusMessage"] = "Event updated.";
             return RedirectToPage("Index");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            ErrorMessage = "Could not save the event.";
+            ErrorMessage = environment.IsDevelopment() ? ex.Message : "Could not save the event.";
             return Page();
         }
     }
@@ -114,8 +114,8 @@ public class EditModel(AdminApiClient apiClient) : PageModel
     {
         Input.Title = detail.Title;
         Input.Description = detail.Description;
-        Input.StartsAt = detail.StartsAt;
-        Input.EndsAt = detail.EndsAt;
+        Input.StartsAt = EventFormMapping.ToFormDateTime(detail.StartsAt);
+        Input.EndsAt = EventFormMapping.ToFormDateTime(detail.EndsAt);
         Input.CityId = detail.CityId;
         Input.Venue = detail.Venue;
         Input.Capacity = detail.Capacity;

@@ -20,10 +20,12 @@ if (string.IsNullOrWhiteSpace(apiBaseUrl))
     apiBaseUrl = "http://localhost";
 }
 
+builder.Services.AddTransient<AdminApiLoggingHandler>();
 builder.Services.AddHttpClient<AdminApiClient>(client =>
-{
-    client.BaseAddress = new Uri(apiBaseUrl.TrimEnd('/') + "/");
-});
+    {
+        client.BaseAddress = new Uri(apiBaseUrl.TrimEnd('/') + "/");
+    })
+    .AddHttpMessageHandler<AdminApiLoggingHandler>();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -48,6 +50,8 @@ builder.Services.AddRazorPages(options =>
 });
 
 var app = builder.Build();
+
+app.Logger.LogInformation("Admin panel API base URL: {ApiBaseUrl}", apiBaseUrl);
 
 if (!app.Environment.IsDevelopment())
 {
